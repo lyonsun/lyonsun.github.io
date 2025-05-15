@@ -1,30 +1,42 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { Headline } from '../components/headline.tsx';
-import { LinkedInIcon, GitHubIcon, EmailIcon } from '../components/icons/index.ts';
+import LinkedInIcon from '../components/icons/linkedin.astro';
+import EmailIcon from '../components/icons/email.astro';
+import GitHubIcon from '../components/icons/github.astro';
 ---
 
 <Layout>
     <div class="relative bg-zinc-900 text-zinc-100 overflow-hidden">
-        <div class="h-screen w-screen flex flex-col justify-center items-center gap-4">
+        <div
+            class="h-screen w-screen flex flex-col justify-center items-center gap-4"
+        >
             <div class="text-6xl">👨🏻‍💻</div>
             <Headline client:load />
             <div class="flex justify-center items-center gap-4 mt-8">
-                <a href="https://www.linkedin.com/in/lyonsun7" target="_blank" aria-label="LinkedIn">
+                <a
+                    href="https://www.linkedin.com/in/lyonsun7"
+                    target="_blank"
+                    aria-label="LinkedIn"
+                >
                     <LinkedInIcon
-                        className="w-8 h-8 hover:scale-110 transition-all"
+                        class="w-8 h-8 hover:scale-110 transition-all"
                         fill="#f0f0f0"
                     />
                 </a>
-                <a href="https://github.com/lyonsun" target="_blank" aria-label="GitHub">
+                <a
+                    href="https://github.com/lyonsun"
+                    target="_blank"
+                    aria-label="GitHub"
+                >
                     <GitHubIcon
-                        className="w-8 h-8 hover:scale-110 transition-all"
+                        class="w-8 h-8 hover:scale-110 transition-all"
                         fill="#f0f0f0"
                     />
                 </a>
                 <a href="mailto:sunly917@gmail.com" aria-label="Email">
                     <EmailIcon
-                        className="w-8 h-8 hover:scale-110 transition-all"
+                        class="w-8 h-8 hover:scale-110 transition-all"
                         fill="#f0f0f0"
                     />
                 </a>
