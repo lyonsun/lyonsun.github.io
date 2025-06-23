@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@theme {
+  --breakpoint-*: initial; /* You need to declare every breakpoint yourself, since removed all defaults from xs to 2xl using initial. */
+  --breakpoint-md: 960px;
+  --breakpoint-lg: 1100px;
+
+  --container-*: initial; /* You need to declare every breakpoint yourself, since removed all defaults from @xs to @2xl using initial. */
+  --container-md: 960px;
+  --container-lg: 1100px;
+}
