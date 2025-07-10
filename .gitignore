@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# aider files
+.aider*
+
+# obsidian files
+*.obsidian
