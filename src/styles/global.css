@@ -2,10 +2,37 @@
 
 @theme {
   --breakpoint-*: initial; /* You need to declare every breakpoint yourself, since removed all defaults from xs to 2xl using initial. */
+  --breakpoint-sm: 640px;
   --breakpoint-md: 960px;
   --breakpoint-lg: 1100px;
 
   --container-*: initial; /* You need to declare every breakpoint yourself, since removed all defaults from @xs to @2xl using initial. */
+  --container-sm: 640px;
   --container-md: 960px;
   --container-lg: 1100px;
+}
+
+html,
+body {
+  font-family: "Saira", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+*::selection {
+  @apply bg-emerald-300;
+}
+
+.line-before {
+  @apply before:absolute before:top-0 before:left-1/2 before:h-px before:w-[100vw] before:-translate-x-1/2 before:bg-stone-200;
+}
+
+.line-after {
+  @apply after:absolute after:bottom-0 after:left-1/2 after:h-px after:w-[100vw] after:-translate-x-1/2 after:bg-stone-200;
+}
+
+.link {
+  @apply relative inline-block p-2 before:absolute before:inset-0 before:origin-bottom before:scale-y-10 before:transform before:bg-emerald-300 before:transition-transform before:duration-300 before:ease-in-out hover:before:scale-y-100;
 }
