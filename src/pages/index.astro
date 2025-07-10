@@ -1,46 +1,8 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { Headline } from '../components/headline.tsx';
-import LinkedInIcon from '../components/icons/linkedin.astro';
-import EmailIcon from '../components/icons/email.astro';
-import GitHubIcon from '../components/icons/github.astro';
+import Layout from '../layouts/layout.astro';
+import Hero from '../components/sections/hero.astro';
 ---
 
 <Layout>
-    <div class="relative bg-zinc-900 text-zinc-100 overflow-hidden">
-        <div
-            class="h-screen w-screen flex flex-col justify-center items-center gap-4"
-        >
-            <div class="text-6xl">👨🏻‍💻</div>
-            <Headline client:load />
-            <div class="flex justify-center items-center gap-4 mt-8">
-                <a
-                    href="https://www.linkedin.com/in/lyonsun7"
-                    target="_blank"
-                    aria-label="LinkedIn"
-                >
-                    <LinkedInIcon
-                        class="w-8 h-8 hover:scale-110 transition-all"
-                        fill="#f0f0f0"
-                    />
-                </a>
-                <a
-                    href="https://github.com/lyonsun"
-                    target="_blank"
-                    aria-label="GitHub"
-                >
-                    <GitHubIcon
-                        class="w-8 h-8 hover:scale-110 transition-all"
-                        fill="#f0f0f0"
-                    />
-                </a>
-                <a href="mailto:sunly917@gmail.com" aria-label="Email">
-                    <EmailIcon
-                        class="w-8 h-8 hover:scale-110 transition-all"
-                        fill="#f0f0f0"
-                    />
-                </a>
-            </div>
-        </div>
-    </div>
+    <Hero />
 </Layout>

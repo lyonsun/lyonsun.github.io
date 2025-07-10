@@ -1,0 +1,43 @@
+---
+import ExternalLink from '../atoms/externalLink.astro';
+
+const currentDate = new Date().toDateString();
+---
+
+<section class="bg-gradient-to-br from-cyan-50 to-fuchsia-100 px-0 sm:px-20">
+    <div
+        class="container mx-auto grid min-h-screen grid-rows-[1fr-2fr-2fr] sm:border-r sm:border-l sm:border-stone-200"
+    >
+        <p class="self-end p-4 text-black/20">10247 lines of code</p>
+        <div
+            class="line-before line-after relative flex w-full flex-col items-center justify-center gap-6 p-4 text-center sm:items-start sm:text-start"
+        >
+            <h1
+                class="font-sans text-[120px] leading-normal font-bold lg:text-[160px] xl:text-[200px]"
+            >
+                Hi.
+            </h1>
+            <p
+                class="text-2xl leading-normal md:text-4xl lg:text-5xl xl:text-6xl"
+            >
+                I'm Liang, passionated Web Engineer.
+            </p>
+            <ul class="flex flex-wrap justify-center gap-4 sm:justify-start">
+                <li>
+                    <a href="/blog" class="link">
+                        <span class="relative">My Writings</span>
+                    </a>
+                </li>
+                <li>
+                    <ExternalLink
+                        url="https://www.linkedin.com/in/lyonsun7"
+                        title="LinkedIn Profile"
+                    />
+                </li>
+            </ul>
+        </div>
+        <p class="justify-self-end p-4 text-black/20">
+            {currentDate}
+        </p>
+    </div>
+</section>

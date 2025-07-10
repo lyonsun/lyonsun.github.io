@@ -1,15 +1,16 @@
-import { type FC, useCallback, useEffect, useState } from 'react';
-import { chars, defaultHeadline, headlines } from '../data';
+import { type FC, useCallback, useEffect, useState, useRef } from 'react';
+import { chars, defaultHeadline, headlines } from '../../data';
 
 const Headline: FC = () => {
     const [headline, setHeadline] = useState(defaultHeadline.toUpperCase());
-    const [interalId, setInteralId] = useState(0);
-    const [previousIndex, setPreviousIndex] = useState(0);
+    const [intervalId, setIntervalId] = useState<number>(0);
+    const [previousIndex, setPreviousIndex] = useState<number>(0);
+    const headlineRef = useRef<HTMLHeadingElement>(null);
 
     const updateHeadline = useCallback(
-        (target: HTMLSpanElement) => {
-            if (interalId) {
-                window.clearInterval(interalId);
+        (target: HTMLElement) => {
+            if (intervalId) {
+                window.clearInterval(intervalId);
             }
 
             let newIndex = Math.floor(Math.random() * headlines.length);
@@ -21,10 +22,10 @@ const Headline: FC = () => {
             setHeadline(newHeadline);
 
             let numberOfIteration = 0;
-            const newInteralId = window.setInterval(() => {
+            const newIntervalId = window.setInterval(() => {
                 target.innerText = newHeadline
                     .split('')
-                    .map((char, index) => {
+                    .map((char: string, index: number) => {
                         return index < numberOfIteration
                             ? char
                             : chars[
@@ -32,23 +33,25 @@ const Headline: FC = () => {
                               ].toUpperCase();
                     })
                     .join('');
+
                 if (numberOfIteration > newHeadline.length) {
-                    window.clearInterval(interalId);
+                    window.clearInterval(newIntervalId);
+                    setIntervalId(0);
                 }
 
                 numberOfIteration++;
             }, 100);
 
-            setInteralId(newInteralId);
+            setIntervalId(newIntervalId);
         },
-        [interalId, previousIndex],
+        [intervalId, previousIndex],
     );
 
     useEffect(() => {
         const mainIntervalId = window.setInterval(() => {
-            updateHeadline(
-                document.querySelector('.headline') as HTMLHeadingElement,
-            );
+            if (headlineRef.current) {
+                updateHeadline(headlineRef.current);
+            }
         }, 4000);
 
         return () => window.clearInterval(mainIntervalId);
@@ -56,9 +59,9 @@ const Headline: FC = () => {
 
     useEffect(() => {
         const timeoutId = window.setTimeout(() => {
-            updateHeadline(
-                document.querySelector('.headline') as HTMLHeadingElement,
-            );
+            if (headlineRef.current) {
+                updateHeadline(headlineRef.current);
+            }
         }, 1000);
 
         return () => window.clearTimeout(timeoutId);
@@ -67,7 +70,10 @@ const Headline: FC = () => {
 
     return (
         <div className="relative">
-            <h1 className="headline text-xl md:text-4xl font-bold text-center px-2 py-4 md:py-8">
+            <h1
+                ref={headlineRef}
+                className="headline px-2 py-4 text-center text-xl font-bold md:py-8 md:text-4xl"
+            >
                 {headline}
             </h1>
         </div>
