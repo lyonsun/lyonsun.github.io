@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @theme {
   --breakpoint-*: initial; /* You need to declare every breakpoint yourself, since removed all defaults from xs to 2xl using initial. */
