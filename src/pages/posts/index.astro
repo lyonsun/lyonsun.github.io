@@ -1,0 +1,67 @@
+---
+import Layout from '../../layouts/layout.astro';
+import PostItem from '../../components/elements/postItem.astro';
+import { type Post } from '../../types';
+
+// Get all markdown posts from the blog directory
+const posts: Post[] = Object.values(
+    import.meta.glob('./*.md', { eager: true }),
+);
+
+// Sort posts by publication date (newest first)
+const sortedPosts = !posts
+    ? []
+    : posts.sort(
+          (a, b) =>
+              new Date(b.frontmatter.pubDate).valueOf() -
+              new Date(a.frontmatter.pubDate).valueOf(),
+      );
+---
+
+<Layout>
+    <section
+        class="bg-gradient-to-br from-cyan-50 to-fuchsia-100 px-0 sm:px-20"
+    >
+        <div
+            class="container mx-auto grid min-h-screen grid-rows-[1fr-2fr-2fr] sm:border-r sm:border-l sm:border-stone-200"
+        >
+            <a href="/" class="self-end p-4 text-black/20 hover:text-black/50">
+                &larr; Back to Home
+            </a>
+            <div
+                class="line-before line-after relative flex w-full flex-col items-center justify-center gap-6 p-4 text-center sm:items-start sm:text-start md:p-16"
+            >
+                <div class="">
+                    <h1 class="mb-8 text-4xl font-bold">Posts</h1>
+                    {
+                        sortedPosts.length > 0 ? (
+                            <div class="grid max-w-[720px] gap-8">
+                                {sortedPosts.map((post, index) => {
+                                    const borderClass = `${
+                                        index !== sortedPosts.length - 1
+                                            ? 'border-b'
+                                            : 'border-none'
+                                    } border-stone-200`;
+
+                                    return (
+                                        <PostItem
+                                            post={post}
+                                            borderClass={borderClass}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <p class="text-center text-stone-500">
+                                No blog posts found.
+                            </p>
+                        )
+                    }
+                </div>
+            </div>
+            <p class="justify-self-end p-4 text-black/20">
+                Another wonderful day
+            </p>
+        </div>
+    </section>
+</Layout>
