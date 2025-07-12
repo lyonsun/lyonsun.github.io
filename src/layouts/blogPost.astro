@@ -20,26 +20,22 @@ const publishDate = new Date(frontmatter.pubDate).toLocaleDateString('en-US', {
         class="bg-gradient-to-br from-cyan-50 to-fuchsia-100 px-0 sm:px-20"
     >
         <div
-            class="container mx-auto grid min-h-screen grid-rows-[1fr-2fr-2fr] sm:border-r sm:border-l sm:border-stone-200"
+            class="container mx-auto grid min-h-screen grid-rows-[auto_1fr] sm:border-r sm:border-l sm:border-stone-200"
         >
-            <a
-                href="/posts"
-                class="self-end p-4 text-black/20 hover:text-black/50"
-            >
-                &larr; Back to Posts
-            </a>
-            <div
-                class="line-before line-after relative flex w-full flex-col items-center justify-center gap-6 p-4 text-center sm:items-start sm:text-start md:p-16"
-            >
+            <p class="self-end p-4 text-black/20">Another wonderful day</p>
+            <div class="line-before line-after relative p-4 md:p-16">
                 <article class="prose prose-stone max-w-[720px]">
                     <h1>{frontmatter.title}</h1>
                     <p class="text-stone-500">{publishDate}</p>
                     <slot />
                 </article>
             </div>
-            <p class="justify-self-end p-4 text-black/20">
-                Another wonderful day
-            </p>
+            <a
+                href="/posts"
+                class="justify-self-end p-4 text-black/20 hover:text-black/50"
+            >
+                &larr; Back to Posts
+            </a>
         </div>
     </section>
 </Layout>
