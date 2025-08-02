@@ -12,8 +12,8 @@ export default defineConfig({
             clientInitPath: '.config/sentry.client.config.ts',
             serverInitPath: '.config/sentry.server.config.ts',
             sourceMapsUploadOptions: {
-                project: 'javascript-astro',
-                org: 'suns-project',
+                project: process.env.SENTRY_PROJECT,
+                org: process.env.SENTRY_ORG,
                 authToken: process.env.SENTRY_AUTH_TOKEN,
                 telemetry: false,
             },
