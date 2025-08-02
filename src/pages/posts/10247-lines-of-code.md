@@ -27,4 +27,3 @@ That's a substantial codebase! 10,247 lines represents a significant software pr
 - Could be anything from a web application to a desktop program to a library
 
 -- _by Claude Sonnet 4_
-
