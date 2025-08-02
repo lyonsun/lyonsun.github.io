@@ -15,6 +15,7 @@ export default defineConfig({
                 project: 'javascript-astro',
                 org: 'suns-project',
                 authToken: process.env.SENTRY_AUTH_TOKEN,
+                telemetry: false,
             },
         }),
     ],
