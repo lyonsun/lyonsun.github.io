@@ -5,7 +5,7 @@ const headlines = [
     'I am based in Finland',
     'I am a frontend developer',
     'I am a backend developer',
-    'I am a fullstack developer',
+    'I am a full-stack developer',
     'I code in typescript',
     'I code in javascript',
     'I code in php',
