@@ -1,10 +1,12 @@
 ---
-
+import Layout from '../layouts/layout.astro';
 ---
 
-<div class="w-screen h-screen">
-    <canvas class="webgl absolute top-0 left-0 w-full h-full"></canvas>
-</div>
+<Layout title="Three.js" description="A spinning cube. Hello WebGL.">
+    <div class="h-screen w-screen">
+        <canvas class="webgl absolute top-0 left-0 h-full w-full"></canvas>
+    </div>
+</Layout>
 
 <script>
     import * as THREE from 'three';

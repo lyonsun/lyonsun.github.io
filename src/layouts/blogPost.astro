@@ -15,7 +15,14 @@ const publishDate = new Date(frontmatter.pubDate).toLocaleDateString('en-US', {
 });
 ---
 
-<Layout>
+<Layout
+    title={frontmatter.title}
+    description={frontmatter.description}
+    article={{
+        publishedTime: frontmatter.pubDate,
+        author: frontmatter.author,
+    }}
+>
     <section
         class="bg-gradient-to-br from-cyan-50 to-fuchsia-100 px-0 sm:px-20"
     >

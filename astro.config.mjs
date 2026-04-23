@@ -6,6 +6,7 @@ import sentry from '@sentry/astro';
 
 // https://astro.build/config
 export default defineConfig({
+    site: process.env.SITE_URL || 'https://lyonsun.github.io',
     integrations: [
         react(),
         sentry({
@@ -21,8 +22,6 @@ export default defineConfig({
     ],
 
     vite: {
-        // @ts-expect-error
         plugins: [tailwindcss()],
     },
 });
-

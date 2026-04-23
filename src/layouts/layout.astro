@@ -1,6 +1,39 @@
 ---
 import '../styles/global.css';
 import GA4 from '../meta/ga4.astro';
+import {
+    SITE_NAME,
+    SITE_DESCRIPTION,
+    SITE_AUTHOR,
+    SITE_LOCALE,
+    TWITTER_HANDLE,
+    DEFAULT_OG_IMAGE,
+} from '../consts';
+
+type Props = {
+    title?: string;
+    description?: string;
+    image?: string;
+    article?: {
+        publishedTime: string;
+        author?: string;
+    };
+    noindex?: boolean;
+};
+
+const {
+    title,
+    description = SITE_DESCRIPTION,
+    image = DEFAULT_OG_IMAGE,
+    article,
+    noindex = false,
+} = Astro.props;
+
+const pageTitle = title ? title : SITE_NAME;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const imageUrl = new URL(image, Astro.site).toString();
+const ogType = article ? 'article' : 'website';
+const author = article?.author ?? SITE_AUTHOR;
 ---
 
 <!doctype html>
@@ -10,7 +43,43 @@ import GA4 from '../meta/ga4.astro';
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />
-        <title>Liang Sun</title>
+
+        <title>{pageTitle}</title>
+        <meta name="description" content={description} />
+        <meta name="author" content={author} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta
+            name="robots"
+            content={noindex ? 'noindex,nofollow' : 'index,follow'}
+        />
+
+        <meta property="og:type" content={ogType} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content={imageUrl} />
+        <meta property="og:site_name" content={SITE_NAME} />
+        <meta property="og:locale" content={SITE_LOCALE} />
+
+        {
+            article && (
+                <>
+                    <meta
+                        property="article:published_time"
+                        content={new Date(article.publishedTime).toISOString()}
+                    />
+                    <meta property="article:author" content={author} />
+                </>
+            )
+        }
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={imageUrl} />
+        <meta name="twitter:site" content={TWITTER_HANDLE} />
+        <meta name="twitter:creator" content={TWITTER_HANDLE} />
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
