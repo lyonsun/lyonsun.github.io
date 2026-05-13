@@ -28,6 +28,6 @@
     "prettier-plugin-tailwindcss": "^0.8.0"
   },
   "overrides": {
-    "vite": "^7"
+    "vite": "^8.0.0"
   }
 }
