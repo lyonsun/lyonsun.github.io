@@ -5,10 +5,6 @@
     {
       "matchUpdateTypes": ["patch", "minor"],
       "groupName": "non-major updates"
-    },
-    {
-      "matchUpdateTypes": ["major"],
-      "groupName": "major updates"
     }
   ]
 }
