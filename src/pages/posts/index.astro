@@ -1,21 +1,12 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../../layouts/layout.astro';
 import PostItem from '../../components/elements/postItem.astro';
-import { type Post } from '../../types';
 
-// Get all markdown posts from the blog directory
-const posts: Post[] = Object.values(
-    import.meta.glob('./*.md', { eager: true }),
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+const sortedPosts = posts.sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-
-// Sort posts by publication date (newest first)
-const sortedPosts = !posts
-    ? []
-    : posts.sort(
-          (a, b) =>
-              new Date(b.frontmatter.pubDate).valueOf() -
-              new Date(a.frontmatter.pubDate).valueOf(),
-      );
 ---
 
 <Layout

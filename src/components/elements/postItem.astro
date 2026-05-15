@@ -1,7 +1,8 @@
 ---
-import { type Post } from '../../types';
+import { type CollectionEntry } from 'astro:content';
+
 type Props = {
-    post: Post;
+    post: CollectionEntry<'posts'>;
     borderClass: string;
 };
 const { post, borderClass } = Astro.props;
@@ -9,13 +10,13 @@ const { post, borderClass } = Astro.props;
 
 <article class={`pb-8 ${borderClass}`}>
     <h2 class="mb-2 text-2xl font-semibold">
-        <a href={post.url} class="hover:text-black/60">
-            {post.frontmatter.title}
+        <a href={`/posts/${post.id}`} class="hover:text-black/60">
+            {post.data.title}
         </a>
     </h2>
     <p class="mb-4 text-black/40">
         {
-            new Date(post.frontmatter.pubDate).toLocaleDateString('en-US', {
+            post.data.pubDate.toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
@@ -23,9 +24,9 @@ const { post, borderClass } = Astro.props;
         }
     </p>
     <p class="text-black/60">
-        {post.frontmatter.description}
+        {post.data.description}
     </p>
-    <a href={post.url} class="link mt-4">
+    <a href={`/posts/${post.id}`} class="link mt-4">
         <span class="relative">Read more &rarr;</span>
     </a>
 </article>

@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/blogPost.astro
 title: Hello World
 pubDate: 2025-05-15
 description: Have you ever questioned the nature of your reality?

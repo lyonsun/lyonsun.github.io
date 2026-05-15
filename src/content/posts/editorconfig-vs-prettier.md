@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/blogPost.astro
 title: EditorConfig vs Prettier
 description: Do we need both .editorconfig and .prettierrc in a project, or just one of them would be enough?
 pubDate: 2025-07-30
@@ -58,7 +57,7 @@ On the other hand, `.prettierrc` is the configuration file for **Prettier**, an 
 
 ---
 
-### Working in Harmony: A Collaborative Approach 🤝
+### Working in Harmony: A Collaborative Approach
 
 The real power comes from using `.editorconfig` and `.prettierrc` **together**. This combination provides a robust and layered approach to code consistency.
 

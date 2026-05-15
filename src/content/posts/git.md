@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/blogPost.astro
 title: Working with Git - undo a git commit
 pubDate: 2025-09-28
 updatedAt: 2025-09-28
