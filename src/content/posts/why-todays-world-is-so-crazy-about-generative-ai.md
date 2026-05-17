@@ -4,6 +4,10 @@ description: Short answer is, it works well enough, and it works almost everywhe
 pubDate: 2026-03-26
 author: Claude
 aiGeneratedContent: true
+tags:
+  - ai
+  - society
+  - technology
 ---
 
 Great question! The generative AI frenzy isn't just hype - there are some deep, converging reasons why it's captured the world's attention.

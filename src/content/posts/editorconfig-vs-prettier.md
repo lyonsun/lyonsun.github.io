@@ -4,6 +4,10 @@ description: Do we need both .editorconfig and .prettierrc in a project, or just
 pubDate: 2025-07-30
 author: Google Gemini 2.5 Pro
 aiGeneratedContent: true
+tags:
+  - tooling
+  - formatting
+  - developer-experience
 ---
 
 ### Decoding Your Dev Environment: .editorconfig vs. .prettierrc

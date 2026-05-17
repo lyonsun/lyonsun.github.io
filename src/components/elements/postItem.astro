@@ -1,5 +1,6 @@
 ---
 import { type CollectionEntry } from 'astro:content';
+import TagLink from '../atoms/tagLink.astro';
 
 type Props = {
     post: CollectionEntry<'posts'>;
@@ -26,6 +27,15 @@ const { post, borderClass } = Astro.props;
     <p class="text-black/60">
         {post.data.description}
     </p>
+    {
+        post.data.tags.length > 0 && (
+            <div class="mt-4 flex flex-wrap gap-2">
+                {post.data.tags.map((tag) => (
+                    <TagLink tag={tag} />
+                ))}
+            </div>
+        )
+    }
     <a href={`/posts/${post.id}`} class="link mt-4">
         <span class="relative">Read more &rarr;</span>
     </a>

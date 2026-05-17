@@ -3,6 +3,10 @@ title: Working with Git - undo a git commit
 pubDate: 2025-09-28
 updatedAt: 2025-09-28
 description: Sometimes it is necessary to undo a git commit for one reason or another
+tags:
+  - git
+  - version-control
+  - workflow
 ---
 
 ## Need to undo a local git commit?

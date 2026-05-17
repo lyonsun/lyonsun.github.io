@@ -4,6 +4,10 @@ description: This number may not represent human consciousness, but is definitel
 pubDate: 2025-07-14
 author: Google Gemini, Claude
 aiGeneratedContent: true
+tags:
+  - ai
+  - culture
+  - software
 ---
 
 The phrase "**10247 lines of code**" is a direct and significant reference from the HBO science fiction series **_Westworld_** ([wiki](<https://en.wikipedia.org/wiki/Westworld_(TV_series)>)). In the show's second season, it's revealed that the complex consciousness of a human being can be distilled down to this specific number of lines of code.

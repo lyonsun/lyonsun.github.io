@@ -1,16 +1,24 @@
 ---
-import Layout from '../../layouts/layout.astro';
-import PostItem from '../../components/elements/postItem.astro';
-import TagLink from '../../components/atoms/tagLink.astro';
-import { getAllPublishedTags, getPublishedPosts } from '../../lib/posts';
+import Layout from '../../../layouts/layout.astro';
+import PostItem from '../../../components/elements/postItem.astro';
+import { getAllPublishedTags, getPublishedPostsByTag } from '../../../lib/posts';
 
-const posts = await getPublishedPosts();
-const tags = await getAllPublishedTags();
+export async function getStaticPaths() {
+    const tags = await getAllPublishedTags();
+
+    return tags.map((tag) => ({
+        params: { tag },
+        props: { tag },
+    }));
+}
+
+const { tag } = Astro.props;
+const posts = await getPublishedPostsByTag(tag);
 ---
 
 <Layout
-    title="My writings"
-    description="Writing on web development, TypeScript, Go, and side projects."
+    title={`Posts tagged ${tag}`}
+    description={`Writing tagged with ${tag}.`}
 >
     <section
         class="bg-gradient-to-br from-cyan-50 to-fuchsia-100 px-0 sm:px-20"
@@ -18,18 +26,12 @@ const tags = await getAllPublishedTags();
         <div
             class="container mx-auto flex min-h-screen flex-col sm:border-r sm:border-l sm:border-stone-200"
         >
-            <p class="p-4 text-black/20">Another wonderful day</p>
+            <p class="p-4 text-black/20">Browsing by tag</p>
             <div class="line-before line-after relative flex-1 p-4 md:p-16">
-                <h1 class="mb-8 text-4xl font-bold">Posts</h1>
-                {
-                    tags.length > 0 && (
-                        <div class="mb-8 flex max-w-[720px] flex-wrap gap-2">
-                            {tags.map((tag) => (
-                                <TagLink tag={tag} />
-                            ))}
-                        </div>
-                    )
-                }
+                <h1 class="mb-3 text-4xl font-bold">#{tag}</h1>
+                <p class="mb-8 text-stone-600">
+                    {posts.length} post{posts.length === 1 ? '' : 's'}
+                </p>
                 {
                     posts.length > 0 ? (
                         <div class="grid max-w-[720px] gap-8">
@@ -49,12 +51,15 @@ const tags = await getAllPublishedTags();
                             })}
                         </div>
                     ) : (
-                        <p class="text-black/20">No blog posts found.</p>
+                        <p class="text-black/20">No posts found for this tag.</p>
                     )
                 }
             </div>
-            <a href="/" class="self-end p-4 text-black/20 hover:text-black/50">
-                &larr; Back to Home
+            <a
+                href="/posts"
+                class="self-end p-4 text-black/20 hover:text-black/50"
+            >
+                &larr; Back to Posts
             </a>
         </div>
     </section>

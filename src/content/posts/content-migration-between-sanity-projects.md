@@ -4,6 +4,10 @@ description: Different approaches to migrate content between different Sanity pr
 pubDate: 2025-08-15
 author: Google Gemini
 aiGeneratedContent: true
+tags:
+  - sanity
+  - cms
+  - migration
 ---
 
 ## Migrate a single document between different Sanity projects
