@@ -22,11 +22,13 @@
     "three": "^0.184.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.9",
     "@tailwindcss/typography": "^0.5.16",
     "@types/three": "^0.184.0",
     "prettier": "^3.6.0",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.8.0"
+    "prettier-plugin-tailwindcss": "^0.8.0",
+    "typescript": "^6.0.3"
   },
   "overrides": {
     "vite": "^7"
