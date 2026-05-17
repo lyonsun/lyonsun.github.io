@@ -1,4 +1,6 @@
 ---
+import { getTagPath } from '../../lib/url';
+
 type Props = {
     tag: string;
 };
@@ -7,7 +9,7 @@ const { tag } = Astro.props;
 ---
 
 <a
-    href={`/posts/tags/${tag}`}
+    href={getTagPath(tag)}
     class="rounded-full border border-stone-300 px-3 py-1 text-sm text-stone-700 transition-colors hover:border-black hover:text-black"
 >
     #{tag}
