@@ -47,7 +47,6 @@ export const GET: APIRoute = async ({ site }) => {
     const pages = [
         { url: '/' },
         { url: '/posts/' },
-        { url: '/threejs/' },
         ...posts.map((post) => ({
             url: `/posts/${post.id}/`,
             lastmod: post.data.updatedAt ?? post.data.pubDate,
