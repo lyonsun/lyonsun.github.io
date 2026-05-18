@@ -3,21 +3,22 @@
     function gtag() {
         dataLayer.push(arguments);
     }
-    gtag('js', new Date());
 
     const loadGA = () => {
+        gtag('js', new Date());
         const script = document.createElement('script');
         script.async = true;
         script.src = 'https://www.googletagmanager.com/gtag/js?id=G-ZGT4BC0C4P';
         script.onload = () => {
             gtag('config', 'G-ZGT4BC0C4P');
         };
+        script.onerror = () => console.warn('GA4 failed to load');
         document.head.appendChild(script);
     };
 
     if ('requestIdleCallback' in window) {
-        requestIdleCallback(loadGA);
+        requestIdleCallback(loadGA, { timeout: 3000 });
     } else {
-        setTimeout(loadGA, 2000);
+        setTimeout(loadGA, 1000);
     }
 </script>
