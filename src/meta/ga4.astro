@@ -1,9 +1,3 @@
-<!-- Google tag (gtag.js) -->
-<script
-    is:inline
-    async
-    src="https://www.googletagmanager.com/gtag/js?id=G-ZGT4BC0C4P"></script>
-
 <script is:raw is:inline>
     window.dataLayer = window.dataLayer || [];
     function gtag() {
@@ -11,5 +5,19 @@
     }
     gtag('js', new Date());
 
-    gtag('config', 'G-ZGT4BC0C4P');
+    const loadGA = () => {
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-ZGT4BC0C4P';
+        script.onload = () => {
+            gtag('config', 'G-ZGT4BC0C4P');
+        };
+        document.head.appendChild(script);
+    };
+
+    if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadGA);
+    } else {
+        setTimeout(loadGA, 2000);
+    }
 </script>
