@@ -83,6 +83,10 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  [data-animate] {
+    opacity: 1;
+  }
+
   .animate-fade-in,
   .animate-slide-up {
     animation: none;
