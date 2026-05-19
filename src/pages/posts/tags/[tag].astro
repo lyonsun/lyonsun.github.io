@@ -26,15 +26,15 @@ const posts = await getPublishedPostsByTag(tag);
         <div
             class="container mx-auto flex min-h-screen flex-col sm:border-r sm:border-l sm:border-stone-200"
         >
-            <p class="p-4 text-black/20">Browsing by tag</p>
-            <div class="line-before line-after relative flex-1 p-4 md:p-16">
-                <h1 class="mb-3 text-4xl font-bold">#{tag}</h1>
-                <p class="mb-8 text-stone-600">
+            <p class="animate-fade-slide-up p-4 text-black/20" style="--delay: 0ms">Browsing by tag</p>
+            <div class="line-before line-after line-animate relative flex-1 p-4 md:p-16" style="--delay: 150ms">
+                <h1 class="animate-fade-slide-up mb-3 text-4xl font-bold" style="--delay: 100ms">#{tag}</h1>
+                <p class="animate-fade-in mb-8 text-stone-600" style="--delay: 200ms">
                     {posts.length} post{posts.length === 1 ? '' : 's'}
                 </p>
                 {
                     posts.length > 0 ? (
-                        <div class="grid max-w-[720px] gap-8">
+                        <div class="animate-fade-in grid max-w-[720px] gap-8" style="--delay: 300ms">
                             {posts.map((post, index) => {
                                 const borderClass = `${
                                     index !== posts.length - 1
@@ -57,7 +57,8 @@ const posts = await getPublishedPostsByTag(tag);
             </div>
             <a
                 href="/posts"
-                class="self-end p-4 text-black/20 hover:text-black/50"
+                class="animate-fade-in self-end p-4 text-black/20 hover:text-black/50"
+                style="--delay: 500ms"
             >
                 &larr; Back to Posts
             </a>

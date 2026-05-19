@@ -17,19 +17,22 @@ const currentDate = new Date().toDateString();
             </a>
         </div>
         <div
-            class="line-before line-after relative flex w-full flex-col items-center justify-center gap-6 p-4 text-center sm:items-start sm:text-start"
+            class="line-before line-after line-animate relative flex w-full flex-col items-center justify-center gap-6 p-4 text-center sm:items-start sm:text-start"
+            style="--delay: 150ms"
         >
             <h1
-                class="font-sans text-[120px] leading-normal font-bold lg:text-[160px] xl:text-[200px]"
+                class="animate-fade-slide-up font-sans text-[120px] leading-normal font-bold lg:text-[160px] xl:text-[200px]"
+                style="--delay: 0ms"
             >
                 Hi.
             </h1>
             <p
-                class="text-2xl leading-normal md:text-4xl lg:text-5xl xl:text-6xl"
+                class="animate-fade-slide-up text-2xl leading-normal md:text-4xl lg:text-5xl xl:text-6xl"
+                style="--delay: 100ms"
             >
                 I'm Liang, passionate Web Engineer.
             </p>
-            <ul class="flex flex-wrap justify-center gap-4 sm:justify-start">
+            <ul class="animate-fade-in flex flex-wrap justify-center gap-4 sm:justify-start" style="--delay: 250ms">
                 <li>
                     <a href="/posts" class="link">
                         <span class="relative">My writings</span>
@@ -43,7 +46,7 @@ const currentDate = new Date().toDateString();
                 </li>
             </ul>
         </div>
-        <p class="justify-self-end p-4 text-black/20">
+        <p class="animate-fade-in justify-self-end p-4 text-black/20" style="--delay: 400ms">
             {currentDate}
         </p>
     </div>
