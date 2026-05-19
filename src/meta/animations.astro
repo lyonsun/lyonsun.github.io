@@ -8,10 +8,9 @@
                 type === 'slide-up' ? 'animate-slide-up' : 'animate-fade-in'
             );
             if (delay) {
-                el.style.animationDelay = delay * 0.1 + 's';
+                el.style.animationDelay = Number(delay) * 0.1 + 's';
             }
         });
     }
-    document.addEventListener('DOMContentLoaded', initAnimations);
-    document.addEventListener('astro:page-load', initAnimations);
+    initAnimations();
 </script>
