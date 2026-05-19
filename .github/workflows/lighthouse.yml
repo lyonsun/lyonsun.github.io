@@ -22,7 +22,7 @@ jobs:
         with:
           urls: |
             https://lyonsun.github.io
-            https://lyonsun.github.io/posts
+            https://lyonsun.github.io/posts/
           configPath: ./lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true
