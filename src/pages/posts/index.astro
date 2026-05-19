@@ -20,10 +20,10 @@ const tags = await getAllPublishedTags();
         >
             <p class="p-4 text-black/20">Another wonderful day</p>
             <div class="line-before line-after relative flex-1 p-4 md:p-16">
-                <h1 class="mb-8 text-4xl font-bold">Posts</h1>
+                <h1 data-animate="slide-up" class="mb-8 text-4xl font-bold">Posts</h1>
                 {
                     tags.length > 0 && (
-                        <div class="mb-8 flex max-w-[720px] flex-wrap gap-2">
+                        <div data-animate="fade-in" data-delay="1" class="mb-8 flex max-w-[720px] flex-wrap gap-2">
                             {tags.map((tag) => (
                                 <TagLink tag={tag} />
                             ))}
@@ -32,7 +32,7 @@ const tags = await getAllPublishedTags();
                 }
                 {
                     posts.length > 0 ? (
-                        <div class="grid max-w-[720px] gap-8">
+                        <div data-animate="fade-in" data-delay="2" class="grid max-w-[720px] gap-8">
                             {posts.map((post, index) => {
                                 const borderClass = `${
                                     index !== posts.length - 1

@@ -21,4 +21,13 @@
     } else {
         setTimeout(loadGA, 3000);
     }
+
+    if (!window._gaInit) {
+        window._gaInit = true;
+        document.addEventListener('astro:page-load', () => {
+            gtag('config', 'G-ZGT4BC0C4P', {
+                page_path: window.location.pathname,
+            });
+        });
+    }
 </script>
