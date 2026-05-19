@@ -5,11 +5,17 @@ import TagLink from '../atoms/tagLink.astro';
 type Props = {
     post: CollectionEntry<'posts'>;
     borderClass: string;
+    'data-animate'?: string;
+    'data-delay'?: string;
 };
 const { post, borderClass } = Astro.props;
 ---
 
-<article class={`pb-8 ${borderClass}`}>
+<article
+    class={`pb-8 ${borderClass}`}
+    data-animate={Astro.props['data-animate']}
+    data-delay={Astro.props['data-delay']}
+>
     <h2 class="mb-2 text-2xl font-semibold">
         <a href={`/posts/${post.id}`} class="hover:text-black/60">
             {post.data.title}
