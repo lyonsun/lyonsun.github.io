@@ -12,5 +12,8 @@
             }
         });
     }
-    document.addEventListener('astro:page-load', initAnimations);
+    if (!window._animInit) {
+        window._animInit = true;
+        document.addEventListener('astro:page-load', initAnimations);
+    }
 </script>
