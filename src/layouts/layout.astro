@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css';
 import GA4 from '../meta/ga4.astro';
-import Animations from '../meta/animations.astro';
 import { ClientRouter } from 'astro:transitions';
 import {
     SITE_NAME,
@@ -45,9 +44,6 @@ const author = article?.author ?? SITE_AUTHOR;
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />
-
-        <ClientRouter />
-
         <title>{pageTitle}</title>
         <meta name="description" content={description} />
         <meta name="author" content={author} />
@@ -90,8 +86,9 @@ const author = article?.author ?? SITE_AUTHOR;
         <meta name="twitter:site" content={TWITTER_HANDLE} />
         <meta name="twitter:creator" content={TWITTER_HANDLE} />
 
+        <ClientRouter />
+
         <GA4 />
-        <Animations />
     </head>
     <body>
         <main>
