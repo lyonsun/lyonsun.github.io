@@ -23,7 +23,6 @@ jobs:
           urls: |
             https://lyonsun.github.io
             https://lyonsun.github.io/posts
-          budgetPath: ./lighthouse-budget.json
           configPath: ./lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true
