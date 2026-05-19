@@ -19,12 +19,14 @@
 
 ## Branches
 
+- **Always create a new branch per issue** — never work directly on main
 - Follow Conventional Commits naming: `<type>/<short-description>` (e.g., `perf/optimize-fonts`, `fix/broken-link`)
 - Keep branches focused on a single change
 
 ## Pull Requests
 
-- Create PRs for non-trivial changes
+- **Always create a PR** — no direct commits to main
+- Exception: single-line doc fixes (typos, formatting) may be committed directly
 - PR title should match the Conventional Commits format
 - Include a brief description of what changed and why
 - Reference Linear issue numbers when applicable (e.g., `Ref: LYO-24`)
