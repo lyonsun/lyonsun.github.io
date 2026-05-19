@@ -86,7 +86,5 @@ body {
   .animate-fade-in,
   .animate-slide-up {
     animation: none;
-    opacity: 1;
-    transform: none;
   }
 }
