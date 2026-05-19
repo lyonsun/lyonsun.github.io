@@ -100,6 +100,49 @@ npx astro check      # Type-check the project
 
 ---
 
+# Lighthouse Performance Requirements
+
+## Approach
+
+- Follow the guidelines below to keep the site fast and accessible
+- Lighthouse audits run in CI on a schedule, not per-commit
+- Use bundle-size budgets to catch regressions early
+
+## Performance Guidelines
+
+- **No render-blocking resources** — defer or async all non-critical scripts
+- **Self-host fonts** when possible — avoid external font CDN requests
+- **Minimize JavaScript** — only ship what's necessary
+- **Optimize images** — use modern formats (WebP/AVIF), proper sizing, lazy loading
+- **Preconnect** to required third-party origins (fonts, analytics)
+- **No layout shifts** — reserve space for all dynamic content
+
+## Accessibility Guidelines
+
+- All interactive elements must be keyboard accessible
+- Decorative SVGs/icons must have `aria-hidden="true"`
+- External links (`target="_blank"`) must include `rel="noopener noreferrer"`
+- Include skip-to-content navigation link
+- All images must have descriptive `alt` text
+- Maintain sufficient color contrast ratios
+
+## Best Practices Guidelines
+
+- No mixed content (HTTP on HTTPS pages)
+- All external links must use `rel="noopener noreferrer"`
+- No console errors or warnings in production
+- Valid HTML with no deprecated elements
+
+## SEO Guidelines
+
+- Every page must have unique `<title>` and `<meta description>`
+- Canonical URLs on all pages
+- Open Graph and Twitter Card meta tags
+- Valid `robots.txt` and `sitemap.xml`
+- Semantic HTML structure (proper heading hierarchy)
+
+---
+
 # Git Workflow Rules
 
 ## Commits
