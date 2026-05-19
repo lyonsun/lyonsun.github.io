@@ -9,11 +9,16 @@
             } else if (type === 'fade-in') {
                 el.classList.add('animate-fade-in');
             } else {
-                console.warn(`Unknown animation type: "${type}". Expected "slide-up" or "fade-in".`);
+                console.warn(
+                    `Unknown animation type: "${type}". Expected "slide-up" or "fade-in".`,
+                );
                 el.classList.add('animate-fade-in');
             }
             if (delay) {
-                el.style.animationDelay = Number(delay) * 0.2 + 's';
+                const parsed = Number(delay);
+                if (!isNaN(parsed)) {
+                    el.style.animationDelay = parsed * 0.2 + 's';
+                }
             }
         });
     }
