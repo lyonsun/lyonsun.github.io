@@ -4,23 +4,23 @@
     "resourceSizes": [
       {
         "resourceType": "total",
-        "budget": 150
+        "budget": 153600
       },
       {
         "resourceType": "script",
-        "budget": 20
+        "budget": 20480
       },
       {
         "resourceType": "stylesheet",
-        "budget": 30
+        "budget": 30720
       },
       {
         "resourceType": "font",
-        "budget": 80
+        "budget": 81920
       },
       {
         "resourceType": "image",
-        "budget": 100
+        "budget": 102400
       }
     ],
     "timings": [
