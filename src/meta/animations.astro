@@ -1,0 +1,19 @@
+<script is:inline>
+    function initAnimations() {
+        var elements = document.querySelectorAll('[data-animate]');
+        requestAnimationFrame(function () {
+            elements.forEach(function (el) {
+                var type = el.getAttribute('data-animate');
+                var delay = el.getAttribute('data-delay');
+                el.classList.add(
+                    type === 'slide-up' ? 'animate-slide-up' : 'animate-fade-in'
+                );
+                if (delay) {
+                    el.classList.add('stagger-' + delay);
+                }
+            });
+        });
+    }
+    document.addEventListener('DOMContentLoaded', initAnimations);
+    document.addEventListener('astro:page-load', initAnimations);
+</script>

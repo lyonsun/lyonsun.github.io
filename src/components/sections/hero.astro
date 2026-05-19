@@ -8,7 +8,11 @@ const currentDate = new Date().toDateString();
     <div
         class="container mx-auto grid min-h-screen sm:border-r sm:border-l sm:border-stone-200"
     >
-        <div class="self-end p-4">
+        <div
+            class="self-end p-4"
+            data-animate="fade-in"
+            data-delay="3"
+        >
             <a
                 href="/posts/10247-lines-of-code"
                 class="text-black/20 hover:text-black/50"
@@ -21,15 +25,22 @@ const currentDate = new Date().toDateString();
         >
             <h1
                 class="font-sans text-[120px] leading-normal font-bold lg:text-[160px] xl:text-[200px]"
+                data-animate="slide-up"
             >
                 Hi.
             </h1>
             <p
                 class="text-2xl leading-normal md:text-4xl lg:text-5xl xl:text-6xl"
+                data-animate="slide-up"
+                data-delay="1"
             >
                 I'm Liang, passionate Web Engineer.
             </p>
-            <ul class="flex flex-wrap justify-center gap-4 sm:justify-start">
+            <ul
+                class="flex flex-wrap justify-center gap-4 sm:justify-start"
+                data-animate="fade-in"
+                data-delay="2"
+            >
                 <li>
                     <a href="/posts" class="link">
                         <span class="relative">My writings</span>
@@ -43,7 +54,11 @@ const currentDate = new Date().toDateString();
                 </li>
             </ul>
         </div>
-        <p class="justify-self-end p-4 text-black/20">
+        <p
+            class="justify-self-end p-4 text-black/20"
+            data-animate="fade-in"
+            data-delay="4"
+        >
             {currentDate}
         </p>
     </div>
