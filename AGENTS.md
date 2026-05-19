@@ -22,7 +22,14 @@ src/
 ├── layouts/             # Page layouts (layout.astro, blogPost.astro)
 ├── lib/                 # Utilities (posts.ts, url.ts)
 ├── meta/                # Analytics (ga4.astro)
-├── pages/               # Routes (index, 404, posts, sitemap, rss, robots.txt)
+├── pages/               # Routes
+│   ├── index.astro      # Homepage
+│   ├── 404.astro        # Error page
+│   ├── posts/           # Blog index and post pages
+│   ├── rss.xml.ts       # RSS feed
+│   ├── sitemap.xml.ts   # Sitemap
+│   └── robots.txt.ts    # Robots.txt
+├── styles/              # Global styles (global.css)
 ├── content.config.ts    # Content collection schema (Zod)
 └── consts.ts            # Site-level constants
 ```
@@ -87,8 +94,9 @@ npx astro check      # Type-check the project
 ## Adding Blog Posts
 
 1. Create a new `.md` file in `src/content/posts/`
-2. Include required frontmatter: `title`, `description`, `pubDate`, `tags`
-3. Schema is defined in `src/content.config.ts` (Zod validation)
+2. Include required frontmatter: `title`, `description`, `pubDate`
+3. Optional fields: `tags` (defaults to `[]`), `author`, `updatedAt`, `draft` (default: `false`), `aiGeneratedContent` (default: `false`)
+4. Schema is defined in `src/content.config.ts` (Zod validation)
 
 ---
 
