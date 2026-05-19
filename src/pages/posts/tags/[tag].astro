@@ -1,7 +1,10 @@
 ---
 import Layout from '../../../layouts/layout.astro';
 import PostItem from '../../../components/elements/postItem.astro';
-import { getAllPublishedTags, getPublishedPostsByTag } from '../../../lib/posts';
+import {
+    getAllPublishedTags,
+    getPublishedPostsByTag,
+} from '../../../lib/posts';
 
 export async function getStaticPaths() {
     const tags = await getAllPublishedTags();
@@ -26,10 +29,22 @@ const posts = await getPublishedPostsByTag(tag);
         <div
             class="container mx-auto flex min-h-screen flex-col sm:border-r sm:border-l sm:border-stone-200"
         >
-            <p class="p-4 text-black/20">Browsing by tag</p>
+            <p class="p-4 text-black/20" data-animate="fade-in">
+                Browsing by tag
+            </p>
             <div class="line-before line-after relative flex-1 p-4 md:p-16">
-                <h1 class="mb-3 text-4xl font-bold">#{tag}</h1>
-                <p class="mb-8 text-stone-600">
+                <h1
+                    class="mb-3 text-4xl font-bold"
+                    data-animate="slide-up"
+                    data-delay="1"
+                >
+                    #{tag}
+                </h1>
+                <p
+                    class="mb-8 text-stone-600"
+                    data-animate="fade-in"
+                    data-delay="2"
+                >
                     {posts.length} post{posts.length === 1 ? '' : 's'}
                 </p>
                 {
@@ -46,18 +61,28 @@ const posts = await getPublishedPostsByTag(tag);
                                     <PostItem
                                         post={post}
                                         borderClass={borderClass}
+                                        data-animate="fade-in"
+                                        data-delay={`${Math.min(3 + index, 8)}`}
                                     />
                                 );
                             })}
                         </div>
                     ) : (
-                        <p class="text-black/20">No posts found for this tag.</p>
+                        <p
+                            class="text-black/20"
+                            data-animate="fade-in"
+                            data-delay="3"
+                        >
+                            No posts found for this tag.
+                        </p>
                     )
                 }
             </div>
             <a
                 href="/posts"
                 class="self-end p-4 text-black/20 hover:text-black/50"
+                data-animate="fade-in"
+                data-delay="4"
             >
                 &larr; Back to Posts
             </a>
