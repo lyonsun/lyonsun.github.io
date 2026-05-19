@@ -16,15 +16,17 @@
 - Run `npm run build` to verify the build passes
 - Run typecheck/lint if available (`npx astro check`)
 - Review `git diff` before staging
+- **Never force push** — use `git commit --fixup` or a separate commit instead of amending
 
 ## Branches
 
+- **Always create a new branch per issue** — never work directly on main
 - Follow Conventional Commits naming: `<type>/<short-description>` (e.g., `perf/optimize-fonts`, `fix/broken-link`)
 - Keep branches focused on a single change
 
 ## Pull Requests
 
-- Create PRs for non-trivial changes
+- **Always create a PR** — no direct commits to main
 - PR title should match the Conventional Commits format
 - Include a brief description of what changed and why
 - Reference Linear issue numbers when applicable (e.g., `Ref: LYO-24`)
