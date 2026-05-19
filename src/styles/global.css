@@ -70,25 +70,17 @@ body {
   }
 }
 
-.js-enabled [data-animate] {
-  opacity: 0;
-}
-
 .animate-fade-in {
-  animation: fadeIn 0.4s ease-out both;
+  animation: fadeIn 0.4s ease-out backwards;
   will-change: opacity;
 }
 
 .animate-slide-up {
-  animation: slideUp 0.4s ease-out both;
+  animation: slideUp 0.4s ease-out backwards;
   will-change: opacity, transform;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .js-enabled [data-animate] {
-    opacity: 1;
-  }
-
   .animate-fade-in,
   .animate-slide-up {
     animation: none;
