@@ -17,8 +17,8 @@
     };
 
     if ('requestIdleCallback' in window) {
-        requestIdleCallback(loadGA, { timeout: 3000 });
+        requestIdleCallback(loadGA, { timeout: 5000 });
     } else {
-        setTimeout(loadGA, 1000);
+        setTimeout(loadGA, 3000);
     }
 </script>
