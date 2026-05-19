@@ -70,15 +70,6 @@ body {
   }
 }
 
-@keyframes lineDrawIn {
-  from {
-    transform: translateX(-50%) scaleX(0);
-  }
-  to {
-    transform: translateX(-50%) scaleX(1);
-  }
-}
-
 .animate-fade-in {
   animation: fadeIn 0.4s ease-out both;
 }
@@ -87,38 +78,11 @@ body {
   animation: slideUp 0.4s ease-out both;
 }
 
-.animate-line-draw {
-  animation: lineDrawIn 0.5s ease-out both;
-}
-
-.stagger-1 {
-  animation-delay: 0.1s;
-}
-
-.stagger-2 {
-  animation-delay: 0.2s;
-}
-
-.stagger-3 {
-  animation-delay: 0.3s;
-}
-
-.stagger-4 {
-  animation-delay: 0.4s;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in,
-  .animate-slide-up,
-  .animate-line-draw {
+  .animate-slide-up {
     animation: none;
     opacity: 1;
     transform: none;
-  }
-
-  .line-before::before,
-  .line-after::after {
-    animation: none;
-    transform: translateX(-50%) scaleX(1);
   }
 }

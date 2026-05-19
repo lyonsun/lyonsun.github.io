@@ -91,11 +91,11 @@ const author = article?.author ?? SITE_AUTHOR;
         <meta name="twitter:creator" content={TWITTER_HANDLE} />
 
         <GA4 />
+        <Animations />
     </head>
     <body>
         <main>
             <slot />
         </main>
-        <Animations />
     </body>
 </html>
