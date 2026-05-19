@@ -16,6 +16,7 @@
 - Run `npm run build` to verify the build passes
 - Run typecheck/lint if available (`npx astro check`)
 - Review `git diff` before staging
+- **Never force push** — use `git commit --fixup` or a separate commit instead of amending
 
 ## Branches
 
