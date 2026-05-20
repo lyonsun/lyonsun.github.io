@@ -10,9 +10,7 @@ const { post, isLast } = Astro.props;
 const borderClass = isLast ? 'border-none' : 'border-b border-stone-200';
 ---
 
-<article
-    class={`pb-8 ${borderClass}`}
->
+<article class={`pb-8 ${borderClass}`}>
     <h2 class="mb-2 text-2xl font-semibold">
         <a href={`/posts/${post.id}`} class="hover:text-black/60">
             {post.data.title}

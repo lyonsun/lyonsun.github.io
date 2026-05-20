@@ -55,12 +55,12 @@ npx astro check      # Type-check the project
 
 ## Key Commands
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start Astro dev server |
-| `npm run build` | Build static site for production |
+| Command           | Description                      |
+| ----------------- | -------------------------------- |
+| `npm run dev`     | Start Astro dev server           |
+| `npm run build`   | Build static site for production |
 | `npm run preview` | Preview production build locally |
-| `npm run astro` | Run Astro CLI commands directly |
+| `npm run astro`   | Run Astro CLI commands directly  |
 | `npx astro check` | Type-check with `@astrojs/check` |
 
 ---
