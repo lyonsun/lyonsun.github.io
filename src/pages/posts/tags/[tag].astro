@@ -40,20 +40,12 @@ const posts = await getPublishedPostsByTag(tag);
                 {
                     posts.length > 0 ? (
                         <div class="grid max-w-[720px] gap-8">
-                            {posts.map((post, index) => {
-                                const borderClass = `${
-                                    index !== posts.length - 1
-                                        ? 'border-b'
-                                        : 'border-none'
-                                } border-stone-200`;
-
-                                return (
-                                    <PostItem
-                                        post={post}
-                                        borderClass={borderClass}
-                                    />
-                                );
-                            })}
+                            {posts.map((post, index) => (
+                                <PostItem
+                                    post={post}
+                                    isLast={index === posts.length - 1}
+                                />
+                            ))}
                         </div>
                     ) : (
                         <p class="text-black/20">
