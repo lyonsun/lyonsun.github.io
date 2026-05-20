@@ -2,13 +2,14 @@
 import '../styles/global.css';
 import GA4 from '../meta/ga4.astro';
 import { ClientRouter } from 'astro:transitions';
+import { getImage } from 'astro:assets';
+import ogImage from '../assets/og-image.png';
 import {
     SITE_NAME,
     SITE_DESCRIPTION,
     SITE_AUTHOR,
     SITE_LOCALE,
     TWITTER_HANDLE,
-    DEFAULT_OG_IMAGE,
 } from '../consts';
 
 type Props = {
@@ -25,16 +26,26 @@ type Props = {
 const {
     title,
     description = SITE_DESCRIPTION,
-    image = DEFAULT_OG_IMAGE,
+    image,
     article,
     noindex = false,
 } = Astro.props;
 
 const pageTitle = title ? title : SITE_NAME;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
-const imageUrl = new URL(image, Astro.site).toString();
 const ogType = article ? 'article' : 'website';
 const author = article?.author ?? SITE_AUTHOR;
+
+// Resolve OG image: optimize default, pass through custom URLs
+const defaultOgImage = await getImage({ src: ogImage });
+const imageUrl = image
+    ? new URL(image, Astro.site).toString()
+    : new URL(defaultOgImage.src, Astro.site).toString();
+const imageWidth = image ? undefined : defaultOgImage.attributes.width;
+const imageHeight = image ? undefined : defaultOgImage.attributes.height;
+const imageMimeType = image
+    ? undefined
+    : `image/${defaultOgImage.options.format}`;
 ---
 
 <!doctype html>
@@ -71,6 +82,9 @@ const author = article?.author ?? SITE_AUTHOR;
         <meta property="og:description" content={description} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content={imageUrl} />
+        {imageWidth && <meta property="og:image:width" content={String(imageWidth)} />}
+        {imageHeight && <meta property="og:image:height" content={String(imageHeight)} />}
+        {imageMimeType && <meta property="og:image:type" content={imageMimeType} />}
         <meta property="og:site_name" content={SITE_NAME} />
         <meta property="og:locale" content={SITE_LOCALE} />
 
