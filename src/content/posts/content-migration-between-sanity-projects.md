@@ -220,75 +220,123 @@ This is the most straightforward way to perform a bulk migration. The process in
     Use the `sanity dataset export` command with the `--types` flag to specify which document type you want. This command will create a compressed `.tar.gz` file.
 
     ```bash
-    # Replace 'yourDocType' with the actual name of your schema type (e.g., 'post', 'product')
-*** Add File: /Users/liangsun/Developer/lyonsun/lyonsun.github.io/src/content/posts/editorconfig-vs-prettier.md
----
-title: EditorConfig vs Prettier
-description: Do we need both .editorconfig and .prettierrc in a project, or just one of them would be enough?
-pubDate: 2025-07-30
-author: Google Gemini 2.5 Pro
-aiGeneratedContent: true
----
+    # Replace 'yourDocType' with the actual name of your schema type
+    # (e.g., 'post', 'product')
+    # Replace 'production' with your source dataset name if it's different
+    sanity dataset export production --types yourDocType
+    ```
 
-### Decoding Your Dev Environment: .editorconfig vs. .prettierrc
+    This will generate a file like `production-export-....tar.gz`.
 
-In the world of software development, maintaining consistent code style across a project is crucial for readability and collaboration. Two popular tools that help enforce this consistency are `.editorconfig` and `.prettierrc`. While they both contribute to a standardized codebase, they operate at different levels and serve distinct, yet complementary, purposes.
+3.  **Login to Your Destination Project**
+    Now, switch the CLI's context to your **destination project**. This is a crucial step.
 
----
+    ```bash
+    # Run this again and select your DESTINATION project
+    sanity login
+    ```
 
-### What is `.editorconfig`?
+4.  **Import the Data**
+    Use the `sanity dataset import` command to upload the exported file to your destination dataset. Using the `--replace` flag will update existing documents that have the same `_id`.
 
-Think of `.editorconfig` as a universal rulebook for your text editor or Integrated Development Environment (IDE). It's a configuration file that dictates fundamental coding style preferences directly within your editor. This ensures that no matter which supported editor a team member uses, the basic formatting of the code they write remains consistent.
+    ```bash
+    # Use the actual filename from step 2
+    # Replace 'staging' with your destination dataset name
+    sanity dataset import production-export-....tar.gz staging --replace
+    ```
 
-**Key Responsibilities of `.editorconfig`:**
-
-- **Indentation Style:** Defines whether to use tabs or spaces for indentation.
-- **Indentation and Tab Size:** Specifies the width of an indent.
-- **End of Line Characters:** Enforces consistent line endings (`lf`, `crlf`, or `cr`).
-- **Character Set:** Sets the file's character encoding (e.g., `utf-8`).
-- **Trimming Trailing Whitespace:** Removes unnecessary whitespace at the end of lines.
-- **Ensuring a Final Newline:** Guarantees that files end with a newline character.
-
-The primary goal of `.editorconfig` is to prevent common inconsistencies that arise from different editor configurations. It achieves this by directly influencing the editor's behavior as you type.
+    The CLI will handle the entire upload process.
 
 ---
 
-### What is `.prettierrc`?
+### ## Method 2: Modified Node.js Script (For More Control) 📜
 
-On the other hand, `.prettierrc` is the configuration file for **Prettier**, an opinionated code formatter. Prettier takes a more active role by automatically reformatting your code to adhere to a predefined set of style rules. It's less about guiding your typing and more about enforcing a consistent look and feel across the entire codebase with a single command or on save.
+This method is ideal if you need to **transform data** during the migration (e.g., change field names, add default values) or handle complex logic. It modifies the previous script to fetch all documents of a type and write them in a single, efficient transaction.
 
-**Key Responsibilities of `.prettierrc`:**
+#### **Updated Script**
 
-- **Print Width:** Determines the maximum line length before the code is wrapped.
-- **Semicolon Usage:** Specifies whether to include or omit semicolons at the end of statements.
-- **Quote Style:** Enforces the use of single or double quotes.
-- **Trailing Commas:** Manages the use of trailing commas in arrays and objects.
-- **Bracket Spacing:** Controls the spacing inside curly braces.
-- And many more language-specific formatting rules.
+This script uses a **GROQ query** to fetch the documents and a **transaction** to create them efficiently.
 
-`.prettierrc` allows for a much more granular and comprehensive set of formatting rules compared to `.editorconfig`.
+```javascript
+// migrate-bulk.js
+import { createClient } from "@sanity/client";
+
+// --- Configuration ---
+// Replace with your actual project details and document type
+const SOURCE_CONFIG = {
+  projectId: "YOUR_SOURCE_PROJECT_ID",
+  dataset: "production",
+  token: "YOUR_SOURCE_READ_TOKEN",
+  apiVersion: "2023-08-01",
+  useCdn: false,
+};
+
+const DESTINATION_CONFIG = {
+  projectId: "YOUR_DESTINATION_PROJECT_ID",
+  dataset: "staging",
+  token: "YOUR_DESTINATION_WRITE_TOKEN",
+  apiVersion: "2023-08-01",
+  useCdn: false,
+};
+
+const DOCUMENT_TYPE_TO_MIGRATE = "yourDocType"; // e.g., 'post'
+// -------------------
+
+const sourceClient = createClient(SOURCE_CONFIG);
+const destinationClient = createClient(DESTINATION_CONFIG);
+
+async function migrateBulkDocuments() {
+  console.log(
+    `Fetching all documents of type '${DOCUMENT_TYPE_TO_MIGRATE}'...`,
+  );
+
+  // 1. Fetch all documents of the specified type from the source
+  const query = `*[_type == "${DOCUMENT_TYPE_TO_MIGRATE}"]`;
+  const documents = await sourceClient.fetch(query);
+
+  if (!documents || documents.length === 0) {
+    console.log("No documents of that type found. Exiting.");
+    return;
+  }
+
+  console.log(`Found ${documents.length} documents to migrate.`);
+
+  // 2. Prepare a transaction for the destination project
+  let transaction = destinationClient.transaction();
+
+  for (const doc of documents) {
+    // 3. Prepare each document for creation, removing system fields
+    const { _rev, _updatedAt, _createdAt, ...newDoc } = doc;
+
+    // Here you could add any data transformation logic if needed
+    // For example: newDoc.newField = 'some default value';
+
+    // 4. Add the 'createOrReplace' operation to the transaction
+    transaction.createOrReplace(newDoc);
+  }
+
+  // 5. Commit the transaction to write all documents in one go
+  console.log("Writing documents to the destination...");
+  try {
+    const result = await transaction.commit();
+    console.log(`✅ Success! Migrated ${result.results.length} documents.`);
+  } catch (error) {
+    console.error("❌ Error committing transaction:", error.message);
+  }
+}
+
+migrateBulkDocuments();
+```
+
+To run this script, save it as `migrate-bulk.js` and execute `node migrate-bulk.js`.
 
 ---
 
-### The Key Differences at a Glance
+### ## Crucial Considerations for Bulk Migration ⚠️
 
-| Feature           | `.editorconfig`                                             | `.prettierrc`                                           |
-| ----------------- | ----------------------------------------------------------- | ------------------------------------------------------- |
-| **Purpose**       | Configures the editor's basic coding style settings.        | Configures an automated code formatter to rewrite code. |
-| **Scope**         | Basic settings like indentation, line endings, and charset. | A wide range of stylistic rules for code formatting.    |
-| **Execution**     | Applies settings directly within the editor as you code.    | Reformats code on demand (e.g., on save, pre-commit).   |
-| **"Opinionated"** | Less opinionated; focuses on fundamental consistency.       | Highly opinionated; enforces a consistent style.        |
-
----
-
-### Working in Harmony: A Collaborative Approach 🤝
-
-The real power comes from using `.editorconfig` and `.prettierrc` **together**. This combination provides a robust and layered approach to code consistency.
-
-Here's the recommended workflow:
-
-1.  **`.editorconfig` as the Foundation:** Use `.editorconfig` to set the most basic and universal coding style rules for your project. This ensures that even before any automated formatting takes place, your editor is configured correctly.
-
-2.  **`.prettierrc` for the Finer Details:** Let `.prettierrc` handle the more complex and opinionated formatting rules. Prettier can even be configured to read your `.editorconfig` file for its basic settings, ensuring a seamless integration. However, it's important to note that any rules explicitly defined in your `.prettierrc` file will override the corresponding settings from `.editorconfig`.
-
-By leveraging both, you create a development environment where your editor provides initial style guidance, and Prettier acts as the ultimate enforcer of a consistent and readable codebase. This two-pronged approach helps to minimize stylistic debates and allows developers to focus on what truly matters: writing quality code.
+- **References**: This is the most important consideration. If your `yourDocType` documents reference other documents (e.g., a "post" references an "author"), you **must migrate the referenced documents first**. The migration will fail or result in broken links if the referenced documents don't exist in the destination.
+- **Assets (Images/Files)**: Both methods will copy the _references_ to assets, not the assets themselves. The images and files will still be hosted by your **source project**. For a true migration, you need a much more complex script that downloads each asset and re-uploads it to the destination project.
+- **Drafts**:
+  - The **CLI method** (`sanity dataset export`) **does not include drafts by default**. You must add the `--drafts` flag to include them: `sanity dataset export ... --types yourDocType --drafts`.
+  - The **Node.js script** using the query `*[_type == "yourDocType"]` will **only fetch published documents**. To include drafts, you'd need a more complex query.
+- **Testing**: Always run a migration on a **non-production dataset first**. Create a temporary dataset in your destination project for testing to ensure everything works as expected before running it on your live data.
