@@ -37,7 +37,7 @@ const ogType = article ? 'article' : 'website';
 const author = article?.author ?? SITE_AUTHOR;
 
 // Resolve OG image: optimize default, pass through custom URLs
-const defaultOgImage = await getImage({ src: ogImage });
+const defaultOgImage = await getImage({ src: ogImage, format: 'webp' });
 const imageUrl = image
     ? new URL(image, Astro.site).toString()
     : new URL(defaultOgImage.src, Astro.site).toString();
@@ -45,7 +45,7 @@ const imageWidth = image ? undefined : defaultOgImage.attributes.width;
 const imageHeight = image ? undefined : defaultOgImage.attributes.height;
 const imageMimeType = image
     ? undefined
-    : `image/${defaultOgImage.options.format}`;
+    : 'image/webp';
 ---
 
 <!doctype html>
