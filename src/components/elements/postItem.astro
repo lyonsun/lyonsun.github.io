@@ -4,9 +4,10 @@ import TagLink from '../atoms/tagLink.astro';
 
 type Props = {
     post: CollectionEntry<'posts'>;
-    borderClass: string;
+    isLast: boolean;
 };
-const { post, borderClass } = Astro.props;
+const { post, isLast } = Astro.props;
+const borderClass = `${!isLast ? 'border-b' : 'border-none'} border-stone-200`;
 ---
 
 <article
