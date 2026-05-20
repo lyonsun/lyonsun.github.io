@@ -1,5 +1,6 @@
 ---
 import { type CollectionEntry } from 'astro:content';
+import { formatDate } from '../lib/posts';
 import TagLink from '../components/atoms/tagLink.astro';
 import Layout from './layout.astro';
 
@@ -9,16 +10,10 @@ type Props = {
 
 const { frontmatter } = Astro.props;
 
-const publishDate = frontmatter.pubDate.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-});
-const updatedDate = frontmatter.updatedAt?.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-});
+const publishDate = formatDate(frontmatter.pubDate);
+const updatedDate = frontmatter.updatedAt
+    ? formatDate(frontmatter.updatedAt)
+    : undefined;
 ---
 
 <Layout

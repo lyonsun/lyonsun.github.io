@@ -30,4 +30,17 @@ async function getAllPublishedTags() {
     return Array.from(tags).sort((a, b) => a.localeCompare(b));
 }
 
-export { getPublishedPosts, getPublishedPostsByTag, getAllPublishedTags };
+function formatDate(date: Date): string {
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+}
+
+export {
+    getPublishedPosts,
+    getPublishedPostsByTag,
+    getAllPublishedTags,
+    formatDate,
+};
