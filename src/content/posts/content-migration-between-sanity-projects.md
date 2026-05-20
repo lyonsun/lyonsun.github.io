@@ -219,19 +219,15 @@ This is the most straightforward way to perform a bulk migration. The process in
 2.  **Export the Specific Document Type**
     Use the `sanity dataset export` command with the `--types` flag to specify which document type you want. This command will create a compressed `.tar.gz` file.
 
-        ```bash
-        # Replace 'yourDocType' with the actual name of your schema type (e.g., 'post', 'product')
-
-    \*\*\* Add File: /Users/liangsun/Developer/lyonsun/lyonsun.github.io/src/content/posts/editorconfig-vs-prettier.md
-
+    ```bash
+    # Replace 'yourDocType' with the actual name of your schema type (e.g., 'post', 'product')
+*** Add File: /Users/liangsun/Developer/lyonsun/lyonsun.github.io/src/content/posts/editorconfig-vs-prettier.md
 ---
-
 title: EditorConfig vs Prettier
 description: Do we need both .editorconfig and .prettierrc in a project, or just one of them would be enough?
 pubDate: 2025-07-30
 author: Google Gemini 2.5 Pro
 aiGeneratedContent: true
-
 ---
 
 ### Decoding Your Dev Environment: .editorconfig vs. .prettierrc

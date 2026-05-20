@@ -50,7 +50,8 @@ npm install          # Install dependencies
 npm run dev          # Start dev server
 npm run build        # Build for production
 npm run preview      # Preview production build
-npx astro check      # Type-check the project
+npm run check        # Type-check the project
+npm run format       # Format code with Prettier
 ```
 
 ## Key Commands
@@ -61,7 +62,8 @@ npx astro check      # Type-check the project
 | `npm run build`   | Build static site for production |
 | `npm run preview` | Preview production build locally |
 | `npm run astro`   | Run Astro CLI commands directly  |
-| `npx astro check` | Type-check with `@astrojs/check` |
+| `npm run check`   | Type-check with `@astrojs/check` |
+| `npm run format`  | Format code with Prettier        |
 
 ---
 
@@ -159,8 +161,8 @@ npx astro check      # Type-check the project
 ## Before Committing
 
 - Run `npm run build` to verify the build passes
-- Run `npx astro check` for type-checking
-- Run Prettier formatting (auto-applied if configured)
+- Run `npm run check` for type-checking
+- Run `npm run format` for formatting
 - Review `git diff` before staging
 - **Never force push** — use `git commit --fixup` or a separate commit instead of amending
 
