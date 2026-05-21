@@ -24,7 +24,11 @@ const posts = await getPublishedPostsByTag(tag);
     title={`Posts tagged ${tag}`}
     description={`Writing tagged with ${tag}.`}
 >
-    <PageSection topText="Browsing by tag" bottomHref="/posts" bottomText="← Back to Posts">
+    <PageSection
+        topText="Browsing by tag"
+        bottomHref="/posts"
+        bottomText="← Back to Posts"
+    >
         <h1 class="mb-3 text-4xl font-bold">#{tag}</h1>
         <p class="mb-8 text-stone-600">
             {posts.length} post{posts.length === 1 ? '' : 's'}
