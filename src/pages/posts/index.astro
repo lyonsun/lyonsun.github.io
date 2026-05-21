@@ -2,6 +2,7 @@
 import Layout from '../../layouts/layout.astro';
 import PostItem from '../../components/elements/postItem.astro';
 import TagLink from '../../components/atoms/tagLink.astro';
+import PageSection from '../../components/sections/pageSection.astro';
 import { getAllPublishedTags, getPublishedPosts } from '../../lib/posts';
 
 const posts = await getPublishedPosts();
@@ -12,42 +13,34 @@ const tags = await getAllPublishedTags();
     title="My writings"
     description="Writing on web development, TypeScript, Go, and side projects."
 >
-    <section
-        class="bg-gradient-to-br from-cyan-50 to-fuchsia-100 px-0 sm:px-20"
+    <PageSection
+        topText="Another wonderful day"
+        bottomHref="/"
+        bottomText="← Back to Home"
     >
-        <div
-            class="container mx-auto flex min-h-screen flex-col sm:border-r sm:border-l sm:border-stone-200"
-        >
-            <p class="p-4 text-black/20">Another wonderful day</p>
-            <div class="line-before line-after relative flex-1 p-4 md:p-16">
-                <h1 class="mb-8 text-4xl font-bold">Posts</h1>
-                {
-                    tags.length > 0 && (
-                        <div class="mb-8 flex max-w-[720px] flex-wrap gap-2">
-                            {tags.map((tag) => (
-                                <TagLink tag={tag} />
-                            ))}
-                        </div>
-                    )
-                }
-                {
-                    posts.length > 0 ? (
-                        <div class="grid max-w-[720px] gap-8">
-                            {posts.map((post, index) => (
-                                <PostItem
-                                    post={post}
-                                    isLast={index === posts.length - 1}
-                                />
-                            ))}
-                        </div>
-                    ) : (
-                        <p class="text-black/20">No blog posts found.</p>
-                    )
-                }
-            </div>
-            <a href="/" class="self-end p-4 text-black/20 hover:text-black/50">
-                &larr; Back to Home
-            </a>
-        </div>
-    </section>
+        <h1 class="mb-8 text-4xl font-bold">Posts</h1>
+        {
+            tags.length > 0 && (
+                <div class="mb-8 flex max-w-[720px] flex-wrap gap-2">
+                    {tags.map((tag) => (
+                        <TagLink tag={tag} />
+                    ))}
+                </div>
+            )
+        }
+        {
+            posts.length > 0 ? (
+                <div class="grid max-w-[720px] gap-8">
+                    {posts.map((post, index) => (
+                        <PostItem
+                            post={post}
+                            isLast={index === posts.length - 1}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <p class="text-black/20">No blog posts found.</p>
+            )
+        }
+    </PageSection>
 </Layout>
