@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../layouts/layout.astro';
 import PostItem from '../../../components/elements/postItem.astro';
+import PageSection from '../../../components/sections/pageSection.astro';
 import {
     getAllPublishedTags,
     getPublishedPostsByTag,
@@ -23,43 +24,24 @@ const posts = await getPublishedPostsByTag(tag);
     title={`Posts tagged ${tag}`}
     description={`Writing tagged with ${tag}.`}
 >
-    <section
-        class="bg-gradient-to-br from-cyan-50 to-fuchsia-100 px-0 sm:px-20"
-    >
-        <div
-            class="container mx-auto flex min-h-screen flex-col sm:border-r sm:border-l sm:border-stone-200"
-        >
-            <p class="p-4 text-black/20">Browsing by tag</p>
-            <div class="line-before line-after relative flex-1 p-4 md:p-16">
-                <h1 class="mb-3 text-4xl font-bold">
-                    #{tag}
-                </h1>
-                <p class="mb-8 text-stone-600">
-                    {posts.length} post{posts.length === 1 ? '' : 's'}
-                </p>
-                {
-                    posts.length > 0 ? (
-                        <div class="grid max-w-[720px] gap-8">
-                            {posts.map((post, index) => (
-                                <PostItem
-                                    post={post}
-                                    isLast={index === posts.length - 1}
-                                />
-                            ))}
-                        </div>
-                    ) : (
-                        <p class="text-black/20">
-                            No posts found for this tag.
-                        </p>
-                    )
-                }
-            </div>
-            <a
-                href="/posts"
-                class="self-end p-4 text-black/20 hover:text-black/50"
-            >
-                &larr; Back to Posts
-            </a>
-        </div>
-    </section>
+    <PageSection topText="Browsing by tag" bottomHref="/posts" bottomText="← Back to Posts">
+        <h1 class="mb-3 text-4xl font-bold">#{tag}</h1>
+        <p class="mb-8 text-stone-600">
+            {posts.length} post{posts.length === 1 ? '' : 's'}
+        </p>
+        {
+            posts.length > 0 ? (
+                <div class="grid max-w-[720px] gap-8">
+                    {posts.map((post, index) => (
+                        <PostItem
+                            post={post}
+                            isLast={index === posts.length - 1}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <p class="text-black/20">No posts found for this tag.</p>
+            )
+        }
+    </PageSection>
 </Layout>
