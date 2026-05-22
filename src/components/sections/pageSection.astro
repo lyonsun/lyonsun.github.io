@@ -23,7 +23,7 @@ const containerClasses =
 
 <section class="bg-gradient-to-br from-cyan-50 to-fuchsia-100 px-0 sm:px-20">
     <div class={containerClasses}>
-        {topText && <p class="p-4 text-black/20">{topText}</p>}
+        {topText && <p class="p-4 text-black/60">{topText}</p>}
         <slot name="top" />
         <div
             class:list={[
@@ -37,7 +37,7 @@ const containerClasses =
             bottomHref && (
                 <a
                     href={bottomHref}
-                    class="self-end p-4 text-black/20 hover:text-black/50"
+                    class="self-end p-4 text-black/60 hover:text-black/70"
                 >
                     {bottomText}
                 </a>
