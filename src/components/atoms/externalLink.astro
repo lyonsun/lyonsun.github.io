@@ -6,7 +6,7 @@ type Props = { url: string; title: string };
 const { url, title } = Astro.props;
 ---
 
-<a href={url} target="_blank" class="link">
+<a href={url} target="_blank" rel="noopener noreferrer" class="link">
     <span class="item-center relative flex justify-center gap-2">
         {title}
         <ExternalLinkIcon className="size-5" />
