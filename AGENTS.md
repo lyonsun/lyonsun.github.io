@@ -76,5 +76,6 @@ Required frontmatter: `title`, `description`, `pubDate`. Optional: `tags` (defau
 - Conventional Commits: `type(scope): description`. Always create a branch per issue.
 - Branch naming: no prefix (e.g., `fix/external-link-rel`, not `lyonsun7/lyo-42-...`).
 - Pre-commit order: `new branch` → `build` → `check` → `format`, then review `git diff`.
+- After pushing, always create a PR using `gh pr create`.
 - No force push; never commit without explicit approval.
 - Reference Linear: `Ref: LYO-NN`.
