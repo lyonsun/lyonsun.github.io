@@ -74,6 +74,7 @@ Required frontmatter: `title`, `description`, `pubDate`. Optional: `tags` (defau
 ## Git Workflow
 
 - Conventional Commits: `type(scope): description`. Always create a branch per issue.
-- Pre-commit order: `build` → `check` → `format`, then review `git diff`.
+- Branch naming: no prefix (e.g., `fix/external-link-rel`, not `lyonsun7/lyo-42-...`).
+- Pre-commit order: `new branch` → `build` → `check` → `format`, then review `git diff`.
 - No force push; never commit without explicit approval.
 - Reference Linear: `Ref: LYO-NN`.
