@@ -1,4 +1,5 @@
 ---
+import SkipLink from '../components/atoms/skipLink.astro';
 import '../styles/global.css';
 import GA4 from '../meta/ga4.astro';
 import { ClientRouter } from 'astro:transitions';
@@ -125,7 +126,8 @@ const imageMimeType = image ? undefined : 'image/webp';
         <GA4 />
     </head>
     <body>
-        <main>
+        <SkipLink />
+        <main id="main-content">
             <slot />
         </main>
     </body>
