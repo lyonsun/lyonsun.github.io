@@ -17,8 +17,13 @@ const POSTS_DIR = join(__dirname, '..', 'src', 'content', 'posts');
 const REPO_ROOT = join(__dirname, '..');
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = 'mixtral-8x7b-32768';
-const SITE_AUTHOR = 'Liang Sun';
+const GROQ_MODEL = 'llama-3.3-70b-versatile';
+const SITE_AUTHOR = GROQ_MODEL.split('/')
+    .pop()
+    .replace(/-versatile|-instruct|-instant|-preview/g, '')
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
 
 function yamlQuote(value) {
     const escaped = String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
@@ -51,14 +56,10 @@ Requirements:
 - 300-500 words
 - Educational, practical, and technically accurate
 - Write in clear, engaging English
-- Use markdown formatting for the body (headings, lists, code blocks as needed)
-
-Respond with valid JSON only (no markdown wrapping, no trailing commas):
-{
-  "title": "The article title",
-  "description": "One-sentence summary for the post's frontmatter description",
-  "body": "Full article body in markdown format"
-}`;
+- Use markdown formatting (headings, lists, code blocks as needed)
+- Start with a level-2 heading (##) for the title
+- Do not include any JSON, metadata, or code fences around the article
+- Just write the article directly in plain markdown`;
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 60000);
@@ -89,23 +90,18 @@ Respond with valid JSON only (no markdown wrapping, no trailing commas):
     }
 
     const data = await response.json();
-    const content = data.choices[0].message.content;
+    const body = data.choices[0].message.content.trim();
 
-    try {
-        const cleaned = content
-            .replace(/^```json\s*/i, '')
-            .replace(/```\s*$/, '')
-            .trim();
-        return JSON.parse(cleaned);
-    } catch {
-        const lines = content.split('\n');
-        const firstHeading = lines.find((l) => l.startsWith('# '));
-        const title = firstHeading
-            ? firstHeading.replace(/^#\s+/, '').trim()
-            : topic.title;
-        const description = topic.angle.slice(0, 150);
-        return { title, description, body: content };
-    }
+    const firstPara = body
+        .replace(/^##\s+.*\n*/i, '')
+        .split('\n\n')
+        .find((p) => p.trim().length > 0);
+
+    const description = firstPara
+        ? firstPara.replace(/[*_#]/g, '').trim().slice(0, 150)
+        : topic.angle.slice(0, 150);
+
+    return { title: topic.title, description, body };
 }
 
 function generateFrontmatter({ title, description, dateStr, tags }) {
