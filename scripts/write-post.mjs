@@ -128,7 +128,9 @@ function slugToFileName(dateStr, slug) {
 }
 
 async function main() {
-    const topicSlug = process.argv[2];
+    const args = process.argv.slice(2);
+    const dryRun = args.includes('--dry-run');
+    const topicSlug = args.find((a) => !a.startsWith('--'));
     const topics = readTopics();
 
     let topicIndex;
@@ -173,6 +175,13 @@ async function main() {
             'AI response missing required fields (title, description, or body).',
         );
         process.exit(1);
+    }
+
+    if (dryRun) {
+        console.log(`[dry-run] Would write: ${filePath}`);
+        console.log(`[dry-run] Title: ${result.title}`);
+        console.log(`[dry-run] Topic: ${topic.slug} would be marked as used`);
+        process.exit(0);
     }
 
     if (!existsSync(POSTS_DIR)) {
