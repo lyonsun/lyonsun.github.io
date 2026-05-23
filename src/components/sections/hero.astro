@@ -1,8 +1,6 @@
 ---
 import ExternalLink from '../atoms/externalLink.astro';
 import PageSection from './pageSection.astro';
-
-const currentDate = new Date().toDateString();
 ---
 
 <PageSection
@@ -39,6 +37,13 @@ const currentDate = new Date().toDateString();
         </li>
     </ul>
     <div slot="bottom" class="justify-self-end p-4 text-black/60">
-        {currentDate}
+        <span id="current-date"></span>
     </div>
 </PageSection>
+
+<script>
+    const el = document.getElementById('current-date');
+    if (el) {
+        el.textContent = new Date().toDateString();
+    }
+</script>
