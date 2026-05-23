@@ -34,9 +34,10 @@ jobs:
         id: compose
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          TOPIC_SLUG: ${{ inputs.topic_slug || '' }}
         run: |
-          if [ -n "${{ inputs.topic_slug }}" ]; then
-            node scripts/write-post.mjs "${{ inputs.topic_slug }}"
+          if [ -n "$TOPIC_SLUG" ]; then
+            node scripts/write-post.mjs "$TOPIC_SLUG"
           else
             node scripts/write-post.mjs
           fi
@@ -72,10 +73,11 @@ jobs:
 
           PR_EXISTS=$(gh pr list --head "$BRANCH" --json number --jq 'length')
           if [ "$PR_EXISTS" -eq 0 ]; then
+            SLUG="${{ steps.compose.outputs.topic-slug }}"
             BODY=$(cat <<EOF
           This PR adds an AI-generated blog post draft.
 
-          Topic slug: ${{ inputs.topic_slug || 'first-unused' }}
+          Topic slug: ${SLUG}
 
           **Note:** The post has \`draft: true\` and \`aiGeneratedContent: true\`. Review and remove \`draft: true\` before publishing.
           EOF

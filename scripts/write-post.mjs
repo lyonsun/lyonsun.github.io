@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
+import {
+    readFileSync,
+    writeFileSync,
+    existsSync,
+    mkdirSync,
+    appendFileSync,
+} from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
@@ -13,6 +19,11 @@ const REPO_ROOT = join(__dirname, '..');
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'mixtral-8x7b-32768';
 const SITE_AUTHOR = 'Liang Sun';
+
+function yamlQuote(value) {
+    const escaped = String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+    return `"${escaped}"`;
+}
 
 function getTodayDate() {
     return new Date().toISOString().slice(0, 10);
@@ -49,6 +60,9 @@ Respond with valid JSON only (no markdown wrapping, no trailing commas):
   "body": "Full article body in markdown format"
 }`;
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
+
     const response = await fetch(GROQ_API_URL, {
         method: 'POST',
         headers: {
@@ -61,10 +75,13 @@ Respond with valid JSON only (no markdown wrapping, no trailing commas):
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: userPrompt },
             ],
-            temperature: 0.7,
-            max_tokens: 1024,
+            temperature: 0.5,
+            max_tokens: 2048,
         }),
+        signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
         const errorText = await response.text();
@@ -94,8 +111,8 @@ Respond with valid JSON only (no markdown wrapping, no trailing commas):
 function generateFrontmatter({ title, description, dateStr, tags }) {
     const tagsYaml = tags.map((t) => `  - ${t}`).join('\n');
     return `---
-title: ${title}
-description: ${description}
+title: ${yamlQuote(title)}
+description: ${yamlQuote(description)}
 pubDate: ${dateStr}
 author: ${SITE_AUTHOR}
 aiGeneratedContent: true
@@ -151,6 +168,13 @@ async function main() {
     console.log(`Generating article for: ${topic.title}`);
     const result = await callGroq(topic);
 
+    if (!result.title || !result.description || !result.body) {
+        console.error(
+            'AI response missing required fields (title, description, or body).',
+        );
+        process.exit(1);
+    }
+
     if (!existsSync(POSTS_DIR)) {
         mkdirSync(POSTS_DIR, { recursive: true });
     }
@@ -177,6 +201,10 @@ async function main() {
         console.log('Formatted with prettier');
     } catch {
         console.warn('Prettier formatting skipped (non-fatal)');
+    }
+
+    if (process.env.GITHUB_OUTPUT) {
+        appendFileSync(process.env.GITHUB_OUTPUT, `topic-slug=${topic.slug}\n`);
     }
 }
 
