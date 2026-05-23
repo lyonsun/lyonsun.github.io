@@ -1,0 +1,72 @@
+[
+  {
+    "slug": "how-ai-coding-assistants-work",
+    "title": "How AI Coding Assistants Actually Work",
+    "angle": "Explain the mechanics behind AI coding assistants: how they tokenize your code, understand context, and generate suggestions. Cover the difference between completion-based and chat-based assistants.",
+    "tags": ["ai", "coding-assistants", "llm"],
+    "usedAt": null
+  },
+  {
+    "slug": "building-agentic-workflows-with-llms",
+    "title": "Building Agentic Workflows with LLMs",
+    "angle": "Explore patterns for building autonomous agents that can plan, execute tools, and iterate. Cover loop architectures, tool calling, and common pitfalls like infinite loops and context overflow.",
+    "tags": ["ai", "agentic", "workflow"],
+    "usedAt": null
+  },
+  {
+    "slug": "ai-powered-code-review",
+    "title": "AI-Powered Code Review: Beyond Linting",
+    "angle": "Discuss how LLMs can review code for logic errors, security issues, and architectural concerns beyond what static analysis catches. Compare inline suggestions vs PR-level review.",
+    "tags": ["ai", "code-review", "ci"],
+    "usedAt": null
+  },
+  {
+    "slug": "using-llms-for-automated-test-generation",
+    "title": "Using LLMs for Automated Test Generation",
+    "angle": "Walk through strategies for using LLMs to generate unit tests, integration tests, and edge cases from code context. Cover prompt patterns, validation, and when human oversight is essential.",
+    "tags": ["ai", "testing", "agentic"],
+    "usedAt": null
+  },
+  {
+    "slug": "multi-agent-systems-for-software-development",
+    "title": "Multi-Agent Systems for Software Development",
+    "angle": "Examine architectures where multiple AI agents collaborate on software tasks: a planner agent breaks down work, a coder implements, a reviewer critiques. Discuss coordination patterns and failure modes.",
+    "tags": ["ai", "agentic", "architecture"],
+    "usedAt": null
+  },
+  {
+    "slug": "prompt-engineering-for-code-generation",
+    "title": "Prompt Engineering for Code Generation",
+    "angle": "Practical techniques for crafting prompts that produce better code: providing context, specifying constraints, using examples, requesting explanations, and iterating on output.",
+    "tags": ["ai", "prompt-engineering", "coding"],
+    "usedAt": null
+  },
+  {
+    "slug": "integrating-ai-into-your-ci-cd-pipeline",
+    "title": "Integrating AI into Your CI/CD Pipeline",
+    "angle": "Show how to add AI-powered steps to CI/CD: auto-generating release notes, summarizing PR changes, flagging risky diffs, and suggesting rollback strategies. Cover cost and latency trade-offs.",
+    "tags": ["ai", "ci-cd", "workflow"],
+    "usedAt": null
+  },
+  {
+    "slug": "tools-for-documentation-generation",
+    "title": "LLMs for Automated Documentation Generation",
+    "angle": "Survey approaches for generating docs from code: JSDoc/TSDoc comments, README generation, API reference docs, and changelogs. Discuss quality control and keeping docs in sync with code.",
+    "tags": ["ai", "documentation", "workflow"],
+    "usedAt": null
+  },
+  {
+    "slug": "design-to-code-with-ai",
+    "title": "From Design to Code: AI-Powered UI Generation",
+    "angle": "Analyze the current state of AI tools that convert designs (Figma, screenshots, sketches) into frontend code. Cover what works today, limitations, and practical workflows for web engineers.",
+    "tags": ["ai", "frontend", "design"],
+    "usedAt": null
+  },
+  {
+    "slug": "evaluating-llm-outputs-in-engineering-workflows",
+    "title": "Evaluating LLM Outputs in Engineering Workflows",
+    "angle": "Discuss strategies for evaluating AI-generated code and content: automated tests, manual review checklists, hallucination detection, and building evaluation datasets for your specific domain.",
+    "tags": ["ai", "llm", "workflow", "testing"],
+    "usedAt": null
+  }
+]

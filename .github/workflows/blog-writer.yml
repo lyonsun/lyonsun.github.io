@@ -1,0 +1,88 @@
+name: Blog Writer
+
+on:
+  schedule:
+    - cron: "0 9 * * 1,4"
+  workflow_dispatch:
+    inputs:
+      topic_slug:
+        description: "Specific topic slug to generate (optional)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Setup Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Compose blog post
+        id: compose
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          if [ -n "${{ inputs.topic_slug }}" ]; then
+            node scripts/write-post.mjs "${{ inputs.topic_slug }}"
+          else
+            node scripts/write-post.mjs
+          fi
+
+      - name: Check formatting
+        run: npx prettier --check .
+
+      - name: Type check
+        run: npm run check
+
+      - name: Build
+        run: npm run build
+
+      - name: Create Pull Request
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          BRANCH="blog/${DATE}"
+
+          if git diff --quiet && git ls-files --others --exclude-standard --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git config user.name "lyonsun"
+          git config user.email "sunly917@gmail.com"
+          git checkout -b "$BRANCH"
+          git add src/content/posts/ scripts/topics.json
+          git commit -m "content(posts): add new post for ${DATE}"
+          git push origin "$BRANCH" --force
+
+          PR_EXISTS=$(gh pr list --head "$BRANCH" --json number --jq 'length')
+          if [ "$PR_EXISTS" -eq 0 ]; then
+            BODY=$(cat <<EOF
+          This PR adds an AI-generated blog post draft.
+
+          Topic slug: ${{ inputs.topic_slug || 'first-unused' }}
+
+          **Note:** The post has \`draft: true\` and \`aiGeneratedContent: true\`. Review and remove \`draft: true\` before publishing.
+          EOF
+          )
+            gh pr create \
+              --title "content(posts): add new post for ${DATE}" \
+              --body "$BODY"
+          else
+            echo "PR already exists for branch $BRANCH."
+          fi
