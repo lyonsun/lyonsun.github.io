@@ -25,6 +25,27 @@ const SITE_AUTHOR = GROQ_MODEL.split('/')
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ');
 
+function truncateAtSentence(text, max) {
+    const trimmed = text.replace(/[*_#]/g, '').trim();
+    if (trimmed.length <= max) return trimmed;
+
+    const slice = trimmed.slice(0, max);
+    const sentEnd = Math.max(
+        slice.lastIndexOf('. '),
+        slice.lastIndexOf('! '),
+        slice.lastIndexOf('? '),
+        slice.lastIndexOf('.\n'),
+        slice.lastIndexOf('!\n'),
+        slice.lastIndexOf('?\n'),
+    );
+    if (sentEnd > 60) return slice.slice(0, sentEnd + 1);
+
+    const space = slice.lastIndexOf(' ');
+    if (space > 60) return slice.slice(0, space);
+
+    return slice;
+}
+
 function yamlQuote(value) {
     const escaped = String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
     return `"${escaped}"`;
@@ -98,8 +119,8 @@ Requirements:
         .find((p) => p.trim().length > 0);
 
     const description = firstPara
-        ? firstPara.replace(/[*_#]/g, '').trim().slice(0, 150)
-        : topic.angle.slice(0, 150);
+        ? truncateAtSentence(firstPara, 150)
+        : truncateAtSentence(topic.angle, 150);
 
     return { title: topic.title, description, body };
 }
