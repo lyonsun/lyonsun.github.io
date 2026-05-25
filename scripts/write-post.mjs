@@ -79,6 +79,7 @@ Requirements:
 - Write in clear, engaging English
 - Use markdown formatting (headings, lists, code blocks as needed)
 - Start with a level-2 heading (##) for the title
+- Include at least one concrete, practical example (e.g., code snippet, CLI command, real-world scenario, or comparison) to illustrate the key point
 - Do not include any JSON, metadata, or code fences around the article
 - Just write the article directly in plain markdown`;
 
