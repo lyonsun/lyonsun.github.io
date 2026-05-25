@@ -199,7 +199,7 @@ async function main() {
     console.log(`Updated topic queue: ${topic.slug} marked as used`);
 
     try {
-        execSync(`npx prettier --write "${filePath}"`, {
+        execSync(`npx prettier --write "${filePath}" "${TOPICS_PATH}"`, {
             cwd: REPO_ROOT,
             stdio: 'inherit',
         });
