@@ -54,7 +54,7 @@ jobs:
       - name: Create Pull Request
         if: success()
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BLOG_WRITER_PAT }}
         run: |
           DATE=$(date +%Y-%m-%d)
           BRANCH="blog/${DATE}"
