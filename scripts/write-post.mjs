@@ -18,11 +18,24 @@ const REPO_ROOT = join(__dirname, '..');
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
-const SITE_AUTHOR = GROQ_MODEL.split('/')
-    .pop()
-    .replace(/-versatile|-instruct|-instant|-preview/g, '')
-    .split('-')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+
+const MODEL_PROVIDERS = {
+    llama: 'Meta',
+    gemma: 'Google',
+    gemini: 'Google',
+    mixtral: 'Mistral',
+    qwen: 'Alibaba',
+    deepseek: 'DeepSeek',
+};
+const modelFamily = GROQ_MODEL.split('-')[0];
+const provider = MODEL_PROVIDERS[modelFamily] ?? '';
+const SITE_AUTHOR = [
+    provider,
+    ...GROQ_MODEL.replace(/-versatile|-instruct|-instant|-preview/g, '')
+        .split('-')
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1)),
+]
+    .filter(Boolean)
     .join(' ');
 
 function truncateAtSentence(text, max) {
