@@ -20,6 +20,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup blog branch
+        id: setup
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          BRANCH="blog/${DATE}"
+          echo "date=$DATE" >> "$GITHUB_OUTPUT"
+          echo "branch_name=$BRANCH" >> "$GITHUB_OUTPUT"
+          git fetch origin "$BRANCH" 2>/dev/null || true
+          if git show-ref --verify --quiet "refs/remotes/origin/$BRANCH"; then
+            git checkout "$BRANCH"
+            echo "branch_exists=true" >> "$GITHUB_OUTPUT"
+          else
+            git checkout -b "$BRANCH"
+            echo "branch_exists=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Setup Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
@@ -56,35 +74,26 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.BLOG_WRITER_PAT }}
         run: |
-          DATE=$(date +%Y-%m-%d)
-          BRANCH="blog/${DATE}"
-
           if git diff --quiet && git ls-files --others --exclude-standard --quiet; then
             echo "No changes to commit."
             exit 0
           fi
 
-          git config user.name "lyonsun"
+          git config user.name "Liang Sun"
           git config user.email "sunly917@gmail.com"
-          git checkout -b "$BRANCH"
           git add src/content/posts/ scripts/topics.json
-          git commit -m "content(posts): add new post for ${DATE}"
-          git push origin "$BRANCH" --force
+          git commit -m "content(posts): add new post for ${{ steps.setup.outputs.date }}"
+          git push origin HEAD:"${{ steps.setup.outputs.branch_name }}"
 
-          PR_EXISTS=$(gh pr list --head "$BRANCH" --json number --jq 'length')
-          if [ "$PR_EXISTS" -eq 0 ]; then
+          if [ "${{ steps.setup.outputs.branch_exists }}" = "false" ]; then
             SLUG="${{ steps.compose.outputs.topic-slug }}"
-            BODY=$(cat <<EOF
-          This PR adds an AI-generated blog post draft.
+            gh pr create \
+              --title "content(posts): add new post for ${{ steps.setup.outputs.date }}" \
+              --body "This PR adds an AI-generated blog post draft.
 
           Topic slug: ${SLUG}
 
-          **Note:** The post has \`draft: true\` and \`aiGeneratedContent: true\`. Review and remove \`draft: true\` before publishing.
-          EOF
-          )
-            gh pr create \
-              --title "content(posts): add new post for ${DATE}" \
-              --body "$BODY"
+          **Note:** The post has \`draft: true\` and \`aiGeneratedContent: true\`. Review and remove \`draft: true\` before publishing."
           else
-            echo "PR already exists for branch $BRANCH."
+            echo "PR already exists for this branch."
           fi
