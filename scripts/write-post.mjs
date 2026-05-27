@@ -79,7 +79,7 @@ function writeTopics(topics) {
 
 async function callGroq(topic) {
     const systemPrompt =
-        'You are a technical blog writer for a personal portfolio site. Write concise, engaging blog posts about AI in web engineering for a seasoned full-stack web engineer audience.';
+        'You are a technical blog writer for a personal portfolio site. Write concise, engaging blog posts about AI in web engineering for a seasoned full-stack web engineer audience. Prioritize technical accuracy and depth — explain mechanisms, not just concepts. Use JavaScript or TypeScript for all code examples.';
 
     const userPrompt = `Write a blog post about: ${topic.title}
 
@@ -91,7 +91,6 @@ Requirements:
 - Educational, practical, and technically accurate
 - Write in clear, engaging English
 - Use markdown formatting (headings, lists, code blocks as needed)
-- Start with a level-2 heading (##) for the title
 - Include at least one concrete, practical example (e.g., code snippet, CLI command, real-world scenario, or comparison) to illustrate the key point
 - Do not include any JSON, metadata, or code fences around the article
 - Just write the article directly in plain markdown`;
@@ -128,7 +127,6 @@ Requirements:
     const body = data.choices[0].message.content.trim();
 
     const firstPara = body
-        .replace(/^##\s+.*\n*/i, '')
         .split('\n\n')
         .find((p) => p.trim().length > 0);
 
