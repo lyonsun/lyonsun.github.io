@@ -78,7 +78,7 @@ jobs:
             exit 0
           fi
 
-          git config user.name "lyonsun"
+          git config user.name "Liang Sun"
           git config user.email "sunly917@gmail.com"
           git add src/content/posts/ scripts/topics.json
           git commit -m "content(posts): add new post for ${{ steps.setup.outputs.date }}"
