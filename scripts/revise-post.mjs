@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { execSync } from 'child_process';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = join(__dirname, '..');
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
@@ -62,7 +68,9 @@ async function main() {
     const filePath = args.find((a) => !a.startsWith('--'));
 
     if (!filePath) {
-        console.error('Usage: node scripts/revise-post.mjs [--dry-run] <file-path>');
+        console.error(
+            'Usage: node scripts/revise-post.mjs [--dry-run] <file-path>',
+        );
         process.exit(1);
     }
 
@@ -77,6 +85,10 @@ async function main() {
     console.log(`Revising: ${filePath}`);
     const revisedBody = await callGroq(body);
 
+    if (!revisedBody || revisedBody.length < 50) {
+        throw new Error('Revision returned empty or too short — discarding.');
+    }
+
     if (dryRun) {
         console.log(`[dry-run] Would revise: ${filePath}`);
         console.log('--- Revised body preview (first 200 chars) ---');
@@ -85,8 +97,23 @@ async function main() {
         process.exit(0);
     }
 
-    const newContent = `---\n${frontmatter}\n---\n\n${revisedBody}\n`;
+    const today = new Date().toISOString().slice(0, 10);
+    const updatedFrontmatter = frontmatter.includes('updatedAt:')
+        ? frontmatter.replace(/updatedAt:.*/, `updatedAt: ${today}`)
+        : `${frontmatter}\nupdatedAt: ${today}`;
+
+    const newContent = `---\n${updatedFrontmatter}\n---\n\n${revisedBody}\n`;
     writeFileSync(filePath, newContent);
+
+    try {
+        execSync(`npx prettier --write "${filePath}"`, {
+            cwd: REPO_ROOT,
+            stdio: 'inherit',
+        });
+    } catch {
+        console.warn('Prettier formatting skipped (non-fatal)');
+    }
+
     console.log(`Revised: ${filePath}`);
 }
 
