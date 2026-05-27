@@ -71,9 +71,7 @@ jobs:
             echo "No existing post found for ${{ steps.setup.outputs.date }}."
             exit 0
           fi
-          git show main:scripts/revise-post.mjs > /tmp/revise-post.mjs
-          chmod +x /tmp/revise-post.mjs
-          node /tmp/revise-post.mjs "$POST_FILE"
+          node scripts/revise-post.mjs "$POST_FILE"
 
       - name: Check formatting
         run: npx prettier --check .
