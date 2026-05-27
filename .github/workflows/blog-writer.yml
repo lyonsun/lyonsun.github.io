@@ -49,6 +49,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Compose blog post
+        if: steps.setup.outputs.branch_exists == 'false'
         id: compose
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
@@ -59,6 +60,18 @@ jobs:
           else
             node scripts/write-post.mjs
           fi
+
+      - name: Revise blog post
+        if: steps.setup.outputs.branch_exists == 'true'
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          POST_FILE=$(ls src/content/posts/${{ steps.setup.outputs.date }}-*.md 2>/dev/null | head -1)
+          if [ -z "$POST_FILE" ]; then
+            echo "No existing post found for ${{ steps.setup.outputs.date }}."
+            exit 0
+          fi
+          node scripts/revise-post.mjs "$POST_FILE"
 
       - name: Check formatting
         run: npx prettier --check .
@@ -81,8 +94,15 @@ jobs:
 
           git config user.name "Liang Sun"
           git config user.email "sunly917@gmail.com"
-          git add src/content/posts/ scripts/topics.json
-          git commit -m "content(posts): add new post for ${{ steps.setup.outputs.date }}"
+
+          if [ "${{ steps.setup.outputs.branch_exists }}" = "false" ]; then
+            git add src/content/posts/ scripts/topics.json
+            git commit -m "content(posts): add new post for ${{ steps.setup.outputs.date }}"
+          else
+            git add src/content/posts/
+            git commit -m "content(posts): revise post for ${{ steps.setup.outputs.date }}"
+          fi
+
           git push origin HEAD:"${{ steps.setup.outputs.branch_name }}"
 
           if [ "${{ steps.setup.outputs.branch_exists }}" = "false" ]; then
