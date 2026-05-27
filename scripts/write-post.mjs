@@ -127,7 +127,6 @@ Requirements:
     const body = data.choices[0].message.content.trim();
 
     const firstPara = body
-        .replace(/^##\s+.*\n*/i, '')
         .split('\n\n')
         .find((p) => p.trim().length > 0);
 
