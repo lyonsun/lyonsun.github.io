@@ -35,6 +35,7 @@ jobs:
             git checkout "$BRANCH"
             echo "branch_exists=true" >> "$GITHUB_OUTPUT"
           else
+            git checkout -b "$BRANCH"
             echo "branch_exists=false" >> "$GITHUB_OUTPUT"
           fi
 
