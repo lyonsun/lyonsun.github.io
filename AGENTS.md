@@ -75,7 +75,7 @@ Required frontmatter: `title`, `description`, `pubDate`. Optional: `tags` (defau
 
 ## Git Workflow
 
-- Conventional Commits: `type(scope): description`. Keep the description under 50 chars (e.g., `docs: expand README`, not `docs: expand README with tech stack, commands, structure, and deployment info`). Always create a branch per issue.
+- Conventional Commits: `type(scope): description`. Keep the description under 50 chars (e.g., `docs: expand README`, not `docs: expand README with tech stack, commands, structure, and deployment info`). No abbreviations (write "message" not "msg"). Always create a branch per issue.
 - Branch naming: `type/scope` where `type` matches the conventional commit type (e.g., `docs/pr-template-workflow`, `fix/external-link-rel`). No user prefix like `lyonsun7/`.
 - Pre-commit order: `new branch` → `build` → `check` → `format`, then review `git diff`.
 - After pushing, always create a PR: read `.github/pull_request_template.md`, fill it, and create with `gh pr create --title "..." --body "..."`.
