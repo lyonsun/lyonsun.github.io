@@ -55,6 +55,8 @@ src/
 
 Required frontmatter: `title`, `description`, `pubDate`. Optional: `tags` (default `[]`), `author`, `updatedAt`, `draft` (default `false`), `aiGeneratedContent` (default `false`). Schema in `src/content.config.ts`.
 
+- **Title case**: Use sentence case for all post titles (e.g., "How AI coding assistants actually work", not "How AI Coding Assistants Actually Work").
+
 ## CI / Lighthouse
 
 - **Deploy**: Push to `main` → GitHub Pages. Uses `actions/checkout@v6`, `actions/setup-node@v6`, `actions/configure-pages@v6`, `actions/deploy-pages@v5`, `actions/upload-pages-artifact@v5`.

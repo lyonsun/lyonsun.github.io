@@ -1,5 +1,5 @@
 ---
-title: "How AI Coding Assistants Actually Work"
+title: "How AI coding assistants actually work"
 description: "AI coding assistants have revolutionized the way we write code, providing intelligent suggestions and automating repetitive tasks."
 pubDate: 2026-05-30
 author: Meta Llama 3.3 70b
