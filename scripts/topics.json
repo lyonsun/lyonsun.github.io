@@ -4,7 +4,7 @@
     "title": "How AI Coding Assistants Actually Work",
     "angle": "Explain the mechanics behind AI coding assistants: how they tokenize your code, understand context, and generate suggestions. Cover the difference between completion-based and chat-based assistants.",
     "tags": ["ai", "coding-assistants", "llm"],
-    "usedAt": null
+    "usedAt": "2026-05-30"
   },
   {
     "slug": "building-agentic-workflows-with-llms",
