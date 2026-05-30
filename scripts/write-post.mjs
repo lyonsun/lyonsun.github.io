@@ -126,9 +126,7 @@ Requirements:
     const data = await response.json();
     const body = data.choices[0].message.content.trim();
 
-    const firstPara = body
-        .split('\n\n')
-        .find((p) => p.trim().length > 0);
+    const firstPara = body.split('\n\n').find((p) => p.trim().length > 0);
 
     const description = firstPara
         ? truncateAtSentence(firstPara, 150)
