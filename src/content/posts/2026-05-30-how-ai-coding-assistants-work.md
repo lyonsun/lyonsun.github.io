@@ -1,7 +1,6 @@
 ---
 title: "How AI Coding Assistants Actually Work"
-description: "Introduction to AI Coding Assistants
-AI coding assistants have revolutionized the way we write code, providing intelligent suggestions and automating"
+description: "AI coding assistants have revolutionized the way we write code, providing intelligent suggestions and automating repetitive tasks."
 pubDate: 2026-05-30
 author: Meta Llama 3.3 70b
 aiGeneratedContent: true
@@ -44,3 +43,5 @@ Here are the key differences between completion-based and chat-based assistants:
 Once the AI assistant has tokenized your code and understood the context, it generates suggestions using a combination of natural language processing (NLP) and machine learning algorithms. For completion-based assistants, this might involve predicting the next token or code snippet based on statistical patterns in the training data. Chat-based assistants, on the other hand, might use more advanced techniques, such as large language models (LLMs), to generate human-like responses to your queries.
 
 By understanding the mechanics behind AI coding assistants, you can better appreciate the technology that's helping you write more efficient, effective, and maintainable code. Whether you're using a completion-based or chat-based assistant, the key to getting the most out of these tools is to understand how they work and how to leverage their strengths to augment your own coding abilities.
+
+That said, these tools have real limitations — hallucinated APIs, stale training data, and brittle context windows all demand human judgment. Treat suggestions as a starting point, not a final answer. Review, test, and understand what the assistant produces before committing it to your codebase.
