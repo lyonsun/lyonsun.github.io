@@ -18,7 +18,7 @@ A manual CLI approach is also possible for a quick one-off task but is more cumb
 
 ---
 
-### ## Recommended Method: Node.js Script 🚀
+### Recommended Method: Node.js Script 🚀
 
 This method gives you the most control, is repeatable, and is best for handling any data transformations if needed.
 
@@ -128,7 +128,7 @@ This method gives you the most control, is repeatable, and is best for handling 
 
 ---
 
-### ## Alternative: Manual CLI Method 🔧
+### Alternative: Manual CLI Method 🔧
 
 This method is feasible for a single document without complex references but involves manual steps.
 
@@ -186,7 +186,7 @@ This method is feasible for a single document without complex references but inv
 
 ---
 
-### ## Important Considerations ⚠️
+### Important Considerations ⚠️
 
 - **Document References:** If your document contains references to other documents (e.g., an `author` on a `post`), those referenced documents **must exist** in the destination dataset with the **same `_id`s** for the references to work. If they don't, the references will be broken.
 - **Assets (Images and Files):** Asset references (`image.asset._ref`) will be copied as-is. However, the actual binary asset data belongs to the source project's dataset. The image will still render, but it's "hotlinked" from the old project. For a true migration, you would need a more advanced script to download the asset from the source and re-upload it to the destination project to get a new asset record.
@@ -202,7 +202,7 @@ For most bulk migrations, **the Sanity CLI method is the recommended starting po
 
 ---
 
-### ## Method 1: Using the Sanity CLI (Recommended) ⚙️
+### Method 1: Using the Sanity CLI (Recommended) ⚙️
 
 This is the most straightforward way to perform a bulk migration. The process involves exporting only the document type you need from the source and importing it into the destination.
 
@@ -249,7 +249,7 @@ This is the most straightforward way to perform a bulk migration. The process in
 
 ---
 
-### ## Method 2: Modified Node.js Script (For More Control) 📜
+### Method 2: Modified Node.js Script (For More Control) 📜
 
 This method is ideal if you need to **transform data** during the migration (e.g., change field names, add default values) or handle complex logic. It modifies the previous script to fetch all documents of a type and write them in a single, efficient transaction.
 
@@ -332,7 +332,7 @@ To run this script, save it as `migrate-bulk.js` and execute `node migrate-bulk.
 
 ---
 
-### ## Crucial Considerations for Bulk Migration ⚠️
+### Crucial Considerations for Bulk Migration ⚠️
 
 - **References**: This is the most important consideration. If your `yourDocType` documents reference other documents (e.g., a "post" references an "author"), you **must migrate the referenced documents first**. The migration will fail or result in broken links if the referenced documents don't exist in the destination.
 - **Assets (Images/Files)**: Both methods will copy the _references_ to assets, not the assets themselves. The images and files will still be hosted by your **source project**. For a true migration, you need a much more complex script that downloads each asset and re-uploads it to the destination project.
