@@ -11,6 +11,160 @@ const REPO_ROOT = join(__dirname, '..');
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
 
+function sentenceCase(title) {
+    const knownAcronyms = new Set([
+        'AI',
+        'API',
+        'CLI',
+        'CI',
+        'CD',
+        'CMS',
+        'CSS',
+        'DOM',
+        'ESM',
+        'HTML',
+        'HTTP',
+        'JS',
+        'JSON',
+        'LLM',
+        'LLMs',
+        'SDK',
+        'SQL',
+        'TS',
+        'UI',
+        'URL',
+        'YAML',
+    ]);
+    let first = true;
+    return title.replace(/\b(\w+)\b/g, (match) => {
+        const upper = match.toUpperCase();
+        for (const a of knownAcronyms) {
+            if (a.toUpperCase() === upper) {
+                first = false;
+                return a;
+            }
+        }
+        const lower = match.toLowerCase();
+        if (first) {
+            first = false;
+            return lower.charAt(0).toUpperCase() + lower.slice(1);
+        }
+        return lower;
+    });
+}
+
+function truncateAtSentence(text, max) {
+    const trimmed = text.replace(/[*_#]/g, '').replace(/\n/g, ' ').trim();
+    if (trimmed.length <= max) return trimmed;
+
+    const slice = trimmed.slice(0, max);
+    const sentEnd = Math.max(
+        slice.lastIndexOf('. '),
+        slice.lastIndexOf('! '),
+        slice.lastIndexOf('? '),
+        slice.lastIndexOf('.\n'),
+        slice.lastIndexOf('!\n'),
+        slice.lastIndexOf('?\n'),
+    );
+    if (sentEnd > 60) return slice.slice(0, sentEnd + 1);
+
+    const space = slice.lastIndexOf(' ');
+    if (space > 60) return slice.slice(0, space);
+
+    return slice;
+}
+
+function extractDescription(body) {
+    const firstPara = body
+        .split('\n\n')
+        .find((p) => p.trim().length > 0 && !p.trim().startsWith('#'));
+    if (!firstPara) return '';
+
+    const truncated = truncateAtSentence(firstPara, 150);
+    const sanitized = truncated.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+    return /[.!?]$/.test(sanitized) ? sanitized : sanitized + '.';
+}
+
+function yamlQuote(value) {
+    const escaped = String(value)
+        .replace(/\\/g, '\\\\')
+        .replace(/"/g, '\\"')
+        .replace(/\n/g, '\\n');
+    return `"${escaped}"`;
+}
+
+function parseFrontmatter(raw) {
+    const fields = {};
+    for (const line of raw.split('\n')) {
+        const match = line.match(/^(\w+):\s*(.*)$/);
+        if (match) {
+            let value = match[2];
+            if (value.startsWith('"') && value.endsWith('"')) {
+                value = value.slice(1, -1);
+            }
+            fields[match[1]] = value;
+        }
+    }
+    return fields;
+}
+
+function rebuildFrontmatter(fields, tagsRaw) {
+    const tagsYaml = fields.tags ? tagsRaw : '';
+    const parts = [];
+    for (const key of [
+        'title',
+        'description',
+        'pubDate',
+        'author',
+        'aiGeneratedContent',
+        'draft',
+    ]) {
+        if (fields[key] !== undefined) {
+            if (key === 'title' || key === 'description') {
+                parts.push(`${key}: ${yamlQuote(fields[key])}`);
+            } else {
+                parts.push(`${key}: ${fields[key]}`);
+            }
+        }
+    }
+    if (fields.updatedAt !== undefined) {
+        parts.push(`updatedAt: ${fields.updatedAt}`);
+    }
+    if (tagsYaml) {
+        parts.push('tags:');
+        parts.push(tagsYaml);
+    }
+    return parts.join('\n');
+}
+
+function splitFrontmatter(content) {
+    const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+    if (!match) {
+        throw new Error('File is missing valid frontmatter');
+    }
+    return { frontmatter: match[1].trim(), body: match[2].trim() };
+}
+
+function getTagsYaml(frontmatter) {
+    const lines = frontmatter.split('\n');
+    const tagLines = [];
+    let inTags = false;
+    for (const line of lines) {
+        if (line.trim() === 'tags:') {
+            inTags = true;
+            continue;
+        }
+        if (inTags) {
+            if (line.startsWith('  - ')) {
+                tagLines.push(line);
+            } else {
+                break;
+            }
+        }
+    }
+    return tagLines.join('\n');
+}
+
 async function callGroq(postBody) {
     const systemPrompt =
         'You are a technical blog editor. Revise the given blog post to be more technically accurate, deeper, and clearer. Keep the same overall structure and length (300-500 words). Use JavaScript or TypeScript for all code examples. All code examples must use ESM/import syntax (not CommonJS require). Avoid patterns with obvious security issues (shell injection via exec, etc.). Do not change the topic or angle. Do not wrap the output in code fences. Return only the revised markdown body — no title, no metadata.';
@@ -54,14 +208,6 @@ ${postBody}
     return revised.replace(/^```[\w]*\n?|```$/g, '').trim();
 }
 
-function splitFrontmatter(content) {
-    const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
-    if (!match) {
-        throw new Error('File is missing valid frontmatter');
-    }
-    return { frontmatter: match[1].trim(), body: match[2].trim() };
-}
-
 async function main() {
     const args = process.argv.slice(2);
     const dryRun = args.includes('--dry-run');
@@ -98,11 +244,25 @@ async function main() {
     }
 
     const today = new Date().toISOString().slice(0, 10);
-    const updatedFrontmatter = frontmatter.includes('updatedAt:')
-        ? frontmatter.replace(/updatedAt:.*/, `updatedAt: ${today}`)
-        : `${frontmatter}\nupdatedAt: ${today}`;
 
-    const newContent = `---\n${updatedFrontmatter}\n---\n\n${revisedBody}\n`;
+    const fields = parseFrontmatter(frontmatter);
+    const tagsRaw = getTagsYaml(frontmatter);
+
+    if (fields.title) {
+        fields.title = sentenceCase(fields.title);
+    }
+
+    const newDescription = extractDescription(revisedBody);
+    if (newDescription) {
+        fields.description = newDescription;
+    }
+
+    fields.updatedAt = today;
+
+    const tagsBlock = tagsRaw ? `\n${tagsRaw}` : '';
+    const rebuiltFrontmatter = `---\n${rebuildFrontmatter(fields, tagsRaw)}${tagsBlock}\n---`;
+
+    const newContent = `${rebuiltFrontmatter}\n\n${revisedBody}\n`;
     writeFileSync(filePath, newContent);
 
     try {
