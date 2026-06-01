@@ -39,7 +39,7 @@ const SITE_AUTHOR = [
     .join(' ');
 
 function truncateAtSentence(text, max) {
-    const trimmed = text.replace(/[*_#]/g, '').trim();
+    const trimmed = text.replace(/[*_#]/g, '').replace(/\n/g, ' ').trim();
     if (trimmed.length <= max) return trimmed;
 
     const slice = trimmed.slice(0, max);
@@ -60,7 +60,10 @@ function truncateAtSentence(text, max) {
 }
 
 function yamlQuote(value) {
-    const escaped = String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+    const escaped = String(value)
+        .replace(/\\/g, '\\\\')
+        .replace(/"/g, '\\"')
+        .replace(/\n/g, '\\n');
     return `"${escaped}"`;
 }
 
@@ -79,7 +82,7 @@ function writeTopics(topics) {
 
 async function callGroq(topic) {
     const systemPrompt =
-        'You are a technical blog writer for a personal portfolio site. Write concise, engaging blog posts about AI in web engineering for a seasoned full-stack web engineer audience. Prioritize technical accuracy and depth — explain mechanisms, not just concepts. Use JavaScript or TypeScript for all code examples.';
+        'You are a technical blog writer for a personal portfolio site. Write concise, engaging blog posts about AI in web engineering for a seasoned full-stack web engineer audience. Prioritize technical accuracy and depth — explain mechanisms, not just concepts. Use JavaScript or TypeScript for all code examples.\n\nConventions:\n- Post titles use sentence case (first word capitalized, rest lowercase unless proper nouns)\n- The first paragraph of the article will be extracted as the meta description — it must be a complete, self-contained sentence (no mid-sentence cutoff, no markdown formatting)\n- All code examples must use ESM/import syntax (not CommonJS require)\n- Avoid patterns with obvious security issues (shell injection via exec, etc.)';
 
     const userPrompt = `Write a blog post about: ${topic.title}
 
@@ -132,7 +135,15 @@ Requirements:
         ? truncateAtSentence(firstPara, 150)
         : truncateAtSentence(topic.angle, 150);
 
-    return { title: topic.title, description, body };
+    const sanitized = description
+        .replace(/\n/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    const finalDescription = /[.!?]$/.test(sanitized)
+        ? sanitized
+        : sanitized + '.';
+
+    return { title: topic.title, description: finalDescription, body };
 }
 
 function generateFrontmatter({ title, description, dateStr, tags }) {
