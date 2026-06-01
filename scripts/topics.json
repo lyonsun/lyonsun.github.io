@@ -11,7 +11,7 @@
     "title": "Building Agentic Workflows with LLMs",
     "angle": "Explore patterns for building autonomous agents that can plan, execute tools, and iterate. Cover loop architectures, tool calling, and common pitfalls like infinite loops and context overflow.",
     "tags": ["ai", "agentic", "workflow"],
-    "usedAt": null
+    "usedAt": "2026-06-01"
   },
   {
     "slug": "ai-powered-code-review",
