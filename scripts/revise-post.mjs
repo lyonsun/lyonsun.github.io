@@ -11,48 +11,6 @@ const REPO_ROOT = join(__dirname, '..');
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
 
-function sentenceCase(title) {
-    const knownAcronyms = new Set([
-        'AI',
-        'API',
-        'CLI',
-        'CI',
-        'CD',
-        'CMS',
-        'CSS',
-        'DOM',
-        'ESM',
-        'HTML',
-        'HTTP',
-        'JS',
-        'JSON',
-        'LLM',
-        'LLMs',
-        'SDK',
-        'SQL',
-        'TS',
-        'UI',
-        'URL',
-        'YAML',
-    ]);
-    let first = true;
-    return title.replace(/\b(\w+)\b/g, (match) => {
-        const upper = match.toUpperCase();
-        for (const a of knownAcronyms) {
-            if (a.toUpperCase() === upper) {
-                first = false;
-                return a;
-            }
-        }
-        const lower = match.toLowerCase();
-        if (first) {
-            first = false;
-            return lower.charAt(0).toUpperCase() + lower.slice(1);
-        }
-        return lower;
-    });
-}
-
 function truncateAtSentence(text, max) {
     const trimmed = text.replace(/[*_#]/g, '').replace(/\n/g, ' ').trim();
     if (trimmed.length <= max) return trimmed;
@@ -247,10 +205,6 @@ async function main() {
 
     const fields = parseFrontmatter(frontmatter);
     const tagsRaw = getTagsYaml(frontmatter);
-
-    if (fields.title) {
-        fields.title = sentenceCase(fields.title);
-    }
 
     const newDescription = extractDescription(revisedBody);
     if (newDescription) {
