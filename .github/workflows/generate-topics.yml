@@ -1,0 +1,74 @@
+name: Generate Topics
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Setup Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Setup topics branch
+        id: setup
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          BRANCH="topics/${DATE}"
+          echo "date=$DATE" >> "$GITHUB_OUTPUT"
+          echo "branch_name=$BRANCH" >> "$GITHUB_OUTPUT"
+          git fetch origin "$BRANCH" 2>/dev/null || true
+          if git show-ref --verify --quiet "refs/remotes/origin/$BRANCH"; then
+            echo "Branch $BRANCH already exists. Topics likely already generated today."
+            echo "branch_exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "branch_exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generate topics
+        if: steps.setup.outputs.branch_exists == 'false'
+        id: generate
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: node scripts/generate-topics.mjs
+
+      - name: Format topics.json
+        if: steps.generate.outputs.num-generated != '' && steps.generate.outputs.num-generated != '0'
+        run: npx prettier --write scripts/topics.json
+
+      - name: Create Pull Request
+        if: steps.generate.outputs.num-generated != '' && steps.generate.outputs.num-generated != '0'
+        env:
+          GITHUB_TOKEN: ${{ secrets.BLOG_WRITER_PAT }}
+        run: |
+          BRANCH="${{ steps.setup.outputs.branch_name }}"
+
+          git config user.name "Liang Sun"
+          git config user.email "sunly917@gmail.com"
+
+          git checkout -b "$BRANCH"
+          git add scripts/topics.json
+          git commit -m "content(posts): add ${{ steps.generate.outputs.num-generated }} new topic(s) to queue"
+
+          git push origin HEAD:"${BRANCH}"
+
+          gh pr create \
+            --title "content(posts): add ${{ steps.generate.outputs.num-generated }} new topic(s) to queue" \
+            --body "This PR adds ${{ steps.generate.outputs.num-generated }} new topic(s) to \`scripts/topics.json\`, generated via LLM.
+
+          Review the new topic ideas and merge if they look good. The \`write-post.mjs\` script will consume them on its next run."
