@@ -1,66 +1,181 @@
 ---
 title: "Building agentic workflows with LLMs"
-description: "Building agentic workflows with LLMs As large language models (LLMs) continue to advance, they are increasingly being used to build autonomous agents."
+description: "Real patterns for building LLM agents: tool-use loops, ReAct, and self-correction with runnable code examples."
 pubDate: 2026-06-08
-author: Meta Llama 3.3 70b
-aiGeneratedContent: true
-draft: true
+author: Liang Sun
 tags:
   - ai
   - agentic
   - workflow
+  - llm
+  - patterns
 ---
 
-Building agentic workflows with LLMs
-As large language models (LLMs) continue to advance, they are increasingly being used to build autonomous agents that can plan, execute tools, and iterate, enabling the creation of complex workflows that can operate with minimal human intervention, and this capability has the potential to revolutionize the way we approach tasks that require automation and decision-making.
+"Agentic" is the word of the year in AI. Every demo shows an agent autonomously browsing the web, writing code, and booking flights. But underneath the hype, the patterns are remarkably simple — and composable. Once you understand three core patterns, you can build reliable agents for a wide range of tasks.
 
-## Introduction to Agentic Workflows
+## Pattern 1: The tool-use loop
 
-Agentic workflows are designed to mimic human decision-making and problem-solving processes, allowing agents to adapt to changing circumstances and make decisions based on context and available information. To build such workflows, developers can leverage LLMs as the core component, using their ability to understand and generate human-like language to create agents that can interact with tools and systems.
+This is the foundation. An LLM alone can't interact with the outside world — it can only generate text. Tool-use gives it that ability by wrapping external functions (APIs, databases, file systems) as callable tools.
 
-## Loop Architectures
+The loop has four steps:
 
-A key pattern in building agentic workflows is the use of loop architectures, where the agent continuously iterates over a set of steps, refining its plan and execution based on feedback and new information. This can be achieved using a simple loop that calls the LLM to generate the next action, execute the action, and then provide feedback to the LLM for the next iteration. For example, the following code snippet demonstrates a basic loop architecture in JavaScript:
+1. Call the LLM with a user request and a list of available tools.
+2. The LLM responds with a tool call (or the final answer).
+3. Execute the tool and return the result to the LLM.
+4. Repeat until the LLM produces a final answer.
+
+Here it is with the OpenAI SDK:
 
 ```javascript
-import { LLM } from "@llm/core";
+import OpenAI from "openai";
 
-const llm = new LLM();
-const workflow = async () => {
+const openai = new OpenAI();
+
+const tools = [
+  {
+    type: "function",
+    function: {
+      name: "get_weather",
+      description: "Get current weather for a city",
+      parameters: {
+        type: "object",
+        properties: {
+          city: { type: "string" },
+        },
+        required: ["city"],
+      },
+    },
+  },
+];
+
+async function agentLoop(userMessage) {
+  const messages = [{ role: "user", content: userMessage }];
+
   while (true) {
-    const action = await llm.generateAction();
-    await executeAction(action);
-    const feedback = await getFeedback();
-    await llm.provideFeedback(feedback);
-  }
-};
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages,
+      tools,
+    });
 
-workflow();
+    const choice = response.choices[0];
+    const toolCalls = choice.message.tool_calls;
+
+    if (!toolCalls) {
+      return choice.message.content;
+    }
+
+    messages.push(choice.message);
+
+    for (const call of toolCalls) {
+      const result = await executeTool(call);
+      messages.push({
+        role: "tool",
+        tool_call_id: call.id,
+        content: JSON.stringify(result),
+      });
+    }
+  }
+}
 ```
 
-## Tool Calling and Execution
+The loop is the core primitive. Everything else — ReAct, reflection, multi-agent — builds on top of this.
 
-To execute tools and actions, agentic workflows can use a variety of approaches, including CLI commands, API calls, or even GUI automation. The key is to provide a clear and well-defined interface for the agent to interact with the tool, allowing it to pass parameters, receive output, and handle errors. For instance, to call a CLI command, the agent can use the `child_process` module in Node.js:
+## Pattern 2: ReAct (reasoning + acting)
+
+The tool-use loop works, but the LLM doesn't always pick the right tool. ReAct addresses this by asking the model to reason before and after each action, producing a chain of thought.
+
+The key difference: instead of calling the LLM directly, you prompt it to output "Thought: ... Action: ... Observation: ..." in a structured cycle. Modern function-calling APIs do this implicitly — the model reasons internally before emitting a tool call — but explicit ReAct is useful when you want to inspect or steer the reasoning.
 
 ```javascript
-import { exec } from "child_process";
+const REACT_PROMPT = `You are an assistant that solves problems step by step.
+For each step, think about what you need to do, then call the appropriate tool.
+When you have the final answer, say "Answer: ..."`;
 
-const executeAction = async (action) => {
-  const command = `cli-tool ${action}`;
-  await exec(command, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error executing action: ${error}`);
-    } else {
-      console.log(`Action executed successfully: ${stdout}`);
+async function reactLoop(userMessage) {
+  const messages = [
+    { role: "system", content: REACT_PROMPT },
+    { role: "user", content: userMessage },
+  ];
+
+  for (let step = 0; step < 10; step++) {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages,
+      tools,
+    });
+
+    const choice = response.choices[0];
+    messages.push(choice.message);
+
+    if (choice.message.content?.startsWith("Answer:")) {
+      return choice.message.content;
     }
-  });
-};
+
+    for (const call of choice.message.tool_calls ?? []) {
+      const result = await executeTool(call);
+      messages.push({
+        role: "tool",
+        tool_call_id: call.id,
+        content: `Observation: ${JSON.stringify(result)}`,
+      });
+    }
+  }
+
+  throw new Error("Max steps reached without a final answer");
+}
 ```
 
-## Common Pitfalls
+ReAct gives you a reasoning trace you can log, debug, or audit. The trade-off: each step costs more tokens (the accumulated reasoning history grows fast), and there's no guarantee the model will converge.
 
-When building agentic workflows, developers should be aware of common pitfalls such as infinite loops and context overflow. Infinite loops can occur when the agent becomes stuck in a cycle of execution and feedback, unable to terminate or make progress. Context overflow, on the other hand, happens when the agent's context and memory become too large, causing performance issues and errors. To mitigate these risks, developers can implement mechanisms such as loop termination conditions, context pruning, and error handling.
+## Pattern 3: Reflection and self-correction
 
-## Conclusion
+Agents make mistakes — they call the wrong tool, misinterpret results, or hallucinate outputs they should have computed. Reflection adds a meta-step where the agent reviews its own work and decides whether to retry.
 
-Building agentic workflows with LLMs offers a powerful approach to automation and decision-making, enabling the creation of complex workflows that can operate with minimal human intervention. By understanding loop architectures, tool calling, and common pitfalls, developers can design and implement effective agentic workflows that can adapt to changing circumstances and make decisions based on context and available information.
+A simple approach: after the agent produces an answer, feed it back as a new prompt asking the agent to verify its work.
+
+```javascript
+async function reflectiveAgent(task) {
+  const answer = await agentLoop(task);
+
+  const verification = await openai.chat.completions.create({
+    model: "gpt-4o",
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a verifier. Check if the answer is correct and complete. If not, explain what is wrong.",
+      },
+      { role: "user", content: `Task: ${task}\nAnswer: ${answer}` },
+    ],
+  });
+
+  const verdict = verification.choices[0].message.content;
+
+  if (verdict.includes("incorrect") || verdict.includes("incomplete")) {
+    return agentLoop(
+      `${task}\n\nPrevious attempt: ${answer}\n\nIssues: ${verdict}\n\nPlease try again.`,
+    );
+  }
+
+  return answer;
+}
+```
+
+This is a coarse but effective pattern. More sophisticated approaches include having the agent explicitly call a "self-critique" tool, or running multiple agents in parallel and voting on the best answer. The cost is obvious — you're running 2x-3x the LLM calls.
+
+## When it breaks
+
+These patterns work well for structured tasks with clear success criteria. In practice, they fail in predictable ways:
+
+- **Context limits.** Every loop iteration appends tool results and reasoning to the message list. A long-running agent hits the model's context window within a few dozen steps. You need to summarize, prune, or paginate history.
+- **Cost blowup.** Reflection triples your token spend. ReAct doubles it. An agent that loops 20 times before converging costs 20x a single call. Budget-aware architectures are an active research area.
+- **Compounding errors.** A wrong tool call produces bad output, which feeds the next LLM call, which makes a worse decision. Without validation checkpoints, errors cascade.
+- **Non-determinism.** The same agent on the same input produces different results each run. Testing requires statistical evaluation, not assertion-based tests.
+- **No real autonomy.** Despite the hype, today's agents cannot handle ambiguous instructions, recover from unexpected tool failures, or navigate API changes. Human supervision is still required for anything beyond toy demos.
+
+## A practical takeaway
+
+Start with the simple tool-use loop. If your task needs it, add ReAct for debuggability. Add reflection only when you've measured that the agent makes errors worth catching. Each layer of complexity has a real cost — tokens, latency, and failure modes of its own.
+
+The patterns here compose: you can put a tool-use loop inside a reflective agent, or give a ReAct agent a "self-critique" tool. But don't build what you don't need yet. A single well-designed tool call often beats a multi-agent deliberation.
