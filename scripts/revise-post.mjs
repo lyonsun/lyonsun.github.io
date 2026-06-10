@@ -6,14 +6,14 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const PROMPT_PATH = join(__dirname, 'revise-post-prompt.md');
 const REPO_ROOT = join(__dirname, '..');
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
 
 async function callGroq(postBody) {
-    const systemPrompt =
-        'You are a technical blog editor. Revise the given blog post to be more technically accurate, deeper, and clearer. Keep the same overall structure and length (300-500 words). Use JavaScript or TypeScript for all code examples. All code examples must use ESM/import syntax (not CommonJS require). Avoid patterns with obvious security issues (shell injection via exec, etc.). Do not change the topic or angle. Do not wrap the output in code fences. Return only the revised markdown body — no title, no metadata.';
+    const systemPrompt = readFileSync(PROMPT_PATH, 'utf-8').trim();
 
     const userPrompt = `Revise this blog post. Improve technical accuracy, add depth, fix any inaccuracies, and ensure code examples are JavaScript or TypeScript.
 

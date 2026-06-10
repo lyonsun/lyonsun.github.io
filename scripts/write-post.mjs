@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const PROMPT_PATH = join(__dirname, 'write-post-prompt.md');
 const TOPICS_PATH = join(__dirname, 'topics.json');
 const POSTS_DIR = join(__dirname, '..', 'src', 'content', 'posts');
 const REPO_ROOT = join(__dirname, '..');
@@ -81,8 +82,7 @@ function writeTopics(topics) {
 }
 
 async function callGroq(topic) {
-    const systemPrompt =
-        'You are a technical blog writer for a personal portfolio site. Write concise, engaging blog posts about AI in web engineering for a seasoned full-stack web engineer audience. Prioritize technical accuracy and depth — explain mechanisms, not just concepts. Use JavaScript or TypeScript for all code examples.\n\nConventions:\n- Post titles use sentence case (first word capitalized, rest lowercase unless proper nouns)\n- The first paragraph of the article will be extracted as the meta description — it must be a complete, self-contained sentence (no mid-sentence cutoff, no markdown formatting)\n- All code examples must use ESM/import syntax (not CommonJS require)\n- Avoid patterns with obvious security issues (shell injection via exec, etc.)';
+    const systemPrompt = readFileSync(PROMPT_PATH, 'utf-8').trim();
 
     const userPrompt = `Write a blog post about: ${topic.title}
 
@@ -94,9 +94,7 @@ Requirements:
 - Educational, practical, and technically accurate
 - Write in clear, engaging English
 - Use markdown formatting (headings, lists, code blocks as needed)
-- Include at least one concrete, practical example (e.g., code snippet, CLI command, real-world scenario, or comparison) to illustrate the key point
-- Do not include any JSON, metadata, or code fences around the article
-- Just write the article directly in plain markdown`;
+- Include at least one concrete, practical example (e.g., code snippet, CLI command, real-world scenario, or comparison) to illustrate the key point`;
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 60000);
@@ -127,7 +125,9 @@ Requirements:
     }
 
     const data = await response.json();
-    const body = data.choices[0].message.content.trim();
+    const body = data.choices[0].message.content
+        .replace(/^```[\w]*\n?|```$/g, '')
+        .trim();
 
     const firstPara = body.split('\n\n').find((p) => p.trim().length > 0);
 
