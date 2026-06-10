@@ -125,7 +125,9 @@ Requirements:
     }
 
     const data = await response.json();
-    const body = data.choices[0].message.content.trim();
+    const body = data.choices[0].message.content
+        .replace(/^```[\w]*\n?|```$/g, '')
+        .trim();
 
     const firstPara = body.split('\n\n').find((p) => p.trim().length > 0);
 
