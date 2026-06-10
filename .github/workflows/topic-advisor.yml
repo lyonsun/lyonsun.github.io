@@ -1,4 +1,4 @@
-name: Generate Topics
+name: Topic Advisor
 
 on:
   schedule:
@@ -40,19 +40,19 @@ jobs:
             echo "branch_exists=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Generate topics
+      - name: Run topic advisor
         if: steps.setup.outputs.branch_exists == 'false'
         id: generate
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-        run: node scripts/generate-topics.mjs
+        run: node scripts/topic-advisor.mjs
 
       - name: Format topics.json
-        if: steps.generate.outputs.num-generated != '' && steps.generate.outputs.num-generated != '0'
+        if: steps.generate.outputs.topics-added != '' && steps.generate.outputs.topics-added != '0'
         run: npx prettier --write scripts/topics.json
 
       - name: Create Pull Request
-        if: steps.generate.outputs.num-generated != '' && steps.generate.outputs.num-generated != '0'
+        if: steps.generate.outputs.topics-added != '' && steps.generate.outputs.topics-added != '0'
         env:
           GITHUB_TOKEN: ${{ secrets.BLOG_WRITER_PAT }}
         run: |
@@ -63,12 +63,10 @@ jobs:
 
           git checkout -b "$BRANCH"
           git add scripts/topics.json
-          git commit -m "content(posts): add ${{ steps.generate.outputs.num-generated }} new topic(s) to queue"
+          git commit -m "content(posts): add ${{ steps.generate.outputs.topics-added }} new topic(s) to queue"
 
           git push origin HEAD:"${BRANCH}"
 
           gh pr create \
-            --title "content(posts): add ${{ steps.generate.outputs.num-generated }} new topic(s) to queue" \
-            --body "This PR adds ${{ steps.generate.outputs.num-generated }} new topic(s) to \`scripts/topics.json\`, generated via LLM.
-
-          Review the new topic ideas and merge if they look good. The \`write-post.mjs\` script will consume them on its next run."
+            --title "content(posts): add ${{ steps.generate.outputs.topics-added }} new topic(s) to queue" \
+            --body "${{ steps.generate.outputs.pr-body }}"

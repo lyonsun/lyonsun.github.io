@@ -5,7 +5,7 @@ import { join, dirname, extname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const PROMPT_PATH = join(__dirname, 'generate-topics-prompt.md');
+const PROMPT_PATH = join(__dirname, 'topic-advisor-prompt.md');
 const TOPICS_PATH = join(__dirname, 'topics.json');
 const POSTS_DIR = join(__dirname, '..', 'src', 'content', 'posts');
 
@@ -61,6 +61,9 @@ function validateTopic(topic, index) {
     }
     if (!topic.angle || typeof topic.angle !== 'string') {
         throw new Error(`Topic ${index}: missing or invalid "angle"`);
+    }
+    if (!topic.rationale || typeof topic.rationale !== 'string') {
+        throw new Error(`Topic ${index}: missing or invalid "rationale"`);
     }
     if (
         !Array.isArray(topic.tags) ||
@@ -185,6 +188,7 @@ async function main() {
             slug: topic.slug,
             title: topic.title,
             angle: topic.angle,
+            rationale: topic.rationale,
             tags: topic.tags,
             usedAt: null,
         });
@@ -219,7 +223,23 @@ async function main() {
     if (process.env.GITHUB_OUTPUT) {
         appendFileSync(
             process.env.GITHUB_OUTPUT,
-            `num-generated=${added.length}\n`,
+            `topics-added=${added.length}\n`,
+        );
+
+        const prBodyLines = [
+            `This PR adds ${added.length} new topic(s) to the queue, generated via LLM.`,
+            '',
+            '## New topics',
+            ...added.map((t) => `- **${t.title}** — ${t.rationale}`),
+            '',
+            'Review the new topic ideas and merge if they look good.',
+            'The `write-post.mjs` script will consume them on its next run.',
+        ];
+        const prBody = prBodyLines.join('\n');
+
+        appendFileSync(
+            process.env.GITHUB_OUTPUT,
+            `pr-body<<GH_TOPIC_EOF\n${prBody}\nGH_TOPIC_EOF\n`,
         );
     }
 }
