@@ -84,10 +84,14 @@ function writeTopics(topics) {
 async function callGroq(topic) {
     const systemPrompt = readFileSync(PROMPT_PATH, 'utf-8').trim();
 
+    const rationaleLines = topic.rationale
+        ? `\nRationale: ${topic.rationale}`
+        : '';
+
     const userPrompt = `Write a blog post about: ${topic.title}
 
 Angle: ${topic.angle}
-Tags: ${topic.tags.join(', ')}
+Tags: ${topic.tags.join(', ')}${rationaleLines}
 
 Requirements:
 - 300-500 words
