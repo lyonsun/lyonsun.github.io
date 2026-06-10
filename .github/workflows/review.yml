@@ -40,7 +40,7 @@ jobs:
             ## Project structure
             - src/components/ — atomic design: atoms/, elements/, sections/, icons/
             - src/content/posts/ — blog posts (Markdown with frontmatter)
-            - src/content/config.ts — content collection schema
+            - src/content.config.ts — content collection schema
             - src/consts.ts — site constants (SITE_NAME, SITE_DESCRIPTION, etc.)
             - scripts/ — LLM-powered blog generation scripts
 
