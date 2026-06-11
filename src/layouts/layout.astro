@@ -124,6 +124,32 @@ const imageMimeType = image ? undefined : 'image/webp';
         <ClientRouter />
 
         <GA4 />
+
+        <script
+            type="application/ld+json"
+            is:inline
+            set:html={JSON.stringify({
+                '@context': 'https://schema.org',
+                '@graph': [
+                    {
+                        '@type': 'Person',
+                        name: SITE_NAME,
+                        url: new URL('/', Astro.site).toString(),
+                        sameAs: [
+                            'https://www.linkedin.com/in/lyonsun7',
+                            'https://github.com/lyonsun',
+                            `https://twitter.com/${TWITTER_HANDLE.replace('@', '')}`,
+                        ],
+                    },
+                    {
+                        '@type': 'WebSite',
+                        name: SITE_NAME,
+                        url: new URL('/', Astro.site).toString(),
+                        description: SITE_DESCRIPTION,
+                    },
+                ],
+            })}
+        />
     </head>
     <body>
         <SkipLink />

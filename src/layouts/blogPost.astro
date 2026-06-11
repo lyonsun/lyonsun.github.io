@@ -3,6 +3,7 @@ import { type CollectionEntry } from 'astro:content';
 import { formatDate } from '../lib/posts';
 import TagLink from '../components/atoms/tagLink.astro';
 import Layout from './layout.astro';
+import { SITE_AUTHOR } from '../consts';
 
 type Props = {
     frontmatter: CollectionEntry<'posts'>['data'];
@@ -14,6 +15,7 @@ const publishDate = formatDate(frontmatter.pubDate);
 const updatedDate = frontmatter.updatedAt
     ? formatDate(frontmatter.updatedAt)
     : undefined;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <Layout
@@ -77,4 +79,23 @@ const updatedDate = frontmatter.updatedAt
             </a>
         </div>
     </section>
+    <script
+        type="application/ld+json"
+        is:inline
+        set:html={JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
+            headline: frontmatter.title,
+            description: frontmatter.description,
+            datePublished: frontmatter.pubDate.toISOString(),
+            dateModified: (
+                frontmatter.updatedAt ?? frontmatter.pubDate
+            ).toISOString(),
+            author: {
+                '@type': 'Person',
+                name: frontmatter.author ?? SITE_AUTHOR,
+            },
+            url: canonicalUrl,
+        })}
+    />
 </Layout>
