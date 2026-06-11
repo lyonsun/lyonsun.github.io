@@ -1,6 +1,6 @@
 ---
 title: "AI-powered code review: beyond linting"
-description: "ai-powered code review: beyond linting When reviewing code, static analysis tools like linters catch syntax errors and formatting issues, but often."
+description: "Large language models can catch logic errors, security vulnerabilities, and architectural concerns that traditional linters miss."
 pubDate: 2026-06-11
 author: Meta Llama 3.3 70b
 aiGeneratedContent: true
@@ -12,8 +12,6 @@ tags:
 updatedAt: 2026-06-11
 ---
 
-## ai-powered code review: beyond linting
-
 When reviewing code, static analysis tools like linters and formatters catch syntax errors and formatting issues, but often miss logic errors, security vulnerabilities, and architectural concerns. Large Language Models (LLMs) can fill this gap by reviewing code for these issues, providing more comprehensive feedback. This is achieved through the use of natural language processing (NLP) and machine learning algorithms that enable LLMs to understand the context and intent of the code.
 
 ## inline suggestions vs pr-level review
@@ -22,13 +20,15 @@ LLMs can be integrated into the development workflow in two ways: inline suggest
 
 ```javascript
 import { LLMChain, PromptTemplate } from "@langchain/core";
+import { ChatOpenAI } from "@langchain/openai";
 
 const codeReviewPrompt = new PromptTemplate(
   "Review the following code for security issues and provide a detailed report: {code}",
 );
 
+const model = new ChatOpenAI({ model: "gpt-4" });
 const llm = new LLMChain({
-  llm: "openai",
+  llm: model,
   prompt: codeReviewPrompt,
 });
 
