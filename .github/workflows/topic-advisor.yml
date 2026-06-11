@@ -45,11 +45,11 @@ jobs:
         id: generate
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-        run: node scripts/topic-advisor.mjs
+        run: node .github/scripts/topic-advisor.mjs
 
       - name: Format topics.json
         if: steps.generate.outputs.topics-added != '' && steps.generate.outputs.topics-added != '0'
-        run: npx prettier --write scripts/topics.json
+        run: npx prettier --write .github/scripts/topics.json
 
       - name: Create Pull Request
         if: steps.generate.outputs.topics-added != '' && steps.generate.outputs.topics-added != '0'
@@ -62,7 +62,7 @@ jobs:
           git config user.email "sunly917@gmail.com"
 
           git checkout -b "$BRANCH"
-          git add scripts/topics.json
+          git add .github/scripts/topics.json
           git commit -m "content(posts): add ${{ steps.generate.outputs.topics-added }} new topic(s) to queue"
 
           git push origin HEAD:"${BRANCH}"

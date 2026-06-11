@@ -14,8 +14,8 @@ import { execSync } from 'child_process';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPT_PATH = join(__dirname, 'write-post-prompt.md');
 const TOPICS_PATH = join(__dirname, 'topics.json');
-const POSTS_DIR = join(__dirname, '..', 'src', 'content', 'posts');
-const REPO_ROOT = join(__dirname, '..');
+const POSTS_DIR = join(__dirname, '..', '..', 'src', 'content', 'posts');
+const REPO_ROOT = join(__dirname, '..', '..');
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.3-70b-versatile';

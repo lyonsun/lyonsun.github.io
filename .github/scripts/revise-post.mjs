@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPT_PATH = join(__dirname, 'revise-post-prompt.md');
-const REPO_ROOT = join(__dirname, '..');
+const REPO_ROOT = join(__dirname, '..', '..');
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
@@ -69,7 +69,7 @@ async function main() {
 
     if (!filePath) {
         console.error(
-            'Usage: node scripts/revise-post.mjs [--dry-run] <file-path>',
+            'Usage: node .github/scripts/revise-post.mjs [--dry-run] <file-path>',
         );
         process.exit(1);
     }
