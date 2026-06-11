@@ -16,6 +16,24 @@ const updatedDate = frontmatter.updatedAt
     ? formatDate(frontmatter.updatedAt)
     : undefined;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
+
+const blogPostingStructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: frontmatter.title,
+    description: frontmatter.description,
+    datePublished: frontmatter.pubDate.toISOString(),
+    dateModified: (frontmatter.updatedAt ?? frontmatter.pubDate).toISOString(),
+    author: {
+        '@type': 'Person',
+        name: frontmatter.author ?? SITE_AUTHOR,
+    },
+    url: canonicalUrl,
+    mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': canonicalUrl,
+    },
+};
 ---
 
 <Layout
@@ -25,6 +43,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
         publishedTime: frontmatter.pubDate.toISOString(),
         author: frontmatter.author,
     }}
+    structuredData={blogPostingStructuredData}
 >
     <section
         class="bg-gradient-to-br from-cyan-50 to-fuchsia-100 px-0 sm:px-20"
@@ -79,23 +98,4 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
             </a>
         </div>
     </section>
-    <script
-        type="application/ld+json"
-        is:inline
-        set:html={JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BlogPosting',
-            headline: frontmatter.title,
-            description: frontmatter.description,
-            datePublished: frontmatter.pubDate.toISOString(),
-            dateModified: (
-                frontmatter.updatedAt ?? frontmatter.pubDate
-            ).toISOString(),
-            author: {
-                '@type': 'Person',
-                name: frontmatter.author ?? SITE_AUTHOR,
-            },
-            url: canonicalUrl,
-        })}
-    />
 </Layout>

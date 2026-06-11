@@ -22,6 +22,7 @@ type Props = {
         author?: string;
     };
     noindex?: boolean;
+    structuredData?: Record<string, unknown>;
 };
 
 const {
@@ -30,6 +31,7 @@ const {
     image,
     article,
     noindex = false,
+    structuredData,
 } = Astro.props;
 
 const pageTitle = title ? title : SITE_NAME;
@@ -150,6 +152,16 @@ const imageMimeType = image ? undefined : 'image/webp';
                 ],
             })}
         />
+
+        {
+            structuredData && (
+                <script
+                    type="application/ld+json"
+                    is:inline
+                    set:html={JSON.stringify(structuredData)}
+                />
+            )
+        }
     </head>
     <body>
         <SkipLink />
