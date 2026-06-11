@@ -17,10 +17,15 @@ Write each post following this structure:
 
 4. Closing (2–3 sentences). Give a practical takeaway. Start simple, compose patterns, add complexity only when needed. Do not repeat the introduction.
 
+5. Description. Start your response with `<description>...</description>` on its own line — a standalone complete sentence (max 150 characters) that describes the post. This will be used as the SEO meta description and must NOT repeat the post title. Then a blank line, then the post body.
+
 # Style rules
 
 - Avoid filler phrases: "has the potential to", "in today's world", "revolutionize", "game-changer", "cutting-edge", "increasingly".
 - Use sentence case for the title (first word capitalized, rest lowercase unless proper nouns).
+- Use sentence case for all section headings (e.g., "## How it works", not "## how it works").
+- Section headings must be distinct from the post title. Do not mirror or paraphrase the title as a heading.
 - All code examples must use ESM/import syntax (not CommonJS require).
+- Code examples must use correct constructor and API patterns from the actual SDKs. For example, `@langchain/core`'s `PromptTemplate` requires `PromptTemplate.fromTemplate(...)`, not `new PromptTemplate(templateString)`.
 - Avoid patterns with obvious security issues (shell injection via exec, etc.).
 - Write directly in markdown. Do not wrap the output in JSON, code fences, or any enclosing structure.
