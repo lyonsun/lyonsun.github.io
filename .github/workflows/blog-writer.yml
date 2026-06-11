@@ -107,6 +107,7 @@ jobs:
             git commit -m "content(posts): revise post for ${{ steps.setup.outputs.date }}"
           fi
 
+          git remote set-url origin https://x-access-token:${{ secrets.BLOG_WRITER_PAT }}@github.com/lyonsun/lyonsun.github.io
           git push origin HEAD:"${{ steps.setup.outputs.branch_name }}"
 
           if [ "${{ steps.setup.outputs.branch_exists }}" = "false" ]; then
