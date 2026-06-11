@@ -62,7 +62,6 @@ jobs:
           fi
 
       - name: Revise blog post
-        if: steps.setup.outputs.branch_exists == 'true'
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |

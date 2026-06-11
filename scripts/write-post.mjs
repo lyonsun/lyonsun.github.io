@@ -129,15 +129,24 @@ Requirements:
     }
 
     const data = await response.json();
-    const body = data.choices[0].message.content
+    const raw = data.choices[0].message.content
         .replace(/^```[\w]*\n?|```$/g, '')
         .trim();
 
-    const firstPara = body.split('\n\n').find((p) => p.trim().length > 0);
+    let description;
+    let body;
 
-    const description = firstPara
-        ? truncateAtSentence(firstPara, 150)
-        : truncateAtSentence(topic.angle, 150);
+    const descMatch = raw.match(/<description>([\s\S]*?)<\/description>/);
+    if (descMatch) {
+        description = descMatch[1].trim();
+        body = raw.replace(/<description>[\s\S]*?<\/description>/, '').trim();
+    } else {
+        const firstPara = raw.split('\n\n').find((p) => p.trim().length > 0);
+        description = firstPara
+            ? truncateAtSentence(firstPara, 150)
+            : truncateAtSentence(topic.angle, 150);
+        body = raw;
+    }
 
     const sanitized = description
         .replace(/\n/g, ' ')
