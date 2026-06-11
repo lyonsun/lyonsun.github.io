@@ -14,7 +14,7 @@ updatedAt: 2026-06-11
 
 When reviewing code, static analysis tools like linters and formatters catch syntax errors and formatting issues, but often miss logic errors, security vulnerabilities, and architectural concerns. Large Language Models (LLMs) can fill this gap by reviewing code for these issues, providing more comprehensive feedback. This is achieved through the use of natural language processing (NLP) and machine learning algorithms that enable LLMs to understand the context and intent of the code.
 
-## inline suggestions vs pr-level review
+## Inline suggestions vs PR-level review
 
 LLMs can be integrated into the development workflow in two ways: inline suggestions and PR-level review. Inline suggestions provide immediate feedback as developers write code, whereas PR-level review analyzes the entire codebase and provides a comprehensive report. For example, using the `@langchain/core` library, you can create a code review function that checks for security issues:
 
@@ -22,7 +22,7 @@ LLMs can be integrated into the development workflow in two ways: inline suggest
 import { LLMChain, PromptTemplate } from "@langchain/core";
 import { ChatOpenAI } from "@langchain/openai";
 
-const codeReviewPrompt = new PromptTemplate(
+const codeReviewPrompt = PromptTemplate.fromTemplate(
   "Review the following code for security issues and provide a detailed report: {code}",
 );
 
@@ -47,11 +47,11 @@ console.log(review);
 
 This code uses the `@langchain/core` library to create a prompt template for code review and then calls the LLM with the provided code. The review response can be further processed to extract specific issues, such as security vulnerabilities or performance optimizations.
 
-## trade-offs and limitations
+## Trade-offs and limitations
 
 While LLMs can provide valuable insights, they are not perfect. They can be computationally expensive, and their suggestions may not always be accurate. Additionally, LLMs may struggle with very large codebases or complex architectures. When using LLMs for code review, it's essential to consider these trade-offs and limitations. For instance, the cost of using LLMs can be mitigated by implementing a hybrid approach that combines LLMs with traditional static analysis tools.
 
-## when it breaks
+## When it breaks
 
 LLMs can fail in several ways, including:
 
