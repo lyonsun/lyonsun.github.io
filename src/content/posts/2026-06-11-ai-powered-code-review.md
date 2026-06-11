@@ -9,11 +9,12 @@ tags:
   - ai
   - code-review
   - ci
+updatedAt: 2026-06-11
 ---
 
-# ai-powered code review: beyond linting
+## ai-powered code review: beyond linting
 
-When reviewing code, static analysis tools like linters catch syntax errors and formatting issues, but often miss logic errors, security vulnerabilities, and architectural concerns. Large Language Models (LLMs) can fill this gap by reviewing code for these issues, providing more comprehensive feedback.
+When reviewing code, static analysis tools like linters and formatters catch syntax errors and formatting issues, but often miss logic errors, security vulnerabilities, and architectural concerns. Large Language Models (LLMs) can fill this gap by reviewing code for these issues, providing more comprehensive feedback. This is achieved through the use of natural language processing (NLP) and machine learning algorithms that enable LLMs to understand the context and intent of the code.
 
 ## inline suggestions vs pr-level review
 
@@ -23,7 +24,7 @@ LLMs can be integrated into the development workflow in two ways: inline suggest
 import { LLMChain, PromptTemplate } from "@langchain/core";
 
 const codeReviewPrompt = new PromptTemplate(
-  "Review the following code for security issues: {code}",
+  "Review the following code for security issues and provide a detailed report: {code}",
 );
 
 const llm = new LLMChain({
@@ -32,7 +33,7 @@ const llm = new LLMChain({
 });
 
 const code = `
-const express = require('express');
+import express from 'express';
 const app = express();
 
 app.get('/users', (req, res) => {
@@ -44,18 +45,18 @@ const review = await llm.call({ code });
 console.log(review);
 ```
 
-This code uses the `@langchain/core` library to create a prompt template for code review and then calls the LLM with the provided code.
+This code uses the `@langchain/core` library to create a prompt template for code review and then calls the LLM with the provided code. The review response can be further processed to extract specific issues, such as security vulnerabilities or performance optimizations.
 
 ## trade-offs and limitations
 
-While LLMs can provide valuable insights, they are not perfect. They can be computationally expensive, and their suggestions may not always be accurate. Additionally, LLMs may struggle with very large codebases or complex architectures. When using LLMs for code review, it's essential to consider these trade-offs and limitations.
+While LLMs can provide valuable insights, they are not perfect. They can be computationally expensive, and their suggestions may not always be accurate. Additionally, LLMs may struggle with very large codebases or complex architectures. When using LLMs for code review, it's essential to consider these trade-offs and limitations. For instance, the cost of using LLMs can be mitigated by implementing a hybrid approach that combines LLMs with traditional static analysis tools.
 
 ## when it breaks
 
 LLMs can fail in several ways, including:
 
-- **Context limits**: LLMs may not be able to understand the context of the code, leading to inaccurate suggestions.
-- **Cost blowup**: Using LLMs can be expensive, especially for large codebases or frequent reviews.
-- **Compounding errors**: LLMs may introduce new errors or amplify existing ones if their suggestions are not carefully reviewed.
+- **Context limits**: LLMs may not be able to understand the context of the code, leading to inaccurate suggestions. This can be addressed by providing additional context, such as documentation or comments, to help the LLM understand the code's intent.
+- **Cost blowup**: Using LLMs can be expensive, especially for large codebases or frequent reviews. This can be mitigated by implementing a cost-effective strategy, such as using LLMs only for critical components of the codebase.
+- **Compounding errors**: LLMs may introduce new errors or amplify existing ones if their suggestions are not carefully reviewed. This can be addressed by implementing a rigorous review process that verifies the accuracy of the LLM's suggestions.
 
 In conclusion, AI-powered code review can provide valuable insights beyond what static analysis tools catch. By integrating LLMs into the development workflow, developers can catch logic errors, security issues, and architectural concerns earlier and improve the overall quality of their code. Start by using inline suggestions and gradually move to PR-level review as needed, always considering the trade-offs and limitations of LLMs.
