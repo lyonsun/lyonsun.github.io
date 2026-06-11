@@ -8,7 +8,6 @@ tags:
   - ai
   - code-review
   - ci
-updatedAt: 2026-06-11
 ---
 
 When reviewing code, static analysis tools like linters and formatters catch syntax errors and formatting issues, but often miss logic errors, security vulnerabilities, and architectural concerns. Large Language Models (LLMs) can fill this gap by reviewing code for these issues, providing more comprehensive feedback. This is achieved through the use of natural language processing (NLP) and machine learning algorithms that enable LLMs to understand the context and intent of the code.
