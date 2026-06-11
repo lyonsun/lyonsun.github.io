@@ -56,9 +56,9 @@ jobs:
           TOPIC_SLUG: ${{ inputs.topic_slug || '' }}
         run: |
           if [ -n "$TOPIC_SLUG" ]; then
-            node scripts/write-post.mjs "$TOPIC_SLUG"
+            node .github/scripts/write-post.mjs "$TOPIC_SLUG"
           else
-            node scripts/write-post.mjs
+            node .github/scripts/write-post.mjs
           fi
 
       - name: Revise blog post
@@ -71,10 +71,10 @@ jobs:
             exit 0
           fi
           # The blog branch was forked before revise-post.mjs was added to main
-          if [ ! -f scripts/revise-post.mjs ]; then
-            git show main:scripts/revise-post.mjs > scripts/revise-post.mjs
+          if [ ! -f .github/scripts/revise-post.mjs ]; then
+            git show main:.github/scripts/revise-post.mjs > .github/scripts/revise-post.mjs
           fi
-          node scripts/revise-post.mjs "$POST_FILE"
+          node .github/scripts/revise-post.mjs "$POST_FILE"
 
       - name: Check formatting
         run: npx prettier --check .
@@ -99,7 +99,7 @@ jobs:
           git config user.email "sunly917@gmail.com"
 
           if [ "${{ steps.setup.outputs.branch_exists }}" = "false" ]; then
-            git add src/content/posts/ scripts/topics.json
+            git add src/content/posts/ .github/scripts/topics.json
             git commit -m "content(posts): add new post for ${{ steps.setup.outputs.date }}"
           else
             git add src/content/posts/
