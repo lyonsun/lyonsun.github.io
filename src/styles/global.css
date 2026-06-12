@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+@custom-variant dark (@media (prefers-color-scheme: dark));
 
 @font-face {
   font-family: "Saira";
@@ -35,21 +36,21 @@ body {
 }
 
 *::selection {
-  @apply bg-emerald-300;
+  @apply bg-emerald-300 dark:bg-emerald-600;
 }
 
 .skip-link {
-  @apply fixed -top-full left-4 z-[9999] rounded-md bg-white px-4 py-2 text-sm font-semibold text-black shadow-lg ring-2 ring-emerald-300 transition-all duration-150 outline-none focus:top-4;
+  @apply fixed -top-full left-4 z-[9999] rounded-md bg-white px-4 py-2 text-sm font-semibold text-black shadow-lg ring-2 ring-emerald-300 transition-all duration-150 outline-none focus:top-4 dark:bg-gray-950 dark:text-white dark:ring-emerald-600;
 }
 
 .line-before {
-  @apply before:absolute before:top-0 before:left-1/2 before:h-px before:w-[100vw] before:-translate-x-1/2 before:bg-stone-200;
+  @apply before:absolute before:top-0 before:left-1/2 before:h-px before:w-[100vw] before:-translate-x-1/2 before:bg-stone-200 dark:before:bg-stone-700;
 }
 
 .line-after {
-  @apply after:absolute after:bottom-0 after:left-1/2 after:h-px after:w-[100vw] after:-translate-x-1/2 after:bg-stone-200;
+  @apply after:absolute after:bottom-0 after:left-1/2 after:h-px after:w-[100vw] after:-translate-x-1/2 after:bg-stone-200 dark:after:bg-stone-700;
 }
 
 .link {
-  @apply relative inline-block p-2 before:absolute before:inset-0 before:origin-bottom before:scale-y-10 before:transform before:bg-emerald-300 before:transition-transform before:duration-300 before:ease-in-out hover:before:scale-y-100;
+  @apply relative inline-block p-2 before:absolute before:inset-0 before:origin-bottom before:scale-y-10 before:transform before:bg-emerald-300 before:transition-transform before:duration-300 before:ease-in-out hover:before:scale-y-100 dark:before:bg-emerald-600;
 }

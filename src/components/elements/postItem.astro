@@ -8,19 +8,24 @@ type Props = {
     isLast: boolean;
 };
 const { post, isLast } = Astro.props;
-const borderClass = isLast ? 'border-none' : 'border-b border-stone-200';
+const borderClass = isLast
+    ? 'border-none'
+    : 'border-b border-stone-200 dark:border-stone-700';
 ---
 
 <article class={`pb-8 ${borderClass}`}>
     <h2 class="mb-2 text-2xl font-semibold">
-        <a href={`/posts/${post.id}`} class="hover:text-black/60">
+        <a
+            href={`/posts/${post.id}`}
+            class="hover:text-black/60 dark:hover:text-white/60"
+        >
             {post.data.title}
         </a>
     </h2>
-    <p class="mb-4 text-black/40">
+    <p class="mb-4 text-black/40 dark:text-white/40">
         {formatDate(post.data.pubDate)}
     </p>
-    <p class="text-black/60">
+    <p class="text-black/60 dark:text-white/60">
         {post.data.description}
     </p>
     {

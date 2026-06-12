@@ -17,18 +17,24 @@ const {
 
 const containerClasses =
     layout === 'grid'
-        ? 'container mx-auto grid min-h-screen sm:border-r sm:border-l sm:border-stone-200'
-        : 'container mx-auto flex min-h-screen flex-col sm:border-r sm:border-l sm:border-stone-200';
+        ? 'container mx-auto grid min-h-screen sm:border-r sm:border-l sm:border-stone-200 dark:sm:border-stone-700'
+        : 'container mx-auto flex min-h-screen flex-col sm:border-r sm:border-l sm:border-stone-200 dark:sm:border-stone-700';
 
 const bottomTextClasses =
     layout === 'grid'
-        ? 'justify-self-end p-4 text-black/60 hover:text-black/70'
-        : 'self-end p-4 text-black/60 hover:text-black/70';
+        ? 'justify-self-end p-4 text-black/60 hover:text-black/70 dark:text-white/60 dark:hover:text-white/70'
+        : 'self-end p-4 text-black/60 hover:text-black/70 dark:text-white/60 dark:hover:text-white/70';
 ---
 
-<section class="bg-gradient-to-br from-cyan-50 to-fuchsia-100 px-0 sm:px-20">
+<section
+    class="bg-gradient-to-br from-cyan-50 to-fuchsia-100 px-0 sm:px-20 dark:bg-gradient-to-br dark:from-slate-900 dark:to-purple-950"
+>
     <div class={containerClasses}>
-        {topText && <p class="p-4 text-black/60">{topText}</p>}
+        {
+            topText && (
+                <p class="p-4 text-black/60 dark:text-white/60">{topText}</p>
+            )
+        }
         <slot name="top" />
         <div
             class:list={[

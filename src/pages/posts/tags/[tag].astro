@@ -30,7 +30,7 @@ const posts = await getPublishedPostsByTag(tag);
         bottomText="← Back to Posts"
     >
         <h1 class="mb-3 text-4xl font-bold">#{tag}</h1>
-        <p class="mb-8 text-stone-600">
+        <p class="mb-8 text-stone-600 dark:text-stone-400">
             {posts.length} post{posts.length === 1 ? '' : 's'}
         </p>
         {
@@ -44,7 +44,9 @@ const posts = await getPublishedPostsByTag(tag);
                     ))}
                 </div>
             ) : (
-                <p class="text-black/60">No posts found for this tag.</p>
+                <p class="text-black/60 dark:text-white/60">
+                    No posts found for this tag.
+                </p>
             )
         }
     </PageSection>

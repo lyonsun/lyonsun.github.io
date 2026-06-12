@@ -10,7 +10,7 @@ import PageSection from './pageSection.astro';
     <div slot="top" class="self-end p-4">
         <a
             href="/posts/10247-lines-of-code"
-            class="text-black/60 hover:text-black/70"
+            class="text-black/60 hover:text-black/70 dark:text-white/60 dark:hover:text-white/70"
         >
             10247 lines of code
         </a>
@@ -36,7 +36,10 @@ import PageSection from './pageSection.astro';
             />
         </li>
     </ul>
-    <div slot="bottom" class="justify-self-end p-4 text-black/60">
+    <div
+        slot="bottom"
+        class="justify-self-end p-4 text-black/60 dark:text-white/60"
+    >
         <span id="current-date"></span>
     </div>
 </PageSection>
