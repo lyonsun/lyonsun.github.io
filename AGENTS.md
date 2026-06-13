@@ -9,7 +9,8 @@ This is a personal portfolio/blog website built with **Astro v6**, deployed to G
 - **Language**: TypeScript (strict mode, `astro/tsconfigs/strict`)
 - **Content**: Markdown blog posts (`src/content/posts/**/*.md`) loaded via `glob` loader with Zod validation
 - **Formatting**: Prettier with `prettier-plugin-astro` and `prettier-plugin-tailwindcss`
-- **Deployment**: GitHub Pages via GitHub Actions (Node 22, `npm ci`)
+- **AI Tooling**: OpenCode with superpowers plugin (`opencode.json`)
+- **Deployment**: GitHub Pages via GitHub Actions (Node 24, `npm ci`)
 - **Dependency Updates**: Renovate (groups patch/minor together)
 - **Vite**: Overridden to `^7`
 
@@ -25,19 +26,7 @@ This is a personal portfolio/blog website built with **Astro v6**, deployed to G
 
 ## Project Structure
 
-```
-src/
-├── components/          # Atomic design: atoms/, elements/, sections/, icons/
-├── content/posts/       # Blog posts (Markdown with frontmatter)
-├── layouts/             # layout.astro (head, SEO, OG), blogPost.astro
-├── lib/                 # posts.ts (collection helpers), url.ts (tag path builder)
-├── meta/                # ga4.astro
-├── pages/               # index, 404, posts/[slug], posts/tags/[tag], rss.xml, sitemap.xml, robots.txt
-├── styles/              # global.css
-├── assets/              # og-image.png
-├── content.config.ts    # Zod schema for posts
-└── consts.ts            # SITE_NAME, SITE_DESCRIPTION, SITE_AUTHOR, TWITTER_HANDLE, SITE_LOCALE
-```
+- Atomic design in `src/components/`, content in `src/content/posts/`, pages in `src/pages/`, configs at root.
 
 ## Code Conventions
 
@@ -63,6 +52,11 @@ Required frontmatter: `title`, `description`, `pubDate`. Optional: `tags` (defau
 - **Lighthouse**: Daily 09:00 UTC (scheduled + manual trigger). Desktop preset, 3 runs. Threshold ≥0.9 for all categories. Failures create a GitHub issue with label `lighthouse`.
 - **Budget** (lighthouse-budget.json): total ≤150KB, script ≤20KB, stylesheet ≤30KB, font ≤80KB, image ≤100KB. FCP ≤1.5s, LCP ≤2.5s, TBT ≤200ms, CLS ≤0.1.
 - **PR Review**: OpenCode review via `anomalyco/opencode/github@latest` (model `opencode/deepseek-v4-flash-free`). Skips Renovate/Dependabot PRs.
+
+## Blog Workflows
+
+- **Blog Writer** (`.github/workflows/blog-writer.yml`): Scheduled Mon/Thu 09:00 UTC + manual trigger. Generates AI blog posts via Groq, creates PRs with `draft: true`. Uses `GROQ_API_KEY` and `BLOG_WRITER_PAT` secrets.
+- **Topic Advisor** (`.github/workflows/topic-advisor.yml`): Scheduled Mon 09:00 UTC + manual trigger. Suggests new blog topics via Groq, updates `.github/scripts/topics.json`, creates PRs.
 
 ## Site Details
 

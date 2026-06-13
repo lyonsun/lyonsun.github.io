@@ -47,7 +47,7 @@ Titles use sentence case.
 
 ## Deployment
 
-Push to `main` → automatically built and deployed to GitHub Pages via GitHub Actions (Node 22, `npm ci`).
+Push to `main` → automatically built and deployed to GitHub Pages via GitHub Actions (Node 24, `npm ci`).
 
 ## Live
 
