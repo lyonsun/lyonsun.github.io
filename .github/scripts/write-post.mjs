@@ -174,8 +174,8 @@ ${tagsYaml}
 `;
 }
 
-function slugToFileName(dateStr, slug) {
-    return `${dateStr}-${slug}.md`;
+function slugToFileName(slug) {
+    return `${slug}.md`;
 }
 
 async function main() {
@@ -210,7 +210,7 @@ async function main() {
     }
 
     const dateStr = getTodayDate();
-    const fileName = slugToFileName(dateStr, topic.slug);
+    const fileName = slugToFileName(topic.slug);
     const filePath = join(POSTS_DIR, fileName);
 
     if (existsSync(filePath)) {
