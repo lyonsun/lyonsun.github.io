@@ -65,9 +65,13 @@ jobs:
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
-          POST_FILE=$(printf '%s\n' src/content/posts/${{ steps.setup.outputs.date }}-*.md 2>/dev/null | head -1)
+          # Find post file: uncommitted from compose (initial) or git diff vs main (revision)
+          POST_FILE=$(git status --porcelain src/content/posts/ 2>/dev/null | sed -n 's/^?? //p' | head -1)
           if [ -z "$POST_FILE" ]; then
-            echo "No existing post found for ${{ steps.setup.outputs.date }}."
+            POST_FILE=$(git diff --diff-filter=A --name-only origin/main...HEAD -- 'src/content/posts/*.md' 2>/dev/null | head -1)
+          fi
+          if [ -z "$POST_FILE" ]; then
+            echo "No existing post found."
             exit 0
           fi
           # The blog branch was forked before revise-post.mjs was added to main
