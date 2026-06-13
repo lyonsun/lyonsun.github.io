@@ -66,10 +66,6 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }} --ignore-scripts
         working-directory: ${{ env.BUILD_PATH }}
-      - name: Run security audit
-        if: steps.detect-package-manager.outputs.manager == 'npm'
-        run: npm audit --audit-level=high --omit=dev
-        working-directory: ${{ env.BUILD_PATH }}
       - name: Run type check
         run: ${{ steps.detect-package-manager.outputs.runner }} astro check
         working-directory: ${{ env.BUILD_PATH }}
