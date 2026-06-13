@@ -18,7 +18,7 @@ jobs:
 
       - name: Audit URLs using Lighthouse
         id: lighthouse
-        uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # v12
+        uses: treosh/lighthouse-ci-action@512cc908a55bfb0ad231facca52adf3d3a651df4 # v12
         with:
           urls: |
             https://lyonsun.github.io
@@ -29,7 +29,7 @@ jobs:
 
       - name: Create issue on failure
         if: failure()
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+        uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         with:
           script: |
             const existing = await github.rest.issues.listForRepo({
