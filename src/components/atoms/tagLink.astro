@@ -10,7 +10,7 @@ const { tag } = Astro.props;
 
 <a
     href={getTagPath(tag)}
-    class="rounded-full border border-stone-300 px-3 py-1 text-sm text-stone-700 transition-colors hover:border-black hover:text-black"
+    class="rounded-full border border-stone-300 px-3 py-1 text-sm text-stone-700 transition-colors hover:border-black hover:text-black dark:border-stone-600 dark:text-stone-300 dark:hover:border-white dark:hover:text-white"
 >
     #{tag}
 </a>
