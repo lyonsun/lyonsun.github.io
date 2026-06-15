@@ -68,5 +68,29 @@
     "angle": "Discuss strategies for evaluating AI-generated code and content: automated tests, manual review checklists, hallucination detection, and building evaluation datasets for your specific domain.",
     "tags": ["ai", "llm", "workflow", "testing"],
     "usedAt": null
+  },
+  {
+    "slug": "llm-based-api-design",
+    "title": "Using llms to improve api design",
+    "angle": "Exploring how large language models can be used to generate, validate, and optimize api designs, including approaches for iterative refinement and automated testing. The post will cover practical examples and limitations of llm-based api design tools.",
+    "rationale": "As llms become more prevalent, their potential to augment traditional api design methodologies is increasingly relevant. This post fills a gap by discussing the intersection of llms and api design, providing readers with actionable insights and use cases.",
+    "tags": ["api-design", "llms", "software-engineering"],
+    "usedAt": null
+  },
+  {
+    "slug": "debugging-llm-integrations",
+    "title": "Debugging llm integrations in software systems",
+    "angle": "Discussing the challenges and strategies for debugging llm integrations, including techniques for identifying and addressing errors, biases, and performance issues. The post will cover real-world examples and best practices for llm integration debugging.",
+    "rationale": "As llms are integrated into more software systems, debugging these integrations becomes a critical challenge. This post addresses the need for practical guidance on debugging llm integrations, providing readers with valuable insights and techniques.",
+    "tags": ["debugging", "llms", "software-integration"],
+    "usedAt": null
+  },
+  {
+    "slug": "future-of-frontend-development",
+    "title": "The future of frontend development with ai and llms",
+    "angle": "Examining the potential impact of ai and llms on frontend development, including emerging trends, tools, and methodologies. The post will discuss the possibilities and challenges of ai-driven frontend development, and what this means for the future of the field.",
+    "rationale": "The increasing presence of ai and llms in software development is likely to significantly impact frontend development. This post explores the potential implications and opportunities of ai-driven frontend development, providing readers with a forward-looking perspective on the field.",
+    "tags": ["frontend-development", "ai", "llms"],
+    "usedAt": null
   }
 ]
