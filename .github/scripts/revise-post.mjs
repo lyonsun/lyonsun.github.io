@@ -97,12 +97,7 @@ async function main() {
         process.exit(0);
     }
 
-    const today = new Date().toISOString().slice(0, 10);
-    const updatedFrontmatter = frontmatter.includes('updatedAt:')
-        ? frontmatter.replace(/updatedAt:.*/, `updatedAt: ${today}`)
-        : `${frontmatter}\nupdatedAt: ${today}`;
-
-    const newContent = `---\n${updatedFrontmatter}\n---\n\n${revisedBody}\n`;
+    const newContent = `---\n${frontmatter}\n---\n\n${revisedBody}\n`;
     writeFileSync(filePath, newContent);
 
     try {
