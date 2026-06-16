@@ -9,6 +9,10 @@ const PROMPT_PATH = join(__dirname, 'topic-advisor-prompt.md');
 const TOPICS_PATH = join(__dirname, 'topics.json');
 const POSTS_DIR = join(__dirname, '..', '..', 'src', 'content', 'posts');
 
+function pluralize(count) {
+    return count === 1 ? 'topic' : 'topics';
+}
+
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
 const TARGET_UNUSED = 10;
@@ -163,7 +167,7 @@ async function main() {
     }
 
     console.log(
-        `Queue has ${unusedTopics.length} unused topics. Generating ${countNeeded} new topic(s).`,
+        `Queue has ${unusedTopics.length} unused topics. Generating ${countNeeded} new ${pluralize(countNeeded)}.`,
     );
 
     const existingContext = buildExistingContext(topics, postSlugs);
@@ -204,7 +208,7 @@ async function main() {
 
     if (dryRun) {
         console.log(
-            `[dry-run] Would add ${added.length} topic(s). Final unused: ${finalCount}.`,
+            `[dry-run] Would add ${added.length} ${pluralize(added.length)}. Final unused: ${finalCount}.`,
         );
         for (const t of added) {
             console.log(`  + ${t.title} [${t.tags.join(', ')}]`);
@@ -214,7 +218,7 @@ async function main() {
 
     writeTopics(topics);
     console.log(
-        `Added ${added.length} topic(s). Queue now has ${finalCount} unused topics.`,
+        `Added ${added.length} ${pluralize(added.length)}. Queue now has ${finalCount} unused topics.`,
     );
     for (const t of added) {
         console.log(`  + ${t.title} [${t.tags.join(', ')}]`);
@@ -227,7 +231,7 @@ async function main() {
         );
 
         const prBodyLines = [
-            `This PR adds ${added.length} new topic(s) to the queue, generated via LLM.`,
+            `This PR adds ${added.length} new ${pluralize(added.length)} to the queue, generated via LLM.`,
             '',
             '## New topics',
             ...added.map((t) => `- **${t.title}** — ${t.rationale}`),
