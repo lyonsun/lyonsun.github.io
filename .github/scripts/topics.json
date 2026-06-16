@@ -72,8 +72,8 @@
   {
     "slug": "llm-based-api-design",
     "title": "Using LLMs to improve API design",
-    "angle": "Exploring how large language models can be used to generate, validate, and optimize api designs, including approaches for iterative refinement and automated testing. The post will cover practical examples and limitations of llm-based api design tools.",
-    "rationale": "As llms become more prevalent, their potential to augment traditional api design methodologies is increasingly relevant. This post fills a gap by discussing the intersection of llms and api design, providing readers with actionable insights and use cases.",
+    "angle": "Exploring how large language models can be used to generate, validate, and optimize API designs, including approaches for iterative refinement and automated testing. The post will cover practical examples and limitations of LLM-based API design tools.",
+    "rationale": "As LLMs become more prevalent, their potential to augment traditional API design methodologies is increasingly relevant. This post fills a gap by discussing the intersection of LLMs and API design, providing readers with actionable insights and use cases.",
     "tags": ["api-design", "llm"],
     "usedAt": null
   },
@@ -81,7 +81,7 @@
     "slug": "debugging-llm-integrations",
     "title": "Debugging LLM integrations in software systems",
     "angle": "Discussing the challenges and strategies for debugging LLM integrations, including techniques for identifying and addressing errors, biases, and performance issues. The post will cover real-world examples and best practices for LLM integration debugging.",
-    "rationale": "As llms are integrated into more software systems, debugging these integrations becomes a critical challenge. This post addresses the need for practical guidance on debugging llm integrations, providing readers with valuable insights and techniques.",
+    "rationale": "As LLMs are integrated into more software systems, debugging these integrations becomes a critical challenge. This post addresses the need for practical guidance on debugging LLM integrations, providing readers with valuable insights and techniques.",
     "tags": ["debugging", "llm"],
     "usedAt": null
   },
@@ -89,7 +89,7 @@
     "slug": "future-of-frontend-development",
     "title": "The future of frontend development with AI and LLMs",
     "angle": "Examining the potential impact of AI and LLMs on frontend development, including emerging trends, tools, and methodologies. The post will discuss the possibilities and challenges of AI-driven frontend development, and what this means for the future of the field.",
-    "rationale": "The increasing presence of ai and llms in software development is likely to significantly impact frontend development. This post explores the potential implications and opportunities of ai-driven frontend development, providing readers with a forward-looking perspective on the field.",
+    "rationale": "The increasing presence of AI and LLMs in software development is likely to significantly impact frontend development. This post explores the potential implications and opportunities of AI-driven frontend development, providing readers with a forward-looking perspective on the field.",
     "tags": ["frontend", "ai", "llm"],
     "usedAt": null
   }
