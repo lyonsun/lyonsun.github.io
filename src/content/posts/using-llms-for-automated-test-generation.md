@@ -9,7 +9,6 @@ tags:
   - ai
   - testing
   - agentic
-updatedAt: 2026-06-15
 ---
 
 ## Introduction to Automated Test Generation
