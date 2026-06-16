@@ -25,7 +25,7 @@
     "title": "Using LLMs for automated test generation",
     "angle": "Walk through strategies for using LLMs to generate unit tests, integration tests, and edge cases from code context. Cover prompt patterns, validation, and when human oversight is essential.",
     "tags": ["ai", "testing", "agentic"],
-    "usedAt": null
+    "usedAt": "2026-06-15"
   },
   {
     "slug": "multi-agent-systems-for-software-development",
