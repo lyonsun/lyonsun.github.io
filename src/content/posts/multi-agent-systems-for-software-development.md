@@ -24,36 +24,55 @@ In a multi-agent system, each agent has a distinct role. The planner agent is re
 To illustrate this concept, let's consider a simple example using JavaScript and the `@langchain/core` library. We can define a planner agent that generates a task list based on a given prompt. The planner agent utilizes a prompt template to generate the task list, which is then passed to the coder agent for implementation.
 
 ```javascript
-import { PromptTemplate } from "@langchain/core";
+import { PromptTemplate } from "@langchain/core/prompts";
+import { ChatOpenAI } from "@langchain/openai";
+import { StringOutputParser } from "@langchain/core/output_parsers";
 
-const plannerAgent = PromptTemplate.fromTemplate(
-  "Break down the task of building a simple web application into smaller tasks.",
-);
+const model = new ChatOpenAI({ model: "gpt-4" });
 
-const taskList = await plannerAgent.generate();
-console.log(taskList);
+const implementTask = async (task) => {
+  const prompt = PromptTemplate.fromTemplate(
+    "Implement the following task: {task}",
+  );
+  return prompt.pipe(model).pipe(new StringOutputParser()).invoke({ task });
+};
 
-// Define a coder agent that implements each task
+const evaluateTask = async (task) => {
+  const prompt = PromptTemplate.fromTemplate(
+    "Evaluate the quality of this output: {task}",
+  );
+  return prompt.pipe(model).pipe(new StringOutputParser()).invoke({ task });
+};
+
 const coderAgent = async (taskList) => {
   const implementedTasks = [];
   for (const task of taskList) {
-    // Implement the task using the coder agent's implementation logic
-    const implementedTask = await implementTask(task);
-    implementedTasks.push(implementedTask);
+    implementedTasks.push(await implementTask(task));
   }
   return implementedTasks;
 };
 
-// Define a reviewer agent that evaluates the output
 const reviewerAgent = async (implementedTasks) => {
   const reviewResults = [];
   for (const task of implementedTasks) {
-    // Evaluate the task using the reviewer agent's evaluation logic
-    const reviewResult = await evaluateTask(task);
-    reviewResults.push(reviewResult);
+    reviewResults.push(await evaluateTask(task));
   }
   return reviewResults;
 };
+
+(async () => {
+  const plannerPrompt = PromptTemplate.fromTemplate(
+    "Break down the task of building a simple web application into smaller tasks. List one per line.",
+  );
+  const output = await plannerPrompt
+    .pipe(model)
+    .pipe(new StringOutputParser())
+    .invoke({});
+  const tasks = output.split("\n").filter(Boolean);
+  const implementedTasks = await coderAgent(tasks);
+  const reviewResults = await reviewerAgent(implementedTasks);
+  console.log(reviewResults);
+})();
 ```
 
 ## Failure Modes and Limitations
