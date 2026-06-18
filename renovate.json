@@ -3,6 +3,10 @@
   "extends": ["config:recommended"],
   "packageRules": [
     {
+      "matchDepNames": ["npm"],
+      "enabled": false
+    },
+    {
       "matchUpdateTypes": ["patch", "minor"],
       "groupName": "non-major updates"
     }
