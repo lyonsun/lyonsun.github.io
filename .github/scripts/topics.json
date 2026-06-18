@@ -32,7 +32,7 @@
     "title": "Multi-agent systems for software development",
     "angle": "Examine architectures where multiple AI agents collaborate on software tasks: a planner agent breaks down work, a coder implements, a reviewer critiques. Discuss coordination patterns and failure modes.",
     "tags": ["ai", "agentic", "architecture"],
-    "usedAt": null
+    "usedAt": "2026-06-18"
   },
   {
     "slug": "prompt-engineering-for-code-generation",
