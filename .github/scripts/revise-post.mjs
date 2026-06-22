@@ -12,14 +12,16 @@ const REPO_ROOT = join(__dirname, '..', '..');
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.3-70b-versatile';
 
-async function callGroq(postBody) {
+async function callGroq(postBody, errors) {
     const systemPrompt = readFileSync(PROMPT_PATH, 'utf-8').trim();
 
-    const userPrompt = `Revise this blog post. Improve technical accuracy, add depth, fix any inaccuracies, and ensure code examples are JavaScript or TypeScript.
+    let userPrompt = `Revise this blog post. Improve technical accuracy, add depth, fix any inaccuracies, and ensure code examples are JavaScript or TypeScript.`;
 
----BEGIN POST---
-${postBody}
----END POST---`;
+    if (errors && errors.length > 0) {
+        userPrompt += `\n\nFix the following validation errors in the code examples:\n${errors.map((e) => `  - [${e.tag}] ${e.message}`).join('\n')}`;
+    }
+
+    userPrompt += `\n\n---BEGIN POST---\n${postBody}\n---END POST---`;
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 60000);
@@ -65,11 +67,18 @@ function splitFrontmatter(content) {
 async function main() {
     const args = process.argv.slice(2);
     const dryRun = args.includes('--dry-run');
-    const filePath = args.find((a) => !a.startsWith('--'));
+    const errorsFileIndex = args.indexOf('--errors-file');
+    const errorsFile =
+        errorsFileIndex !== -1 ? args[errorsFileIndex + 1] : null;
+    const filePath = args.find(
+        (a, i) =>
+            !a.startsWith('--') &&
+            (errorsFileIndex === -1 || i !== errorsFileIndex + 1),
+    );
 
     if (!filePath) {
         console.error(
-            'Usage: node .github/scripts/revise-post.mjs [--dry-run] <file-path>',
+            'Usage: node .github/scripts/revise-post.mjs [--dry-run] [--errors-file <path>] <file-path>',
         );
         process.exit(1);
     }
@@ -79,11 +88,24 @@ async function main() {
         process.exit(1);
     }
 
+    let errors = null;
+    if (errorsFile && existsSync(errorsFile)) {
+        const raw = readFileSync(errorsFile, 'utf-8');
+        try {
+            const parsed = JSON.parse(raw);
+            errors = parsed.errors || parsed;
+        } catch {
+            console.warn(
+                `Could not parse errors file: ${errorsFile}. Continuing without.`,
+            );
+        }
+    }
+
     const content = readFileSync(filePath, 'utf-8');
     const { frontmatter, body } = splitFrontmatter(content);
 
     console.log(`Revising: ${filePath}`);
-    const revisedBody = await callGroq(body);
+    const revisedBody = await callGroq(body, errors);
 
     if (!revisedBody || revisedBody.length < 50) {
         throw new Error('Revision returned empty or too short — discarding.');

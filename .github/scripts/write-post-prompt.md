@@ -27,5 +27,8 @@ Write each post following this structure:
 - Section headings must be distinct from the post title. Do not mirror or paraphrase the title as a heading.
 - All code examples must use ESM/import syntax (not CommonJS require).
 - Code examples must use correct constructor and API patterns from the actual SDKs. For example, `@langchain/core`'s `PromptTemplate` requires `PromptTemplate.fromTemplate(...)`, not `new PromptTemplate(templateString)`.
+- Every code block must be self-contained: all referenced functions, variables, and imports must be defined within the block. Do not reference undefined helper functions.
+- Every code block must use proper async handling: wrap top-level `await` in an async IIFE (`(async () => { ... })()`). Never use bare `await` at the top level of a script.
+- Verify that every method called on an SDK object actually exists in that SDK's documented API. For example, `PromptTemplate` has `.pipe()` and `.format()`, but not `.generate()`.
 - Avoid patterns with obvious security issues (shell injection via exec, etc.).
 - Write directly in markdown. Do not wrap the output in JSON, code fences, or any enclosing structure.
