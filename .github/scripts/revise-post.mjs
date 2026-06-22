@@ -53,7 +53,7 @@ async function callGroq(postBody, errors) {
 
     const data = await response.json();
     const revised = data.choices[0].message.content.trim();
-    return revised.replace(/^```[\w]*\n?|```$/g, '').trim();
+    return revised.replace(/^```[\w]*\n?|\n```$/g, '').trim();
 }
 
 function splitFrontmatter(content) {

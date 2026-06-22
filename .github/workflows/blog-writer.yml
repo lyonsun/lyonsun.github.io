@@ -75,11 +75,9 @@ jobs:
             exit 0
           fi
           # The blog branch was forked before scripts were added to main
-          for SCRIPT in revise-post.mjs validate-post.mjs; do
-            if [ ! -f ".github/scripts/$SCRIPT" ]; then
-              git show main:".github/scripts/$SCRIPT" > ".github/scripts/$SCRIPT"
-            fi
-          done
+          if [ ! -f .github/scripts/revise-post.mjs ]; then
+            git show main:.github/scripts/revise-post.mjs > .github/scripts/revise-post.mjs
+          fi
           node .github/scripts/revise-post.mjs "$POST_FILE"
 
       - name: Validate and re-revise blog post
@@ -93,6 +91,11 @@ jobs:
           if [ -z "$POST_FILE" ]; then
             echo "No post file found for validation."
             exit 0
+          fi
+
+          # The blog branch was forked before scripts were added to main
+          if [ ! -f .github/scripts/validate-post.mjs ]; then
+            git show main:.github/scripts/validate-post.mjs > .github/scripts/validate-post.mjs
           fi
 
           MAX_RETRIES=2

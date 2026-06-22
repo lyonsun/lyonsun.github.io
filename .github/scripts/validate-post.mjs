@@ -411,6 +411,16 @@ function findUndefinedReferences(code) {
         /(?:async\s+)?(?:function\s*(?:\w+)?|(?:\([^)]*\)|\w+)\s*(?:=>))/g;
     let execResult;
     while ((execResult = paramsRe.exec(cleaned)) !== null) {
+        const matchToken = execResult[0];
+        // Single-param arrow: `x =>` or `async x =>` (no parens around the param)
+        if (matchToken.includes('=>') && !matchToken.includes('(')) {
+            const name = matchToken
+                .replace(/^(?:async\s+)?/, '')
+                .split(/\s*=>/)[0]
+                .trim();
+            if (name && /^\w+$/.test(name)) defined.add(name);
+            continue;
+        }
         const fnMatch = cleaned.slice(execResult.index).match(/\(([^)]*)\)/);
         if (fnMatch) {
             for (const param of fnMatch[1].split(',')) {
