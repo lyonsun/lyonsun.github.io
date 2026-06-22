@@ -39,7 +39,7 @@
     "title": "Prompt engineering for code generation",
     "angle": "Practical techniques for crafting prompts that produce better code: providing context, specifying constraints, using examples, requesting explanations, and iterating on output.",
     "tags": ["ai", "prompt-engineering", "coding"],
-    "usedAt": null
+    "usedAt": "2026-06-22"
   },
   {
     "slug": "integrating-ai-into-your-ci-cd-pipeline",
