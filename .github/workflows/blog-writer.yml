@@ -74,11 +74,49 @@ jobs:
             echo "No existing post found."
             exit 0
           fi
-          # The blog branch was forked before revise-post.mjs was added to main
+          # The blog branch was forked before scripts were added to main
           if [ ! -f .github/scripts/revise-post.mjs ]; then
             git show main:.github/scripts/revise-post.mjs > .github/scripts/revise-post.mjs
           fi
           node .github/scripts/revise-post.mjs "$POST_FILE"
+
+      - name: Validate and re-revise blog post
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          POST_FILE=$(git status --porcelain src/content/posts/ 2>/dev/null | sed -n 's/^?? //p' | head -1)
+          if [ -z "$POST_FILE" ]; then
+            POST_FILE=$(git diff --diff-filter=A --name-only origin/main...HEAD -- 'src/content/posts/*.md' 2>/dev/null | head -1)
+          fi
+          if [ -z "$POST_FILE" ]; then
+            echo "No post file found for validation."
+            exit 0
+          fi
+
+          # The blog branch was forked before scripts were added to main
+          if [ ! -f .github/scripts/validate-post.mjs ]; then
+            git show main:.github/scripts/validate-post.mjs > .github/scripts/validate-post.mjs
+          fi
+
+          MAX_RETRIES=2
+          for ((i=1; i<=MAX_RETRIES; i++)); do
+            echo "Validating code examples (attempt $i)..."
+            VALIDATION_OUTPUT=$(node .github/scripts/validate-post.mjs --json "$POST_FILE" 2>/dev/null)
+            VALID_EXIT=$?
+
+            if [ $VALID_EXIT -eq 0 ]; then
+              echo "All code examples pass validation."
+              break
+            fi
+
+            echo "Found issues, re-revising post..."
+            echo "$VALIDATION_OUTPUT" > /tmp/validation-errors.json
+            node .github/scripts/revise-post.mjs --errors-file /tmp/validation-errors.json "$POST_FILE"
+            rm -f /tmp/validation-errors.json
+          done
+
+          # Final validation check
+          node .github/scripts/validate-post.mjs "$POST_FILE" || echo "Warning: Some validation issues remain after revision."
 
       - name: Check formatting
         run: npx prettier --check .
