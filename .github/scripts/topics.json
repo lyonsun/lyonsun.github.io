@@ -92,5 +92,21 @@
     "rationale": "The increasing presence of AI and LLMs in software development is likely to significantly impact frontend development. This post explores the potential implications and opportunities of AI-driven frontend development, providing readers with a forward-looking perspective on the field.",
     "tags": ["frontend", "ai", "llm"],
     "usedAt": null
+  },
+  {
+    "slug": "llm-driven-refactoring",
+    "title": "Practical LLM-driven code refactoring strategies",
+    "angle": "Exploring how LLMs can assist in code refactoring by identifying areas for improvement and suggesting targeted refactorings. Discussing the trade-offs between automated and human-in-the-loop approaches.",
+    "rationale": "As LLMs become more prevalent in software development, their potential to aid in code refactoring is vast. This post fills a gap by providing actionable advice on integrating LLMs into refactoring workflows.",
+    "tags": ["llm", "refactoring", "code-quality"],
+    "usedAt": null
+  },
+  {
+    "slug": "mitigating-ai-bias-in-software",
+    "title": "Mitigating AI bias in software systems",
+    "angle": "Investigating the sources of AI bias in software and presenting strategies for detecting and mitigating these biases, including data curation, model interpretability, and human oversight.",
+    "rationale": "As AI becomes increasingly integral to software systems, addressing AI bias is crucial for ensuring fairness and reliability. This post tackles a critical issue that is both timely and technically substantive.",
+    "tags": ["ai", "bias", "fairness"],
+    "usedAt": null
   }
 ]
