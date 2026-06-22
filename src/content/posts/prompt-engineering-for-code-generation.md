@@ -18,21 +18,24 @@ When using AI for code generation, the quality of the output is heavily dependen
 To generate relevant code, the AI model needs to understand the context in which the code will be used. This can include information about the programming language, the specific problem being solved, and any relevant constraints or requirements. For example, when generating a function to calculate the area of a rectangle, you might provide context like this:
 
 ```javascript
-import { OpenAIApi } from "openai";
-const openai = new OpenAIApi("YOUR_API_KEY");
+import OpenAI from "openai";
+const openai = new OpenAI();
 
-(async () => {
-  const response = await openai.complete({
-    model: "code-davinci-002",
-    prompt: `
-      Write a function in JavaScript to calculate the area of a rectangle.
-      The function should take two parameters: length and width.
-      The function should return the area of the rectangle.
-    `,
-    max_tokens: 256,
+async function main() {
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o",
+    messages: [
+      {
+        role: "user",
+        content: `Write a function in JavaScript to calculate the area of a rectangle.
+The function should take two parameters: length and width.
+The function should return the area of the rectangle.`,
+      },
+    ],
   });
-  console.log(response.data.choices[0].text);
-})();
+  console.log(response.choices[0].message.content);
+}
+main();
 ```
 
 ## Specifying Constraints and Using Examples
@@ -40,22 +43,25 @@ const openai = new OpenAIApi("YOUR_API_KEY");
 Specifying constraints and providing examples can help the AI model generate more accurate and relevant code. For instance, you might ask the model to generate a function that takes two integers as input and returns their sum, with the constraint that the function must be implemented using a specific algorithm or data structure. Here's an example:
 
 ```javascript
-import { OpenAIApi } from "openai";
-const openai = new OpenAIApi("YOUR_API_KEY");
+import OpenAI from "openai";
+const openai = new OpenAI();
 
-(async () => {
-  const response = await openai.complete({
-    model: "code-davinci-002",
-    prompt: `
-      Write a function in JavaScript to calculate the sum of two integers using recursion.
-      The function should take two parameters: a and b.
-      The function should return the sum of a and b.
-      For example, given the input (2, 3), the function should return 5.
-    `,
-    max_tokens: 256,
+async function main() {
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o",
+    messages: [
+      {
+        role: "user",
+        content: `Write a function in JavaScript to calculate the sum of two integers using recursion.
+The function should take two parameters: a and b.
+The function should return the sum of a and b.
+For example, given the input (2, 3), the function should return 5.`,
+      },
+    ],
   });
-  console.log(response.data.choices[0].text);
-})();
+  console.log(response.choices[0].message.content);
+}
+main();
 ```
 
 ## Iterating on Output
