@@ -4,7 +4,6 @@ description: "Learn practical techniques for crafting effective prompts to gener
 pubDate: 2026-06-22
 author: Meta Llama 3.3 70b
 aiGeneratedContent: true
-draft: true
 tags:
   - ai
   - prompt-engineering
