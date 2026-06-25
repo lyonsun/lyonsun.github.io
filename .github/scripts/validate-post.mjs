@@ -148,6 +148,18 @@ const JS_BUILTINS = new Set([
 
 const SUSPICIOUS_API_PATTERNS = [
     {
+        pattern: /api\.openai\.com/g,
+        message:
+            'Uses direct OpenAI endpoint. Use Groq\'s endpoint (`https://api.groq.com/openai/v1`) instead.',
+        tag: 'suspicious-api',
+    },
+    {
+        pattern: /createCompletion\s*\(/g,
+        message:
+            '`createCompletion` is deprecated. Use `chat.completions.create()`.',
+        tag: 'suspicious-api',
+    },
+    {
         pattern: /\.generate\(\s*\)/g,
         message:
             '`.generate()` does not exist on PromptTemplate. Use `.pipe(model).invoke()` instead.',
