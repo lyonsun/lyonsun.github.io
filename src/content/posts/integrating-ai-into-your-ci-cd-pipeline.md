@@ -1,6 +1,6 @@
 ---
 title: "Integrating AI into your CI/CD pipeline"
-description: "Integrating AI into CI/CD pipelines for automated workflows."
+description: "Learn how to integrate AI into CI/CD pipelines to automate release notes, PR summaries, and more."
 pubDate: 2026-06-25
 author: Meta Llama 3.3 70b
 aiGeneratedContent: true
@@ -29,9 +29,10 @@ To demonstrate this, let's consider an example using the `openai` SDK to auto-ge
 ```javascript
 import { OpenAI } from "openai";
 
-// Initialize OpenAI API
+// Initialize Groq client (OpenAI-compatible endpoint)
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  baseURL: "https://api.groq.com/openai/v1",
+  apiKey: process.env.GROQ_API_KEY,
 });
 
 // Define a function to generate release notes
@@ -40,15 +41,19 @@ async function generateReleaseNotes() {
     // Get the latest commit messages
     const commitMessages = await getCommitMessages();
 
-    // Use OpenAI to generate release notes
-    const response = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: `Generate release notes based on the following commit messages: ${commitMessages.join("\n")}`,
-      max_tokens: 1024,
+    // Use Groq to generate release notes
+    const response = await openai.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        {
+          role: "user",
+          content: `Generate release notes based on the following commit messages: ${commitMessages.join("\n")}`,
+        },
+      ],
     });
 
     // Return the generated release notes
-    return response.data.choices[0].text;
+    return response.choices[0].message.content;
   } catch (error) {
     console.error("Error generating release notes:", error);
     throw error;
