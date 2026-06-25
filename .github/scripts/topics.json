@@ -46,7 +46,7 @@
     "title": "Integrating AI into your CI/CD pipeline",
     "angle": "Show how to add AI-powered steps to CI/CD: auto-generating release notes, summarizing PR changes, flagging risky diffs, and suggesting rollback strategies. Cover cost and latency trade-offs.",
     "tags": ["ai", "ci-cd", "workflow"],
-    "usedAt": null
+    "usedAt": "2026-06-25"
   },
   {
     "slug": "tools-for-documentation-generation",
