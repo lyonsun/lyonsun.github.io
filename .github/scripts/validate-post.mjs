@@ -150,7 +150,7 @@ const SUSPICIOUS_API_PATTERNS = [
     {
         pattern: /api\.openai\.com/g,
         message:
-            'Uses direct OpenAI endpoint. Use Groq\'s endpoint (`https://api.groq.com/openai/v1`) instead.',
+            "Uses direct OpenAI endpoint. Use Groq's endpoint (`https://api.groq.com/openai/v1`) instead.",
         tag: 'suspicious-api',
     },
     {
