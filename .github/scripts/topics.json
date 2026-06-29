@@ -108,5 +108,21 @@
     "rationale": "As AI becomes increasingly integral to software systems, addressing AI bias is crucial for ensuring fairness and reliability. This post tackles a critical issue that is both timely and technically substantive.",
     "tags": ["ai", "bias", "fairness"],
     "usedAt": null
+  },
+  {
+    "slug": "optimizing-llm-performance",
+    "title": "Optimizing LLM performance for resource-constrained environments",
+    "angle": "Exploring techniques to reduce the computational requirements of LLMs, such as model pruning, knowledge distillation, and efficient inference algorithms. Focus on practical applications and trade-offs.",
+    "rationale": "As LLMs become more ubiquitous, optimizing their performance is crucial for widespread adoption, especially in resource-constrained environments. This post fills a gap by providing actionable advice on optimizing LLM performance.",
+    "tags": ["llm", "performance", "optimization"],
+    "usedAt": null
+  },
+  {
+    "slug": "human-ai-collaboration-patterns",
+    "title": "Effective patterns for human-AI collaboration in software engineering",
+    "angle": "Investigating design patterns and workflows that facilitate seamless human-AI collaboration, including hybrid intelligence, explainability, and human-in-the-loop feedback. Emphasize the importance of human oversight and judgment.",
+    "rationale": "As AI becomes more integrated into software engineering, understanding how humans and AI systems can collaborate effectively is essential. This post explores the emerging patterns and best practices for human-AI collaboration, addressing a timely and pressing concern in the industry.",
+    "tags": ["ai", "collaboration", "software-engineering"],
+    "usedAt": null
   }
 ]
