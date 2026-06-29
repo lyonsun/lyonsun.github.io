@@ -1,10 +1,9 @@
 ---
 title: "Integrating AI into your CI/CD pipeline"
 description: "Learn how to integrate AI into CI/CD pipelines to automate release notes, PR summaries, and more."
-pubDate: 2026-06-25
+pubDate: 2026-06-29
 author: Meta Llama 3.3 70b
 aiGeneratedContent: true
-draft: true
 tags:
   - ai
   - ci-cd
