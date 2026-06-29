@@ -101,8 +101,11 @@ jobs:
           MAX_RETRIES=2
           for ((i=1; i<=MAX_RETRIES; i++)); do
             echo "Validating code examples (attempt $i)..."
-            VALIDATION_OUTPUT=$(node .github/scripts/validate-post.mjs --json "$POST_FILE" 2>/dev/null)
-            VALID_EXIT=$?
+            if VALIDATION_OUTPUT=$(node .github/scripts/validate-post.mjs --json "$POST_FILE" 2>/dev/null); then
+              VALID_EXIT=0
+            else
+              VALID_EXIT=$?
+            fi
 
             if [ $VALID_EXIT -eq 0 ]; then
               echo "All code examples pass validation."
