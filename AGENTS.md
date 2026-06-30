@@ -1,10 +1,10 @@
 # Project Overview
 
-This is a personal portfolio/blog website built with **Astro v6**, deployed to GitHub Pages at `https://lyonsun.github.io`.
+This is a personal portfolio/blog website built with **Astro v7**, deployed to GitHub Pages at `https://lyonsun.github.io`.
 
 ## Tech Stack
 
-- **Framework**: Astro v6
+- **Framework**: Astro v7
 - **Styling**: Tailwind CSS v4 (via `@tailwindcss/vite` plugin)
 - **Language**: TypeScript (strict mode, `astro/tsconfigs/strict`)
 - **Content**: Markdown blog posts (`src/content/posts/**/*.md`) loaded via `glob` loader with Zod validation
@@ -12,7 +12,6 @@ This is a personal portfolio/blog website built with **Astro v6**, deployed to G
 - **AI Tooling**: OpenCode with superpowers plugin (`opencode.json`)
 - **Deployment**: GitHub Pages via GitHub Actions (Node 24, `npm ci`)
 - **Dependency Updates**: Renovate (groups patch/minor together)
-- **Vite**: Overridden to `^7`
 
 ## Key Commands (no test framework)
 
@@ -60,7 +59,7 @@ Required frontmatter: `title`, `description`, `pubDate`. Optional: `tags` (defau
 
 ## Site Details
 
-- Site URL: `https://lyonsun.github.io` (override via `SITE_URL` env var in `astro.config.mjs`)
+- Site URL: `https://lyonsun.github.io` (override via `SITE_URL` env var in `astro.config.ts`)
 - Font: Self-hosted Saira variable (`/fonts/saira-variable-latin.woff2`), preloaded in `<head>`
 - OG image: `src/assets/og-image.png` → WebP via `astro:assets`
 - Analytics: GA4 in `src/meta/ga4.astro`
