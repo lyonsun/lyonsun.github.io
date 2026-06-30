@@ -259,12 +259,7 @@ async function main() {
 
     const finalCount = topics.filter((t) => !t.usedAt).length;
 
-    const unusedTopicsFinal = topics.filter((t) => !t.usedAt);
-    if (unusedTopicsFinal.length >= 4 && !checkAIDensity(unusedTopicsFinal)) {
-        console.warn(
-            `Warning: Overall unused queue ratio is skewed despite batch-level check. Consider manual curation or a future generation run.`,
-        );
-    }
+    checkAIDensity(topics.filter((t) => !t.usedAt));
 
     if (dryRun) {
         console.log(
