@@ -18,7 +18,7 @@ const POSTS_DIR = join(__dirname, '..', '..', 'src', 'content', 'posts');
 const REPO_ROOT = join(__dirname, '..', '..');
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = 'llama-3.3-70b-versatile';
+const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
 
 const MODEL_PROVIDERS = {
     llama: 'Meta',

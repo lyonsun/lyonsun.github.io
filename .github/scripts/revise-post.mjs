@@ -10,7 +10,7 @@ const PROMPT_PATH = join(__dirname, 'revise-post-prompt.md');
 const REPO_ROOT = join(__dirname, '..', '..');
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = 'llama-3.3-70b-versatile';
+const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
 
 async function callGroq(postBody, errors) {
     const systemPrompt = readFileSync(PROMPT_PATH, 'utf-8').trim();

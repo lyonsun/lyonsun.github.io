@@ -32,6 +32,6 @@ Write each post following this structure:
 - Verify that every method called on an SDK object actually exists in that SDK's documented API. For example, `PromptTemplate` has `.pipe()` and `.format()`, but not `.generate()`.
 - Avoid patterns with obvious security issues (shell injection via exec, etc.).
 - Write directly in markdown. Do not wrap the output in JSON, code fences, or any enclosing structure.
-- Code examples using the OpenAI SDK must use Groq's OpenAI-compatible endpoint (`baseURL: 'https://api.groq.com/openai/v1'`) with current models (e.g., `llama-3.3-70b-versatile`). Never use `createCompletion` or `text-davinci-003`.
+- Code examples using the OpenAI SDK must use Groq's OpenAI-compatible endpoint (`baseURL: 'https://api.groq.com/openai/v1'`) with current models. Never use `createCompletion` or `text-davinci-003`.
 - The description must be a complete sentence with a subject and verb (not a gerund phrase like "Integrating AI into...").
 - Use single quotes for strings in JavaScript/TypeScript code examples.
