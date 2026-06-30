@@ -86,14 +86,6 @@
     "usedAt": null
   },
   {
-    "slug": "future-of-frontend-development",
-    "title": "The future of frontend development with AI and LLMs",
-    "angle": "Examining the potential impact of AI and LLMs on frontend development, including emerging trends, tools, and methodologies. The post will discuss the possibilities and challenges of AI-driven frontend development, and what this means for the future of the field.",
-    "rationale": "The increasing presence of AI and LLMs in software development is likely to significantly impact frontend development. This post explores the potential implications and opportunities of AI-driven frontend development, providing readers with a forward-looking perspective on the field.",
-    "tags": ["frontend", "ai", "llm"],
-    "usedAt": null
-  },
-  {
     "slug": "llm-driven-refactoring",
     "title": "Practical LLM-driven code refactoring strategies",
     "angle": "Exploring how LLMs can assist in code refactoring by identifying areas for improvement and suggesting targeted refactorings. Discussing the trade-offs between automated and human-in-the-loop approaches.",
@@ -102,27 +94,11 @@
     "usedAt": null
   },
   {
-    "slug": "mitigating-ai-bias-in-software",
-    "title": "Mitigating AI bias in software systems",
-    "angle": "Investigating the sources of AI bias in software and presenting strategies for detecting and mitigating these biases, including data curation, model interpretability, and human oversight.",
-    "rationale": "As AI becomes increasingly integral to software systems, addressing AI bias is crucial for ensuring fairness and reliability. This post tackles a critical issue that is both timely and technically substantive.",
-    "tags": ["ai", "bias", "fairness"],
-    "usedAt": null
-  },
-  {
     "slug": "optimizing-llm-performance",
     "title": "Optimizing LLM performance for resource-constrained environments",
     "angle": "Exploring techniques to reduce the computational requirements of LLMs, such as model pruning, knowledge distillation, and efficient inference algorithms. Focus on practical applications and trade-offs.",
     "rationale": "As LLMs become more ubiquitous, optimizing their performance is crucial for widespread adoption, especially in resource-constrained environments. This post fills a gap by providing actionable advice on optimizing LLM performance.",
     "tags": ["llm", "performance", "optimization"],
-    "usedAt": null
-  },
-  {
-    "slug": "human-ai-collaboration-patterns",
-    "title": "Effective patterns for human-AI collaboration in software engineering",
-    "angle": "Investigating design patterns and workflows that facilitate seamless human-AI collaboration, including hybrid intelligence, explainability, and human-in-the-loop feedback. Emphasize the importance of human oversight and judgment.",
-    "rationale": "As AI becomes more integrated into software engineering, understanding how humans and AI systems can collaborate effectively is essential. This post explores the emerging patterns and best practices for human-AI collaboration, addressing a timely and pressing concern in the industry.",
-    "tags": ["ai", "collaboration", "software-engineering"],
     "usedAt": null
   }
 ]
