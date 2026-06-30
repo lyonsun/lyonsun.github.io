@@ -4,7 +4,7 @@ This is a personal portfolio/blog website built with **Astro v7**, deployed to G
 
 ## Tech Stack
 
-- **Framework**: Astro v6
+- **Framework**: Astro v7
 - **Styling**: Tailwind CSS v4 (via `@tailwindcss/vite` plugin)
 - **Language**: TypeScript (strict mode, `astro/tsconfigs/strict`)
 - **Content**: Markdown blog posts (`src/content/posts/**/*.md`) loaded via `glob` loader with Zod validation
