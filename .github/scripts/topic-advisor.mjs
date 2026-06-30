@@ -80,6 +80,30 @@ function validateTopic(topic, index) {
     }
 }
 
+function checkAIDensity(topics) {
+    if (topics.length < 4) {
+        return true;
+    }
+    const aiTags = [
+        'ai',
+        'llm',
+        'agentic',
+        'prompt-engineering',
+        'coding-assistants',
+    ];
+    const aiCount = topics.filter((t) =>
+        t.tags.some((tag) => aiTags.includes(tag)),
+    ).length;
+    const ratio = aiCount / topics.length;
+    if (ratio < 0.4 || ratio > 0.6) {
+        console.warn(
+            `AI topic ratio ${(ratio * 100).toFixed(0)}% outside 40-60% range.`,
+        );
+        return false;
+    }
+    return true;
+}
+
 function isDuplicate(topic, existingTopics, postSlugs) {
     const slugMatch = existingTopics.some((t) => t.slug === topic.slug);
     const titleMatch = existingTopics.some(
@@ -151,6 +175,42 @@ No duplicates. No topics about crypto, blockchain, or mobile development.`;
     return topics;
 }
 
+async function callGroqWithRetry(count, existingContext, maxRetries = 2) {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        const generated = await callGroq(count, existingContext);
+
+        const valid = [];
+        for (let i = 0; i < generated.length; i++) {
+            const topic = generated[i];
+            try {
+                validateTopic(topic, i);
+            } catch {
+                continue;
+            }
+            valid.push(topic);
+        }
+
+        const sameCount = valid.length === count;
+        const goodDensity = sameCount && checkAIDensity(valid);
+
+        if (sameCount && goodDensity) {
+            return valid;
+        }
+
+        const reasons = [];
+        if (!sameCount)
+            reasons.push(`only ${valid.length}/${count} passed validation`);
+        if (sameCount && !goodDensity)
+            reasons.push('AI density outside 40-60% range');
+
+        console.warn(`Attempt ${attempt}: ${reasons.join('; ')}. Retrying...`);
+    }
+
+    throw new Error(
+        'Failed to generate topics meeting ratio constraints after retries',
+    );
+}
+
 async function main() {
     const dryRun = process.argv.includes('--dry-run');
     const topics = readTopics();
@@ -171,17 +231,10 @@ async function main() {
     );
 
     const existingContext = buildExistingContext(topics, postSlugs);
-    const generated = await callGroq(countNeeded, existingContext);
+    const generated = await callGroqWithRetry(countNeeded, existingContext);
 
     const added = [];
-    for (let i = 0; i < generated.length; i++) {
-        const topic = generated[i];
-        try {
-            validateTopic(topic, i);
-        } catch (err) {
-            console.error(`  Skipping invalid topic: ${err.message}`);
-            continue;
-        }
+    for (const topic of generated) {
         if (isDuplicate(topic, topics, postSlugs)) {
             console.log(
                 `  Skipping duplicate: "${topic.title}" (${topic.slug})`,
@@ -205,6 +258,8 @@ async function main() {
     }
 
     const finalCount = topics.filter((t) => !t.usedAt).length;
+
+    checkAIDensity(topics.filter((t) => !t.usedAt));
 
     if (dryRun) {
         console.log(
