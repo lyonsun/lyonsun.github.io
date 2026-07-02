@@ -13,8 +13,9 @@ function pluralize(count) {
     return count === 1 ? 'topic' : 'topics';
 }
 
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+const AI_API_URL =
+    process.env.AI_API_URL || 'https://api.groq.com/openai/v1/chat/completions';
+const AI_MODEL = process.env.AI_MODEL || 'llama-3.3-70b-versatile';
 const TARGET_UNUSED = 10;
 
 function readTopics() {
@@ -117,7 +118,7 @@ function isDuplicate(topic, existingTopics, postSlugs) {
     return slugMatch || titleMatch || angleMatch || postSlugMatch;
 }
 
-async function callGroq(count, existingContext) {
+async function callAI(count, existingContext) {
     const systemPrompt = readFileSync(PROMPT_PATH, 'utf-8').trim();
     const userPrompt = `Generate ${count} new blog post topics for my personal tech blog.
 
@@ -128,14 +129,14 @@ No duplicates. No topics about crypto, blockchain, or mobile development.`;
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 60000);
 
-    const response = await fetch(GROQ_API_URL, {
+    const response = await fetch(AI_API_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+            Authorization: `Bearer ${process.env.AI_API_KEY}`,
         },
         body: JSON.stringify({
-            model: GROQ_MODEL,
+            model: AI_MODEL,
             messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: userPrompt },
@@ -150,7 +151,7 @@ No duplicates. No topics about crypto, blockchain, or mobile development.`;
 
     if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Groq API error (${response.status}): ${errorText}`);
+        throw new Error(`AI API error (${response.status}): ${errorText}`);
     }
 
     const data = await response.json();
@@ -175,9 +176,9 @@ No duplicates. No topics about crypto, blockchain, or mobile development.`;
     return topics;
 }
 
-async function callGroqWithRetry(count, existingContext, maxRetries = 2) {
+async function callAIWithRetry(count, existingContext, maxRetries = 2) {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
-        const generated = await callGroq(count, existingContext);
+        const generated = await callAI(count, existingContext);
 
         const valid = [];
         for (let i = 0; i < generated.length; i++) {
@@ -231,7 +232,7 @@ async function main() {
     );
 
     const existingContext = buildExistingContext(topics, postSlugs);
-    const generated = await callGroqWithRetry(countNeeded, existingContext);
+    const generated = await callAIWithRetry(countNeeded, existingContext);
 
     const added = [];
     for (const topic of generated) {

@@ -54,8 +54,8 @@ Required frontmatter: `title`, `description`, `pubDate`. Optional: `tags` (defau
 
 ## Blog Workflows
 
-- **Blog Writer** (`.github/workflows/blog-writer.yml`): Scheduled Mon/Thu 09:00 UTC + manual trigger. Generates AI blog posts via Groq, creates PRs with `draft: true`. Uses `GROQ_API_KEY` and `BLOG_WRITER_PAT` secrets.
-- **Topic Advisor** (`.github/workflows/topic-advisor.yml`): Scheduled Mon 09:00 UTC + manual trigger. Suggests new blog topics via Groq, updates `.github/scripts/topics.json`, creates PRs.
+- **Blog Writer** (`.github/workflows/blog-writer.yml`): Scheduled Mon/Thu 09:00 UTC + manual trigger. Generates AI blog posts via LLM API, creates PRs with `draft: true`. Uses `AI_API_KEY` and `BLOG_WRITER_PAT` secrets.
+- **Topic Advisor** (`.github/workflows/topic-advisor.yml`): Scheduled Mon 09:00 UTC + manual trigger. Suggests new blog topics via LLM API, updates `.github/scripts/topics.json`, creates PRs.
 
 ## Site Details
 

@@ -9,10 +9,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPT_PATH = join(__dirname, 'revise-post-prompt.md');
 const REPO_ROOT = join(__dirname, '..', '..');
 
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+const AI_API_URL =
+    process.env.AI_API_URL || 'https://api.groq.com/openai/v1/chat/completions';
+const AI_MODEL = process.env.AI_MODEL || 'llama-3.3-70b-versatile';
 
-async function callGroq(postBody, errors) {
+async function callAI(postBody, errors) {
     const systemPrompt = readFileSync(PROMPT_PATH, 'utf-8').trim();
 
     let userPrompt = `Revise this blog post. Improve technical accuracy, add depth, fix any inaccuracies, and ensure code examples are JavaScript or TypeScript.`;
@@ -26,14 +27,14 @@ async function callGroq(postBody, errors) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 60000);
 
-    const response = await fetch(GROQ_API_URL, {
+    const response = await fetch(AI_API_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+            Authorization: `Bearer ${process.env.AI_API_KEY}`,
         },
         body: JSON.stringify({
-            model: GROQ_MODEL,
+            model: AI_MODEL,
             messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: userPrompt },
@@ -48,7 +49,7 @@ async function callGroq(postBody, errors) {
 
     if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Groq API error (${response.status}): ${errorText}`);
+        throw new Error(`AI API error (${response.status}): ${errorText}`);
     }
 
     const data = await response.json();
@@ -105,7 +106,7 @@ async function main() {
     const { frontmatter, body } = splitFrontmatter(content);
 
     console.log(`Revising: ${filePath}`);
-    const revisedBody = await callGroq(body, errors);
+    const revisedBody = await callAI(body, errors);
 
     if (!revisedBody || revisedBody.length < 50) {
         console.warn(
