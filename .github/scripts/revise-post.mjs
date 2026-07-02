@@ -108,7 +108,10 @@ async function main() {
     const revisedBody = await callGroq(body, errors);
 
     if (!revisedBody || revisedBody.length < 50) {
-        throw new Error('Revision returned empty or too short — discarding.');
+        console.warn(
+            'Revision returned empty or too short — keeping original content.',
+        );
+        process.exit(0);
     }
 
     if (dryRun) {
