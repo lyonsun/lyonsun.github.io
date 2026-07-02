@@ -19,6 +19,6 @@ Your output must be the FULL revised post content (300–500 words). Always outp
 - Use sentence case for all section headings (e.g., "## How it works", not "## how it works").
 - Avoid patterns with obvious security issues (shell injection via exec, etc.).
 - Do not wrap the output in code fences.
-- Code examples using the OpenAI SDK must use Groq's OpenAI-compatible endpoint (`baseURL: 'https://api.groq.com/openai/v1'`) with current models. Never use `createCompletion` or `text-davinci-003`.
+- Code examples using the OpenAI SDK must use the configured API endpoint (never `api.openai.com`). Never use `createCompletion` or `text-davinci-003`.
 - The description must be a complete sentence with a subject and verb (not a gerund phrase like "Integrating AI into...").
 - Use single quotes for strings in JavaScript/TypeScript code examples.

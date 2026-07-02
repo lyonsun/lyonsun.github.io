@@ -18,7 +18,7 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     env:
-      GROQ_MODEL: ${{ vars.GROQ_MODEL || 'llama-3.3-70b-versatile' }}
+      AI_MODEL: ${{ vars.AI_MODEL || 'llama-3.3-70b-versatile' }}
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
@@ -54,7 +54,7 @@ jobs:
         if: steps.setup.outputs.branch_exists == 'false'
         id: compose
         env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
           TOPIC_SLUG: ${{ inputs.topic_slug || '' }}
         run: |
           if [ -n "$TOPIC_SLUG" ]; then
@@ -65,7 +65,7 @@ jobs:
 
       - name: Revise blog post
         env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
         run: |
           # Find post file: uncommitted from compose (initial) or git diff vs main (revision)
           POST_FILE=$(git status --porcelain src/content/posts/ 2>/dev/null | sed -n 's/^?? //p' | head -1)
@@ -84,7 +84,7 @@ jobs:
 
       - name: Validate and re-revise blog post
         env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
         run: |
           POST_FILE=$(git status --porcelain src/content/posts/ 2>/dev/null | sed -n 's/^?? //p' | head -1)
           if [ -z "$POST_FILE" ]; then

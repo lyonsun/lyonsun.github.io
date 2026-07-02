@@ -17,27 +17,43 @@ const TOPICS_PATH = join(__dirname, 'topics.json');
 const POSTS_DIR = join(__dirname, '..', '..', 'src', 'content', 'posts');
 const REPO_ROOT = join(__dirname, '..', '..');
 
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+const AI_API_URL =
+    process.env.AI_API_URL || 'https://api.groq.com/openai/v1/chat/completions';
+const AI_MODEL = process.env.AI_MODEL || 'llama-3.3-70b-versatile';
 
 const MODEL_PROVIDERS = {
     llama: 'Meta',
+    'meta-llama': 'Meta',
     gemma: 'Google',
     gemini: 'Google',
     mixtral: 'Mistral',
     qwen: 'Alibaba',
     deepseek: 'DeepSeek',
 };
-const modelFamily = GROQ_MODEL.split('-')[0];
-const provider = MODEL_PROVIDERS[modelFamily] ?? '';
-const SITE_AUTHOR = [
-    provider,
-    ...GROQ_MODEL.replace(/-versatile|-instruct|-instant|-preview/g, '')
-        .split('-')
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1)),
-]
-    .filter(Boolean)
+
+function normalizeModelName(model) {
+    const slashIdx = model.indexOf('/');
+    const colonIdx = model.lastIndexOf(':');
+    let provider = '';
+    let name = model;
+    if (slashIdx !== -1) {
+        provider = model.slice(0, slashIdx);
+        name = model.slice(slashIdx + 1);
+    }
+    if (colonIdx !== -1) {
+        name = name.split(':')[0];
+    }
+    return { provider, name };
+}
+
+const normalized = normalizeModelName(AI_MODEL);
+const provider = MODEL_PROVIDERS[normalized.provider] ?? '';
+const modelName = normalized.name
+    .replace(/-versatile|-instruct|-instant|-preview/g, '')
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ');
+const SITE_AUTHOR = [provider, modelName].filter(Boolean).join(' ');
 
 function truncateAtSentence(text, max) {
     const trimmed = text.replace(/[*_#]/g, '').replace(/\n/g, ' ').trim();
@@ -81,7 +97,7 @@ function writeTopics(topics) {
     writeFileSync(TOPICS_PATH, JSON.stringify(topics, null, 4) + '\n');
 }
 
-async function callGroq(topic) {
+async function callAI(topic) {
     const systemPrompt = readFileSync(PROMPT_PATH, 'utf-8').trim();
 
     const rationaleLines = topic.rationale
@@ -103,14 +119,14 @@ Requirements:
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 60000);
 
-    const response = await fetch(GROQ_API_URL, {
+    const response = await fetch(AI_API_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+            Authorization: `Bearer ${process.env.AI_API_KEY}`,
         },
         body: JSON.stringify({
-            model: GROQ_MODEL,
+            model: AI_MODEL,
             messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: userPrompt },
@@ -125,7 +141,7 @@ Requirements:
 
     if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Groq API error (${response.status}): ${errorText}`);
+        throw new Error(`AI API error (${response.status}): ${errorText}`);
     }
 
     const data = await response.json();
@@ -219,7 +235,7 @@ async function main() {
     }
 
     console.log(`Generating article for: ${topic.title}`);
-    const result = await callGroq(topic);
+    const result = await callAI(topic);
 
     if (!result.title || !result.description || !result.body) {
         console.error(
