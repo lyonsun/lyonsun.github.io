@@ -53,13 +53,12 @@ function getPostSlugs() {
 
 function buildExistingContext(topics, postSlugs, unusedTopics) {
     const used = topics.filter((t) => t.usedAt);
-    const unused = topics.filter((t) => !t.usedAt);
 
     const lines = [];
     lines.push('Existing topic titles (already used):');
     used.forEach((t) => lines.push(`  - ${t.title}`));
     lines.push('Existing topic titles (unused — avoid these):');
-    unused.forEach((t) => lines.push(`  - ${t.title}`));
+    unusedTopics.forEach((t) => lines.push(`  - ${t.title}`));
     lines.push('Existing post slugs (avoid these):');
     postSlugs.forEach((s) => lines.push(`  - ${s}`));
 
@@ -313,6 +312,17 @@ async function main() {
     if (added.length === 0) {
         console.log('No valid new topics generated.');
         process.exit(0);
+    }
+
+    const skippedCount = generated.length - added.length;
+    if (skippedCount > 0) {
+        const newUnused = topics.filter((t) => !t.usedAt);
+        const ratio = getAiCount(newUnused) / newUnused.length;
+        if (ratio > 0.6) {
+            console.warn(
+                `  Warning: ${skippedCount} duplicate(s) removed (likely non-AI) pushed AI ratio to ${(ratio * 100).toFixed(0)}%.`,
+            );
+        }
     }
 
     const finalCount = topics.filter((t) => !t.usedAt).length;
