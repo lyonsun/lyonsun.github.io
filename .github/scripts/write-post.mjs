@@ -217,11 +217,16 @@ async function main() {
             process.exit(1);
         }
     } else {
-        topicIndex = topics.findIndex((t) => !t.usedAt);
-        if (topicIndex === -1) {
+        const unusedIndices = topics
+            .map((t, i) => ({ t, i }))
+            .filter(({ t }) => !t.usedAt)
+            .map(({ i }) => i);
+        if (unusedIndices.length === 0) {
             console.log('All topics have been used. No article to generate.');
             process.exit(0);
         }
+        topicIndex =
+            unusedIndices[Math.floor(Math.random() * unusedIndices.length)];
         topic = topics[topicIndex];
     }
 

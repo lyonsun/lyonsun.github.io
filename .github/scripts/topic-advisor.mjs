@@ -16,6 +16,19 @@ function pluralize(count) {
 const AI_API_URL =
     process.env.AI_API_URL || 'https://api.groq.com/openai/v1/chat/completions';
 const AI_MODEL = process.env.AI_MODEL || 'llama-3.3-70b-versatile';
+const AI_TAGS = [
+    'ai',
+    'llm',
+    'agentic',
+    'prompt-engineering',
+    'coding-assistants',
+];
+
+function getAiCount(topics) {
+    return topics.filter((t) => t.tags.some((tag) => AI_TAGS.includes(tag)))
+        .length;
+}
+
 const TARGET_UNUSED = 10;
 
 function readTopics() {
@@ -38,17 +51,25 @@ function getPostSlugs() {
         });
 }
 
-function buildExistingContext(topics, postSlugs) {
+function buildExistingContext(topics, postSlugs, unusedTopics) {
     const used = topics.filter((t) => t.usedAt);
-    const unused = topics.filter((t) => !t.usedAt);
 
     const lines = [];
     lines.push('Existing topic titles (already used):');
     used.forEach((t) => lines.push(`  - ${t.title}`));
     lines.push('Existing topic titles (unused — avoid these):');
-    unused.forEach((t) => lines.push(`  - ${t.title}`));
+    unusedTopics.forEach((t) => lines.push(`  - ${t.title}`));
     lines.push('Existing post slugs (avoid these):');
     postSlugs.forEach((s) => lines.push(`  - ${s}`));
+
+    if (unusedTopics.length > 0) {
+        const ratio = getAiCount(unusedTopics) / unusedTopics.length;
+        lines.push('');
+        lines.push(
+            `Note: Current unused queue is ${(ratio * 100).toFixed(0)}% AI/LLM topics.`,
+        );
+    }
+
     return lines.join('\n');
 }
 
@@ -85,20 +106,10 @@ function checkAIDensity(topics) {
     if (topics.length < 4) {
         return true;
     }
-    const aiTags = [
-        'ai',
-        'llm',
-        'agentic',
-        'prompt-engineering',
-        'coding-assistants',
-    ];
-    const aiCount = topics.filter((t) =>
-        t.tags.some((tag) => aiTags.includes(tag)),
-    ).length;
-    const ratio = aiCount / topics.length;
-    if (ratio < 0.4 || ratio > 0.6) {
+    const ratio = getAiCount(topics) / topics.length;
+    if (ratio > 0.6) {
         console.warn(
-            `AI topic ratio ${(ratio * 100).toFixed(0)}% outside 40-60% range.`,
+            `AI topic ratio ${(ratio * 100).toFixed(0)}% exceeds 60% threshold.`,
         );
         return false;
     }
@@ -118,13 +129,15 @@ function isDuplicate(topic, existingTopics, postSlugs) {
     return slugMatch || titleMatch || angleMatch || postSlugMatch;
 }
 
-async function callAI(count, existingContext) {
+async function callAI(count, existingContext, maxAiTopics) {
     const systemPrompt = readFileSync(PROMPT_PATH, 'utf-8').trim();
     const userPrompt = `Generate ${count} new blog post topics for my personal tech blog.
 
 ${existingContext}
 
-No duplicates. No topics about crypto, blockchain, or mobile development.`;
+Constraints:
+- At most ${maxAiTopics} of the ${count} topics may be about AI or LLMs.
+- No duplicates. No topics about crypto, blockchain, or mobile development.`;
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 60000);
@@ -177,9 +190,28 @@ No duplicates. No topics about crypto, blockchain, or mobile development.`;
     return topics;
 }
 
-async function callAIWithRetry(count, existingContext, maxRetries = 3) {
+async function callAIWithRetry(
+    count,
+    existingContext,
+    unusedTopics,
+    maxRetries = 3,
+) {
+    const currentAiRatio =
+        unusedTopics.length > 0
+            ? getAiCount(unusedTopics) / unusedTopics.length
+            : 0;
+
+    let maxAiTopics;
+    if (currentAiRatio >= 0.6) {
+        maxAiTopics = 0;
+    } else if (currentAiRatio >= 0.5) {
+        maxAiTopics = Math.max(0, Math.floor(count * 0.25));
+    } else {
+        maxAiTopics = Math.ceil(count * 0.5);
+    }
+
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
-        const generated = await callAI(count, existingContext);
+        const generated = await callAI(count, existingContext, maxAiTopics);
 
         const valid = [];
         for (let i = 0; i < generated.length; i++) {
@@ -193,17 +225,32 @@ async function callAIWithRetry(count, existingContext, maxRetries = 3) {
         }
 
         const sameCount = valid.length === count;
-        const goodDensity = sameCount && checkAIDensity(valid);
+        const batchAiCount = getAiCount(valid);
+        const batchWithinLimit = batchAiCount <= maxAiTopics;
 
-        if (sameCount && goodDensity) {
+        const projectedUnused = [...unusedTopics, ...valid];
+        const cumulativeAiRatio =
+            getAiCount(projectedUnused) / projectedUnused.length;
+        const cumulativeOk = cumulativeAiRatio <= 0.6;
+
+        if (sameCount && batchWithinLimit && cumulativeOk) {
             return valid;
         }
 
         const reasons = [];
-        if (!sameCount)
+        if (!sameCount) {
             reasons.push(`only ${valid.length}/${count} passed validation`);
-        if (sameCount && !goodDensity)
-            reasons.push('AI density outside 40-60% range');
+        }
+        if (sameCount && !batchWithinLimit) {
+            reasons.push(
+                `batch has ${batchAiCount} AI topics (limit ${maxAiTopics})`,
+            );
+        }
+        if (sameCount && batchWithinLimit && !cumulativeOk) {
+            reasons.push(
+                `cumulative AI ratio would be ${(cumulativeAiRatio * 100).toFixed(0)}% (max 60%)`,
+            );
+        }
 
         console.warn(`Attempt ${attempt}: ${reasons.join('; ')}. Retrying...`);
     }
@@ -232,8 +279,16 @@ async function main() {
         `Queue has ${unusedTopics.length} unused topics. Generating ${countNeeded} new ${pluralize(countNeeded)}.`,
     );
 
-    const existingContext = buildExistingContext(topics, postSlugs);
-    const generated = await callAIWithRetry(countNeeded, existingContext);
+    const existingContext = buildExistingContext(
+        topics,
+        postSlugs,
+        unusedTopics,
+    );
+    const generated = await callAIWithRetry(
+        countNeeded,
+        existingContext,
+        unusedTopics,
+    );
 
     const added = [];
     for (const topic of generated) {
@@ -257,6 +312,17 @@ async function main() {
     if (added.length === 0) {
         console.log('No valid new topics generated.');
         process.exit(0);
+    }
+
+    const skippedCount = generated.length - added.length;
+    if (skippedCount > 0) {
+        const newUnused = topics.filter((t) => !t.usedAt);
+        const ratio = getAiCount(newUnused) / newUnused.length;
+        if (ratio > 0.6) {
+            console.warn(
+                `  Warning: ${skippedCount} duplicate(s) removed (likely non-AI) pushed AI ratio to ${(ratio * 100).toFixed(0)}%.`,
+            );
+        }
     }
 
     const finalCount = topics.filter((t) => !t.usedAt).length;
