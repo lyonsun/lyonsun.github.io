@@ -53,7 +53,7 @@
     "title": "LLMs for automated documentation generation",
     "angle": "Survey approaches for generating docs from code: JSDoc/TSDoc comments, README generation, API reference docs, and changelogs. Discuss quality control and keeping docs in sync with code.",
     "tags": ["ai", "documentation", "workflow"],
-    "usedAt": null
+    "usedAt": "2026-07-06"
   },
   {
     "slug": "design-to-code-with-ai",
