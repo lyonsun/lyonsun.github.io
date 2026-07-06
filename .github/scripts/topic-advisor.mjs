@@ -141,6 +141,7 @@ No duplicates. No topics about crypto, blockchain, or mobile development.`;
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: userPrompt },
             ],
+            response_format: { type: 'json_object' },
             temperature: 0.7,
             max_tokens: 2048,
         }),
@@ -176,7 +177,7 @@ No duplicates. No topics about crypto, blockchain, or mobile development.`;
     return topics;
 }
 
-async function callAIWithRetry(count, existingContext, maxRetries = 2) {
+async function callAIWithRetry(count, existingContext, maxRetries = 3) {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         const generated = await callAI(count, existingContext);
 
