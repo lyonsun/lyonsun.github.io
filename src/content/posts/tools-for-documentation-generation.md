@@ -38,14 +38,14 @@ function add(a: number, b: number): number {
 }
 ```
 
-An large language model can parse these comments to generate documentation, including function descriptions, parameter information, and return types, using libraries such as `jsdoc` or `typedoc`.
+A large language model can parse these comments to generate documentation, including function descriptions, parameter information, and return types, using libraries such as `jsdoc` or `typedoc`.
 
 ## Quality Control and Synchronization
 
 To ensure the quality and accuracy of generated documentation, it is essential to implement quality control measures, such as:
 
 - Regularly reviewing and updating JSDoc/TSDoc comments to reflect changes in the codebase, using tools like `git hooks` to automate the process.
-- Using large language models to generate documentation in a continuous integration/continuous deployment (CI/CD) pipeline, ensuring that documentation is always up-to-date, with tools like `github actions` or `jenkins`.
+- Using large language models to generate documentation in a continuous integration/continuous deployment (CI/CD) pipeline, ensuring that documentation is always up-to-date, with tools like `GitHub Actions` or `Jenkins`.
 - Implementing automated testing to verify the accuracy of generated documentation, using frameworks like `jest` or `mocha`, to catch any errors or inconsistencies.
 
 ## Overcoming Limitations
