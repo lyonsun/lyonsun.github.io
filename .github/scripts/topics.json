@@ -100,5 +100,29 @@
     "rationale": "As LLMs become more ubiquitous, optimizing their performance is crucial for widespread adoption, especially in resource-constrained environments. This post fills a gap by providing actionable advice on optimizing LLM performance.",
     "tags": ["llm", "performance", "optimization"],
     "usedAt": null
+  },
+  {
+    "slug": "llm-based-code-analysis",
+    "title": "LLM-based code analysis for security vulnerabilities",
+    "angle": "Using LLMs to identify potential security vulnerabilities in code, including pattern recognition and anomaly detection. Focus on integration with existing security tools and workflows.",
+    "rationale": "As LLMs become more prevalent in software development, their potential for code analysis is vast. This post fills a gap by exploring the practical applications of LLM-based code analysis for security.",
+    "tags": ["security", "llm", "code-analysis"],
+    "usedAt": null
+  },
+  {
+    "slug": "designing-micro-frontends",
+    "title": "Designing micro-frontends for complex web applications",
+    "angle": "Practical strategies for designing and implementing micro-frontend architectures, including componentization, integration, and deployment. Focus on real-world examples and lessons learned.",
+    "rationale": "Micro-frontend architecture is becoming increasingly popular, but there is a lack of concrete guidance on designing and implementing these systems. This post provides timely and practical advice.",
+    "tags": ["frontend", "architecture", "micro-frontends"],
+    "usedAt": null
+  },
+  {
+    "slug": "optimizing-llm-training-data",
+    "title": "Optimizing LLM training data for improved code generation",
+    "angle": "Techniques for curating, preprocessing, and optimizing LLM training data to improve code generation quality, including data augmentation, filtering, and weighting. Focus on empirical results and best practices.",
+    "rationale": "High-quality training data is essential for effective LLM-based code generation. This post addresses a critical gap by providing actionable advice on optimizing LLM training data.",
+    "tags": ["llm", "code-generation", "training-data"],
+    "usedAt": null
   }
 ]
