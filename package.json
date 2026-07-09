@@ -22,7 +22,7 @@
     "prettier": "^3.6.0",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.0"
   },
   "packageManager": "npm@11.6.2",
   "engines": {
