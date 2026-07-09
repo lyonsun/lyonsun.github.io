@@ -8,6 +8,10 @@
       "enabled": false
     },
     {
+      "matchDepNames": ["typescript"],
+      "allowedVersions": "<7.0.0"
+    },
+    {
       "matchUpdateTypes": ["patch", "minor"],
       "groupName": "non-major updates"
     }
