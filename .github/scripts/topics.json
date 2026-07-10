@@ -67,7 +67,7 @@
     "title": "Evaluating LLM outputs in engineering workflows",
     "angle": "Discuss strategies for evaluating AI-generated code and content: automated tests, manual review checklists, hallucination detection, and building evaluation datasets for your specific domain.",
     "tags": ["ai", "llm", "workflow", "testing"],
-    "usedAt": null
+    "usedAt": "2026-07-09"
   },
   {
     "slug": "llm-based-api-design",
