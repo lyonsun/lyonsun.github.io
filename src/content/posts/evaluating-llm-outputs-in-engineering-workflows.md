@@ -24,19 +24,21 @@ import { expect } from "@jest/globals";
 
 const openai = new OpenAI({
   apiKey: "YOUR_API_KEY",
-  apiVersion: "2023-03-15",
-  organization: "YOUR_ORG_ID",
-  endpoint: "https://YOUR_CONFIGURED_ENDPOINT.openai.com",
 });
 
 (async () => {
   const response = await openai.chat.completions.create({
-    model: "code-davinci-002",
-    prompt: "Generate a function to add two numbers",
-    maxTokens: 1024,
+    model: "gpt-4o-mini",
+    messages: [
+      {
+        role: "user",
+        content: "Generate a function to add two numbers in JavaScript",
+      },
+    ],
+    max_tokens: 1024,
   });
 
-  const generatedCode = response.data.choices[0].text;
+  const generatedCode = response.choices[0].message.content ?? "";
   // Define a function to add two numbers
   function addFunction(a, b) {
     return a + b;
