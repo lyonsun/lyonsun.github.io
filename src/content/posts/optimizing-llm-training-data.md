@@ -4,7 +4,6 @@ description: "Optimizing LLM training data improves code generation quality thro
 pubDate: 2026-07-13
 author: Llama 3.3 70b
 aiGeneratedContent: true
-draft: true
 tags:
   - llm
   - code-generation
