@@ -24,7 +24,7 @@ Several techniques can be employed to optimize LLM training data, including:
 ```javascript
 import { PromptTemplate } from "@langchain/core/prompts";
 
-(async () => {
+(() => {
   const template = PromptTemplate.fromTemplate(
     "Create a function that adds two numbers: {functionName}",
   );
@@ -38,7 +38,7 @@ import { PromptTemplate } from "@langchain/core/prompts";
 ```javascript
 import { Linter } from "eslint";
 
-(async () => {
+(() => {
   const linter = new Linter();
   const code = "const add = (a, b) => a + b;";
   const results = linter.verify(code, {
@@ -59,7 +59,7 @@ import { Linter } from "eslint";
 ```javascript
 import { v4 as uuidv4 } from "uuid";
 
-(async () => {
+(() => {
   const dataPoints = [
     { id: uuidv4(), code: "const add = (a, b) => a + b;", weight: 0.5 },
     {
