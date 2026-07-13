@@ -41,7 +41,7 @@ import { Linter } from "eslint";
 (async () => {
   const linter = new Linter();
   const code = "const add = (a, b) => a + b;";
-  const results = await linter.verify(code, {
+  const results = linter.verify(code, {
     rules: {
       "no-undef": "error",
     },
