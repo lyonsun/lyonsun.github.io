@@ -123,6 +123,6 @@
     "angle": "Techniques for curating, preprocessing, and optimizing LLM training data to improve code generation quality, including data augmentation, filtering, and weighting. Focus on empirical results and best practices.",
     "rationale": "High-quality training data is essential for effective LLM-based code generation. This post addresses a critical gap by providing actionable advice on optimizing LLM training data.",
     "tags": ["llm", "code-generation", "training-data"],
-    "usedAt": null
+    "usedAt": "2026-07-13"
   }
 ]
