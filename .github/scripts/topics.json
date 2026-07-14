@@ -124,5 +124,21 @@
     "rationale": "High-quality training data is essential for effective LLM-based code generation. This post addresses a critical gap by providing actionable advice on optimizing LLM training data.",
     "tags": ["llm", "code-generation", "training-data"],
     "usedAt": "2026-07-13"
+  },
+  {
+    "slug": "database-performance-optimization",
+    "title": "database performance optimization techniques",
+    "angle": "In-depth analysis of database performance optimization techniques: indexing strategies, query optimization, and data modeling best practices. Focus on relational databases and their limitations.",
+    "rationale": "Database performance is a critical aspect of software engineering, but many developers lack a deep understanding of optimization techniques. This post provides a comprehensive guide to database performance optimization.",
+    "tags": ["databases", "performance-optimization"],
+    "usedAt": null
+  },
+  {
+    "slug": "security-in-ci-cd-pipelines",
+    "title": "security in ci/cd pipelines",
+    "angle": "Practical approaches to securing ci/cd pipelines: secret management, access control, and vulnerability scanning. Focus on integrating security into existing workflows.",
+    "rationale": "CI/CD pipelines are increasingly complex, and security is often an afterthought. This post highlights the importance of security in ci/cd pipelines and provides actionable advice for securing them.",
+    "tags": ["security", "ci-cd"],
+    "usedAt": null
   }
 ]
