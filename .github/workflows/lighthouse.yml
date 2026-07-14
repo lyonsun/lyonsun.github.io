@@ -2,7 +2,7 @@ name: Lighthouse Audit
 
 on:
   schedule:
-    - cron: "0 9 * * *" # Daily at 09:00 UTC
+    - cron: "0 3 * * *" # Daily at 03:00 UTC
   workflow_dispatch:
 
 permissions:
