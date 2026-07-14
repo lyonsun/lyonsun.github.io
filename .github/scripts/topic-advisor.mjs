@@ -129,9 +129,20 @@ function isDuplicate(topic, existingTopics, postSlugs) {
     return slugMatch || titleMatch || angleMatch || postSlugMatch;
 }
 
-async function callAI(count, existingContext, maxAiTopics) {
+async function callAI(count, existingContext, maxAiTopics, forceNoAi = false) {
     const systemPrompt = readFileSync(PROMPT_PATH, 'utf-8').trim();
-    const userPrompt = `Generate ${count} new blog post topics for my personal tech blog.
+    const userPrompt = forceNoAi
+        ? `Generate ${count} new blog post topics for my personal tech blog.
+
+${existingContext}
+
+Constraints:
+- NONE of the ${count} topics may be about AI, LLMs, machine learning,
+  prompt engineering, agentic systems, or any AI-related topic. Every single
+  topic must be from other software engineering areas only. If even one topic
+  has AI/LLM tags, the entire batch will be rejected and discarded.
+- No duplicates. No topics about crypto, blockchain, or mobile development.`
+        : `Generate ${count} new blog post topics for my personal tech blog.
 
 ${existingContext}
 
@@ -211,7 +222,12 @@ async function callAIWithRetry(
     }
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
-        const generated = await callAI(count, existingContext, maxAiTopics);
+        const generated = await callAI(
+            count,
+            existingContext,
+            maxAiTopics,
+            maxAiTopics === 0,
+        );
 
         const valid = [];
         for (let i = 0; i < generated.length; i++) {
