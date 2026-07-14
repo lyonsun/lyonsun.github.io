@@ -48,14 +48,14 @@ Required frontmatter: `title`, `description`, `pubDate`. Optional: `tags` (defau
 ## CI / Lighthouse
 
 - **Deploy**: Push to `main` → GitHub Pages. Uses `actions/checkout@v6`, `actions/setup-node@v6`, `actions/configure-pages@v6`, `actions/deploy-pages@v5`, `actions/upload-pages-artifact@v5`.
-- **Lighthouse**: Daily 09:00 UTC (scheduled + manual trigger). Desktop preset, 3 runs. Threshold ≥0.9 for all categories. Failures create a GitHub issue with label `lighthouse`.
+- **Lighthouse**: Daily 03:00 UTC (scheduled + manual trigger). Desktop preset, 3 runs. Threshold ≥0.9 for all categories. Failures create a GitHub issue with label `lighthouse`.
 - **Budget** (lighthouse-budget.json): total ≤150KB, script ≤20KB, stylesheet ≤30KB, font ≤80KB, image ≤100KB. FCP ≤1.5s, LCP ≤2.5s, TBT ≤200ms, CLS ≤0.1.
 - **PR Review**: OpenCode review via `anomalyco/opencode/github@latest` (model `opencode/deepseek-v4-flash-free`). Skips Renovate/Dependabot PRs.
 
 ## Blog Workflows
 
-- **Blog Writer** (`.github/workflows/blog-writer.yml`): Scheduled Mon/Wed/Fri 09:00 UTC + manual trigger. Generates AI blog posts via LLM API, creates PRs with `draft: true`. Uses `AI_API_KEY` and `BLOG_WRITER_PAT` secrets.
-- **Topic Advisor** (`.github/workflows/topic-advisor.yml`): Scheduled Mon 09:00 UTC + manual trigger. Suggests new blog topics via LLM API, updates `.github/scripts/topics.json`, creates PRs.
+- **Blog Writer** (`.github/workflows/blog-writer.yml`): Scheduled Mon/Wed/Fri 03:00 UTC + manual trigger. Generates AI blog posts via LLM API, creates PRs with `draft: true`. Uses `AI_API_KEY` and `BLOG_WRITER_PAT` secrets.
+- **Topic Advisor** (`.github/workflows/topic-advisor.yml`): Scheduled Mon 03:00 UTC + manual trigger. Suggests new blog topics via LLM API, updates `.github/scripts/topics.json`, creates PRs.
 
 ## Site Details
 
