@@ -10,16 +10,13 @@ import {
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
+import { callAIWithRetry, AI_MODEL } from './lib/api.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPT_PATH = join(__dirname, 'write-post-prompt.md');
 const TOPICS_PATH = join(__dirname, 'topics.json');
 const POSTS_DIR = join(__dirname, '..', '..', 'src', 'content', 'posts');
 const REPO_ROOT = join(__dirname, '..', '..');
-
-const AI_API_URL =
-    process.env.AI_API_URL || 'https://api.groq.com/openai/v1/chat/completions';
-const AI_MODEL = process.env.AI_MODEL || 'llama-3.3-70b-versatile';
 
 const MODEL_PROVIDERS = {
     llama: 'Meta',
@@ -116,38 +113,12 @@ Requirements:
 - Use markdown formatting (headings, lists, code blocks as needed)
 - Include at least one concrete, practical example (e.g., code snippet, CLI command, real-world scenario, or comparison) to illustrate the key point`;
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 60000);
-
-    const response = await fetch(AI_API_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.AI_API_KEY}`,
-        },
-        body: JSON.stringify({
-            model: AI_MODEL,
-            messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: userPrompt },
-            ],
-            temperature: 0.5,
-            max_tokens: 2048,
-        }),
-        signal: controller.signal,
+    let raw = await callAIWithRetry({
+        systemPrompt,
+        userPrompt,
+        temperature: 0.5,
     });
-
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`AI API error (${response.status}): ${errorText}`);
-    }
-
-    const data = await response.json();
-    const raw = data.choices[0].message.content
-        .replace(/^```[\w]*\n?|```$/g, '')
-        .trim();
+    raw = raw.replace(/^```[\w]*\n?|```$/g, '').trim();
 
     let description;
     let body;

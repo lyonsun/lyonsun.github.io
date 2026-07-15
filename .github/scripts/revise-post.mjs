@@ -4,14 +4,11 @@ import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { execSync } from 'child_process';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { callAIWithRetry } from './lib/api.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPT_PATH = join(__dirname, 'revise-post-prompt.md');
 const REPO_ROOT = join(__dirname, '..', '..');
-
-const AI_API_URL =
-    process.env.AI_API_URL || 'https://api.groq.com/openai/v1/chat/completions';
-const AI_MODEL = process.env.AI_MODEL || 'llama-3.3-70b-versatile';
 
 async function callAI(postBody, errors) {
     const systemPrompt = readFileSync(PROMPT_PATH, 'utf-8').trim();
@@ -24,36 +21,11 @@ async function callAI(postBody, errors) {
 
     userPrompt += `\n\n---BEGIN POST---\n${postBody}\n---END POST---`;
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 60000);
-
-    const response = await fetch(AI_API_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.AI_API_KEY}`,
-        },
-        body: JSON.stringify({
-            model: AI_MODEL,
-            messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: userPrompt },
-            ],
-            temperature: 0.3,
-            max_tokens: 2048,
-        }),
-        signal: controller.signal,
+    const revised = await callAIWithRetry({
+        systemPrompt,
+        userPrompt,
+        temperature: 0.3,
     });
-
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`AI API error (${response.status}): ${errorText}`);
-    }
-
-    const data = await response.json();
-    const revised = data.choices[0].message.content.trim();
     return revised.replace(/^```[\w]*\n?|\n```$/g, '').trim();
 }
 
