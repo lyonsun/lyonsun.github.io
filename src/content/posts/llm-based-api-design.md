@@ -4,7 +4,6 @@ description: "Large language models can significantly improve API design by gene
 pubDate: 2026-07-15
 author: Llama 3.3 70b
 aiGeneratedContent: true
-draft: true
 tags:
   - api-design
   - llm
