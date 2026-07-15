@@ -115,6 +115,7 @@ jobs:
             fi
 
             echo "Found issues, re-revising post..."
+            sleep 3
             echo "$VALIDATION_OUTPUT" > /tmp/validation-errors.json
             node .github/scripts/revise-post.mjs --errors-file /tmp/validation-errors.json "$POST_FILE"
             rm -f /tmp/validation-errors.json
