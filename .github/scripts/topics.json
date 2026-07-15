@@ -75,7 +75,7 @@
     "angle": "Exploring how large language models can be used to generate, validate, and optimize API designs, including approaches for iterative refinement and automated testing. The post will cover practical examples and limitations of LLM-based API design tools.",
     "rationale": "As LLMs become more prevalent, their potential to augment traditional API design methodologies is increasingly relevant. This post fills a gap by discussing the intersection of LLMs and API design, providing readers with actionable insights and use cases.",
     "tags": ["api-design", "llm"],
-    "usedAt": null
+    "usedAt": "2026-07-15"
   },
   {
     "slug": "debugging-llm-integrations",
