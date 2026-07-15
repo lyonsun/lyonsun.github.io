@@ -14,21 +14,19 @@ When designing APIs, developers often face challenges in creating intuitive and 
 
 ## How it Works
 
-LLMs can be used to generate API designs based on natural language descriptions. For example, we can use the OpenAI API to generate an API design for a simple blog platform. To do this, we'll need to configure the OpenAI API endpoint and use a suitable model to generate the API design. We'll use the `openai` package and create an instance of the `OpenAIApi` class, passing in a `Configuration` object with our API key and the configured API endpoint.
+LLMs can be used to generate API designs based on natural language descriptions. For example, we can use the OpenAI API to generate an API design for a simple blog platform. To do this, we'll need to configure the OpenAI API endpoint and use a suitable model to generate the API design. We'll use the `openai` package and create an instance of the `OpenAI` client, passing in our API key and the configured API endpoint.
 
 ```javascript
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: "YOUR_API_KEY",
-  basePath: "https://YOUR_CONFIGURED_API_ENDPOINT/v1",
+  baseURL: "https://YOUR_CONFIGURED_API_ENDPOINT/v1",
 });
-
-const openai = new OpenAIApi(configuration);
 
 (async () => {
   const response = await openai.chat.completions.create({
-    model: "code-davinci-002",
+    model: "gpt-4o-mini",
     messages: [
       {
         role: "user",
@@ -39,7 +37,7 @@ const openai = new OpenAIApi(configuration);
     max_tokens: 1024,
   });
 
-  console.log(response.data.choices[0].message.content);
+  console.log(response.choices[0].message.content);
 })();
 ```
 
@@ -56,7 +54,7 @@ const apiDesign = {
 
 (async () => {
   const response = await openai.chat.completions.create({
-    model: "code-davinci-002",
+    model: "gpt-4o-mini",
     messages: [
       {
         role: "user",
@@ -66,7 +64,7 @@ const apiDesign = {
     max_tokens: 1024,
   });
 
-  console.log(response.data.choices[0].message.content);
+  console.log(response.choices[0].message.content);
 })();
 ```
 
