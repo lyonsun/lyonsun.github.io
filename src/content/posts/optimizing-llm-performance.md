@@ -4,7 +4,6 @@ description: "Techniques to optimize LLM performance in resource-constrained env
 pubDate: 2026-07-17
 author: Llama 3.3 70b
 aiGeneratedContent: true
-draft: true
 tags:
   - llm
   - performance
@@ -17,49 +16,35 @@ Large language models have become increasingly powerful, but their computational
 
 ## Model Pruning and Knowledge Distillation
 
-Model pruning involves removing redundant or unnecessary weights and connections in a neural network, resulting in a smaller and more efficient model. This process can be achieved through various pruning techniques, including unstructured pruning, structured pruning, and iterative pruning. Knowledge distillation, on the other hand, involves training a smaller model to mimic the behavior of a larger model. Both techniques can significantly reduce the computational requirements of large language models. For example, the following code snippet demonstrates how to use the `@langchain/core/prompts` library to create a prompt template:
+Model pruning involves removing redundant or unnecessary weights and connections in a neural network, resulting in a smaller and more efficient model. This process can be achieved through various pruning techniques, including unstructured pruning, structured pruning, and iterative pruning. Knowledge distillation, on the other hand, involves training a smaller model to mimic the behavior of a larger model. Both techniques can significantly reduce the computational requirements of large language models. For example, the following code snippet demonstrates loading a distilled model (DistilBERT) for text classification:
 
-```javascript
-import { PromptTemplate } from "@langchain/core/prompts";
+```typescript
+import { pipeline } from "@huggingface/transformers";
 
-(async () => {
-  const template = PromptTemplate.fromTemplate(
-    "What is the meaning of {word}?",
-  );
-  const formattedTemplate = template.format({ word: "example" });
-  console.log(formattedTemplate);
-})();
+const classifier = await pipeline(
+  "text-classification",
+  "Xenova/distilbert-base-uncased",
+);
+const result = await classifier("This movie was fantastic!");
+console.log(result);
 ```
-
-Note that the `pipe` method is used to chain multiple operations together, but in this case, we only need to format the prompt template.
 
 ## Efficient Inference Algorithms
 
-Efficient inference algorithms can also play a crucial role in reducing the computational requirements of large language models. For example, techniques like beam search and greedy decoding can be used to reduce the number of computations required during inference. The following code snippet demonstrates how to use the `openai` library to perform beam search decoding:
+Efficient inference algorithms can also play a crucial role in reducing the computational requirements of large language models. For example, techniques like beam search and greedy decoding can be used to reduce the number of computations required during inference. The following code snippet demonstrates how to use `@huggingface/transformers` to perform beam search during text generation:
 
-```javascript
-import { Configuration, OpenAIApi } from "openai";
+```typescript
+import { pipeline } from "@huggingface/transformers";
 
-const configuration = new Configuration({
-  apiKey: "YOUR_API_KEY",
-  apiHost: "YOUR_API_HOST",
+const generator = await pipeline("text-generation", "Xenova/gpt2");
+const output = await generator("The future of AI is", {
+  max_new_tokens: 100,
+  temperature: 0.1,
+  top_p: 0.9,
+  num_beams: 4,
 });
-const openai = new OpenAIApi(configuration);
-
-(async () => {
-  const response = await openai.chat.completions.create({
-    model: "YOUR_MODEL",
-    messages: [{ role: "user", content: "What is the meaning of life?" }],
-    maxTokens: 100,
-    temperature: 0.1,
-    topP: 0.9,
-    numBeams: 4,
-  });
-  console.log(response.choices[0].message.content);
-})();
+console.log(output[0].generated_text);
 ```
-
-Note that the `chat.completions.create` method is used to generate text based on the given prompt and model. The `numBeams` parameter is used to specify the number of beams to use during beam search decoding.
 
 ## When it Breaks
 
