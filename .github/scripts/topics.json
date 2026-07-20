@@ -83,7 +83,7 @@
     "angle": "Discussing the challenges and strategies for debugging LLM integrations, including techniques for identifying and addressing errors, biases, and performance issues. The post will cover real-world examples and best practices for LLM integration debugging.",
     "rationale": "As LLMs are integrated into more software systems, debugging these integrations becomes a critical challenge. This post addresses the need for practical guidance on debugging LLM integrations, providing readers with valuable insights and techniques.",
     "tags": ["debugging", "llm"],
-    "usedAt": null
+    "usedAt": "2026-07-20"
   },
   {
     "slug": "llm-driven-refactoring",
