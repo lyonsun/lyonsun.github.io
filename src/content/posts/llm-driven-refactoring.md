@@ -28,7 +28,7 @@ const openai = new OpenAI({
   baseURL: "YOUR_API_ENDPOINT",
 });
 const template = PromptTemplate.fromTemplate(
-  "Analyze the following code and suggest improvements: {{code}}",
+  "Analyze the following code and suggest improvements: {code}",
 );
 const code = "function add(a, b) { return a + b; }";
 
