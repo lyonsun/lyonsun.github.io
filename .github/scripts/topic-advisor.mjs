@@ -205,6 +205,8 @@ async function callAIWithRetry(
     count,
     existingContext,
     unusedTopics,
+    allTopics,
+    postSlugs,
     maxRetries = 3,
 ) {
     const currentAiRatio =
@@ -235,6 +237,9 @@ async function callAIWithRetry(
             try {
                 validateTopic(topic, i);
             } catch {
+                continue;
+            }
+            if (isDuplicate(topic, allTopics, postSlugs)) {
                 continue;
             }
             valid.push(topic);
@@ -272,7 +277,7 @@ async function callAIWithRetry(
     }
 
     throw new Error(
-        'Failed to generate topics meeting ratio constraints after retries',
+        'Failed to generate valid non-duplicate topics after retries',
     );
 }
 
@@ -304,16 +309,12 @@ async function main() {
         countNeeded,
         existingContext,
         unusedTopics,
+        topics,
+        postSlugs,
     );
 
     const added = [];
     for (const topic of generated) {
-        if (isDuplicate(topic, topics, postSlugs)) {
-            console.log(
-                `  Skipping duplicate: "${topic.title}" (${topic.slug})`,
-            );
-            continue;
-        }
         topics.push({
             slug: topic.slug,
             title: topic.title,
@@ -323,22 +324,6 @@ async function main() {
             usedAt: null,
         });
         added.push(topic);
-    }
-
-    if (added.length === 0) {
-        console.log('No valid new topics generated.');
-        process.exit(0);
-    }
-
-    const skippedCount = generated.length - added.length;
-    if (skippedCount > 0) {
-        const newUnused = topics.filter((t) => !t.usedAt);
-        const ratio = getAiCount(newUnused) / newUnused.length;
-        if (ratio > 0.6) {
-            console.warn(
-                `  Warning: ${skippedCount} duplicate(s) removed (likely non-AI) pushed AI ratio to ${(ratio * 100).toFixed(0)}%.`,
-            );
-        }
     }
 
     const finalCount = topics.filter((t) => !t.usedAt).length;
