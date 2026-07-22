@@ -205,6 +205,8 @@ async function callAIWithRetry(
     count,
     existingContext,
     unusedTopics,
+    allTopics,
+    postSlugs,
     maxRetries = 3,
 ) {
     const currentAiRatio =
@@ -235,6 +237,9 @@ async function callAIWithRetry(
             try {
                 validateTopic(topic, i);
             } catch {
+                continue;
+            }
+            if (isDuplicate(topic, allTopics, postSlugs)) {
                 continue;
             }
             valid.push(topic);
@@ -272,7 +277,7 @@ async function callAIWithRetry(
     }
 
     throw new Error(
-        'Failed to generate topics meeting ratio constraints after retries',
+        'Failed to generate valid non-duplicate topics after retries',
     );
 }
 
@@ -304,6 +309,8 @@ async function main() {
         countNeeded,
         existingContext,
         unusedTopics,
+        topics,
+        postSlugs,
     );
 
     const added = [];
