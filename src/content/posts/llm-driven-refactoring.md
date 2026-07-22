@@ -21,13 +21,12 @@ One effective way to leverage LLMs in refactoring is by utilizing automated tool
 
 ```javascript
 import { PromptTemplate } from "@langchain/core/prompts";
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: "YOUR_API_KEY",
-  basePath: "YOUR_API_ENDPOINT",
+  baseURL: "YOUR_API_ENDPOINT",
 });
-const openai = new OpenAIApi(configuration);
 const template = PromptTemplate.fromTemplate(
   "Analyze the following code and suggest improvements: {{code}}",
 );
@@ -35,11 +34,11 @@ const code = "function add(a, b) { return a + b; }";
 
 (async () => {
   const prompt = template.format({ code });
-  const response = await openai.createChatCompletion({
-    model: "code-davinci-002",
-    prompt: prompt,
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [{ role: "user", content: prompt }],
     temperature: 0.7,
-    maxTokens: 2048,
+    max_tokens: 2048,
   });
   console.log(response.choices[0].message.content);
 })();
