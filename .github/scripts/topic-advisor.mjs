@@ -315,12 +315,6 @@ async function main() {
 
     const added = [];
     for (const topic of generated) {
-        if (isDuplicate(topic, topics, postSlugs)) {
-            console.log(
-                `  Skipping duplicate: "${topic.title}" (${topic.slug})`,
-            );
-            continue;
-        }
         topics.push({
             slug: topic.slug,
             title: topic.title,
@@ -330,22 +324,6 @@ async function main() {
             usedAt: null,
         });
         added.push(topic);
-    }
-
-    if (added.length === 0) {
-        console.log('No valid new topics generated.');
-        process.exit(0);
-    }
-
-    const skippedCount = generated.length - added.length;
-    if (skippedCount > 0) {
-        const newUnused = topics.filter((t) => !t.usedAt);
-        const ratio = getAiCount(newUnused) / newUnused.length;
-        if (ratio > 0.6) {
-            console.warn(
-                `  Warning: ${skippedCount} duplicate(s) removed (likely non-AI) pushed AI ratio to ${(ratio * 100).toFixed(0)}%.`,
-            );
-        }
     }
 
     const finalCount = topics.filter((t) => !t.usedAt).length;
