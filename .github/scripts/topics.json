@@ -91,7 +91,7 @@
     "angle": "Exploring how LLMs can assist in code refactoring by identifying areas for improvement and suggesting targeted refactorings. Discussing the trade-offs between automated and human-in-the-loop approaches.",
     "rationale": "As LLMs become more prevalent in software development, their potential to aid in code refactoring is vast. This post fills a gap by providing actionable advice on integrating LLMs into refactoring workflows.",
     "tags": ["llm", "refactoring", "code-quality"],
-    "usedAt": null
+    "usedAt": "2026-07-22"
   },
   {
     "slug": "optimizing-llm-performance",
