@@ -139,6 +139,6 @@
     "angle": "Practical approaches to securing ci/cd pipelines: secret management, access control, and vulnerability scanning. Focus on integrating security into existing workflows.",
     "rationale": "CI/CD pipelines are increasingly complex, and security is often an afterthought. This post highlights the importance of security in ci/cd pipelines and provides actionable advice for securing them.",
     "tags": ["security", "ci-cd"],
-    "usedAt": null
+    "usedAt": "2026-07-24"
   }
 ]
