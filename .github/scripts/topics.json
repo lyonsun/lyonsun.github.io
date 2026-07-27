@@ -107,7 +107,7 @@
     "angle": "Using LLMs to identify potential security vulnerabilities in code, including pattern recognition and anomaly detection. Focus on integration with existing security tools and workflows.",
     "rationale": "As LLMs become more prevalent in software development, their potential for code analysis is vast. This post fills a gap by exploring the practical applications of LLM-based code analysis for security.",
     "tags": ["security", "llm", "code-analysis"],
-    "usedAt": null
+    "usedAt": "2026-07-27"
   },
   {
     "slug": "designing-micro-frontends",
