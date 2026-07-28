@@ -1,6 +1,6 @@
 ---
-title: "security in ci/cd pipelines"
-description: "Securing ci/cd pipelines with practical approaches and tools."
+title: "Security in CI/CD pipelines"
+description: "Learn practical approaches to securing CI/CD pipelines with secret management, access control, and vulnerability scanning."
 pubDate: 2026-07-24
 author: Llama 3.3 70b
 aiGeneratedContent: true
@@ -19,14 +19,17 @@ CI/CD pipelines are the backbone of modern software development, enabling teams 
 Secrets, such as API keys and credentials, are a critical component of CI/CD pipelines. However, hardcoding these secrets into pipeline configurations or scripts is a significant security risk. To mitigate this, we can use secret management tools like HashiCorp's Vault or AWS Secrets Manager. These tools provide a secure way to store and manage secrets, allowing us to inject them into our pipelines as needed. For example, we can use the `@aws-sdk/client-secretsmanager` package to integrate AWS Secrets Manager with our CI/CD pipeline.
 
 ```javascript
-import { SecretsManagerClient } from "@aws-sdk/client-secretsmanager";
+import {
+  SecretsManagerClient,
+  GetSecretValueCommand,
+} from "@aws-sdk/client-secretsmanager";
 
 const secretsManager = new SecretsManagerClient({ region: "us-west-2" });
 const secretName = "my-secret";
 
 (async () => {
-  const getSecretValueCommand = { SecretId: secretName };
-  const response = await secretsManager.getSecretValue(getSecretValueCommand);
+  const command = new GetSecretValueCommand({ SecretId: secretName });
+  const response = await secretsManager.send(command);
   const secretValue = response.SecretString;
   // Use the secret value in our pipeline
 })();
@@ -38,18 +41,12 @@ Access control is another critical aspect of CI/CD pipeline security. We need to
 
 Vulnerability scanning is also essential to identify potential security risks in our pipelines and dependencies. Tools like OWASP ZAP and Snyk provide comprehensive vulnerability scanning and reporting capabilities. We can integrate these tools into our CI/CD pipelines to automatically scan for vulnerabilities and report any issues.
 
-```javascript
-import { SnykClient } from "@snyk/cli";
+```bash
+# Run Snyk vulnerability test on your project
+snyk test --severity-threshold=high
 
-const snykClient = new SnykClient();
-const orgId = "my-org-id";
-const projectId = "my-project-id";
-
-(async () => {
-  const testResult = await snykClient.testProject(orgId, projectId);
-  const vulnerabilities = testResult.vulnerabilities;
-  // Process the vulnerabilities
-})();
+# Monitor project and upload results to Snyk dashboard
+snyk monitor --org=my-org-id
 ```
 
 ## When it Breaks
