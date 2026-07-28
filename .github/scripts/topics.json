@@ -140,5 +140,21 @@
     "rationale": "CI/CD pipelines are increasingly complex, and security is often an afterthought. This post highlights the importance of security in ci/cd pipelines and provides actionable advice for securing them.",
     "tags": ["security", "ci-cd"],
     "usedAt": "2026-07-24"
+  },
+  {
+    "slug": "api-security-best-practices",
+    "title": "securing your api endpoints with best practices",
+    "angle": "A comprehensive overview of api security best practices, including authentication, authorization, and input validation. Focus on practical implementation of owasp guidelines.",
+    "rationale": "API security is a critical aspect of software development, and many developers struggle to implement secure api endpoints. This post fills the gap by providing actionable advice and real-world examples.",
+    "tags": ["security", "api", "best-practices"],
+    "usedAt": null
+  },
+  {
+    "slug": "ci-cd-pipeline-optimization",
+    "title": "optimizing your ci/cd pipeline for faster deployment",
+    "angle": "Practical strategies for optimizing your ci/cd pipeline, including parallelization, caching, and automated testing. Focus on reducing deployment time and improving overall efficiency.",
+    "rationale": "As software development cycles become shorter, optimizing ci/cd pipelines is crucial for faster deployment and improved productivity. This post provides actionable tips and real-world examples.",
+    "tags": ["ci-cd", "pipeline", "optimization"],
+    "usedAt": null
   }
 ]
