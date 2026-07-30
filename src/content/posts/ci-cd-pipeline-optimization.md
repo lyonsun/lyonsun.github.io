@@ -7,8 +7,6 @@ aiGeneratedContent: true
 draft: true
 tags:
   - ci-cd
-  - pipeline
-  - optimization
 ---
 
 Optimizing CI/CD pipelines is essential for reducing deployment time and improving productivity in software development. A well-optimized pipeline enables developers to focus on writing code rather than waiting for tests to run, thereby increasing overall efficiency. This post explores practical strategies for optimizing CI/CD pipelines, including parallelization, caching, and automated testing, to help developers streamline their workflow.
@@ -23,54 +21,48 @@ Parallelization is a highly effective way to optimize the pipeline by running mu
 
 ```javascript
 // jest.config.js
-import { config } from "@jest/config";
-export default config({
-  // ...
+export default {
   maxWorkers: 4, // Run 4 tests in parallel
-});
+};
 ```
 
 By running tests in parallel, developers can significantly reduce test time, from several minutes to just a few seconds, and improve overall pipeline performance.
 
 ## Caching
 
-Caching is another effective strategy for optimizing the pipeline by storing dependencies and build artifacts, thereby avoiding redundant work and reducing pipeline time. Developers can use tools like npm or yarn to cache dependencies. For example, to configure npm to cache dependencies, you can use the following command:
+Caching is another effective strategy for optimizing the pipeline by storing dependencies and build artifacts, thereby avoiding redundant work and reducing pipeline time. Modern package managers like npm handle caching well when paired with a proper CI workflow. For example, using `npm ci` with dependency caching in a GitHub Actions workflow:
 
-```javascript
-// Configure npm to cache dependencies
-import { exec } from "child_process";
-exec("npm config set cache-min 999999", (error, stdout, stderr) => {
-  if (error) {
-    console.error(`Error: ${error}`);
-  } else {
-    console.log("npm cache configured successfully");
-  }
-});
+```yaml
+name: CI
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm test
 ```
 
-By caching dependencies, developers can avoid reinstalling them on each build, reducing pipeline time and improving overall efficiency.
+By caching dependencies via the CI provider's native cache, developers can avoid reinstalling them on each build, reducing pipeline time and improving overall efficiency.
 
 ## Automated Testing
 
 Automated testing is a critical component of the CI/CD pipeline, ensuring that code is correct and functional, and reducing the risk of errors and bugs. Developers can use tools like Cypress to automate end-to-end tests. Here's an example of how to configure Cypress to run automated tests:
 
 ```javascript
-// cypress/support/index.js
+// cypress/support/e2e.js
 import "./commands";
 ```
 
-To run Cypress tests, you can use the following code:
+To run Cypress tests in CI, add a step to your workflow:
 
-```javascript
-// Run Cypress tests
-import { exec } from "child_process";
-exec("npx cypress run", (error, stdout, stderr) => {
-  if (error) {
-    console.error(`Error: ${error}`);
-  } else {
-    console.log("Cypress tests run successfully");
-  }
-});
+```yaml
+- run: npx cypress run
 ```
 
 By automating tests, developers can ensure that their code is thoroughly tested, reducing the risk of errors and bugs, and improving overall pipeline quality.
