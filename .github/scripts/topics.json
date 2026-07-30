@@ -155,6 +155,6 @@
     "angle": "Practical strategies for optimizing your ci/cd pipeline, including parallelization, caching, and automated testing. Focus on reducing deployment time and improving overall efficiency.",
     "rationale": "As software development cycles become shorter, optimizing ci/cd pipelines is crucial for faster deployment and improved productivity. This post provides actionable tips and real-world examples.",
     "tags": ["ci-cd", "pipeline", "optimization"],
-    "usedAt": null
+    "usedAt": "2026-07-29"
   }
 ]
