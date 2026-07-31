@@ -131,7 +131,7 @@
     "angle": "In-depth analysis of database performance optimization techniques: indexing strategies, query optimization, and data modeling best practices. Focus on relational databases and their limitations.",
     "rationale": "Database performance is a critical aspect of software engineering, but many developers lack a deep understanding of optimization techniques. This post provides a comprehensive guide to database performance optimization.",
     "tags": ["databases", "performance-optimization"],
-    "usedAt": null
+    "usedAt": "2026-07-31"
   },
   {
     "slug": "security-in-ci-cd-pipelines",
