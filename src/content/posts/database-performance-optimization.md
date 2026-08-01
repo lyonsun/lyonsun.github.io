@@ -1,5 +1,5 @@
 ---
-title: "database performance optimization techniques"
+title: "Database performance optimization techniques"
 description: "Techniques for optimizing database performance in relational databases."
 pubDate: 2026-07-31
 author: Llama 3.3 70b
@@ -22,11 +22,11 @@ import { Pool } from "pg";
 
 (async () => {
   const pool = new Pool({
-    user: "username",
-    host: "localhost",
-    database: "database",
-    password: "password",
-    port: 5432,
+    user: process.env.PG_USER,
+    host: process.env.PG_HOST,
+    database: process.env.PG_DATABASE,
+    password: process.env.PG_PASSWORD,
+    port: Number(process.env.PG_PORT) || 5432,
   });
 
   try {
