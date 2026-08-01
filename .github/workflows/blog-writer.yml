@@ -63,65 +63,24 @@ jobs:
             node .github/scripts/write-post.mjs
           fi
 
+      - name: Resolve blog writer helpers
+        run: |
+          BLOG_WRITER_WORKFLOW=".github/scripts/blog-writer-workflow.mjs"
+          if [ ! -f "$BLOG_WRITER_WORKFLOW" ]; then
+            BLOG_WRITER_WORKFLOW="/tmp/blog-writer-workflow.mjs"
+            git show main:.github/scripts/blog-writer-workflow.mjs > "$BLOG_WRITER_WORKFLOW"
+          fi
+          echo "BLOG_WRITER_WORKFLOW=$BLOG_WRITER_WORKFLOW" >> "$GITHUB_ENV"
+
       - name: Revise blog post
         env:
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
-        run: |
-          # Find post file: uncommitted from compose (initial) or git diff vs main (revision)
-          POST_FILE=$(git status --porcelain src/content/posts/ 2>/dev/null | sed -n 's/^?? //p' | head -1)
-          if [ -z "$POST_FILE" ]; then
-            POST_FILE=$(git diff --diff-filter=A --name-only origin/main...HEAD -- 'src/content/posts/*.md' 2>/dev/null | head -1)
-          fi
-          if [ -z "$POST_FILE" ]; then
-            echo "No existing post found."
-            exit 0
-          fi
-          # The blog branch was forked before scripts were added to main
-          if [ ! -f .github/scripts/revise-post.mjs ]; then
-            git show main:.github/scripts/revise-post.mjs > .github/scripts/revise-post.mjs
-          fi
-          node .github/scripts/revise-post.mjs "$POST_FILE"
+        run: node "$BLOG_WRITER_WORKFLOW" revise
 
       - name: Validate and re-revise blog post
         env:
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
-        run: |
-          POST_FILE=$(git status --porcelain src/content/posts/ 2>/dev/null | sed -n 's/^?? //p' | head -1)
-          if [ -z "$POST_FILE" ]; then
-            POST_FILE=$(git diff --diff-filter=A --name-only origin/main...HEAD -- 'src/content/posts/*.md' 2>/dev/null | head -1)
-          fi
-          if [ -z "$POST_FILE" ]; then
-            echo "No post file found for validation."
-            exit 0
-          fi
-
-          # The blog branch was forked before scripts were added to main
-          if [ ! -f .github/scripts/validate-post.mjs ]; then
-            git show main:.github/scripts/validate-post.mjs > .github/scripts/validate-post.mjs
-          fi
-
-          MAX_RETRIES=2
-          for ((i=1; i<=MAX_RETRIES; i++)); do
-            echo "Validating code examples (attempt $i)..."
-            if VALIDATION_OUTPUT=$(node .github/scripts/validate-post.mjs --json "$POST_FILE" 2>/dev/null); then
-              VALID_EXIT=0
-            else
-              VALID_EXIT=$?
-            fi
-
-            if [ $VALID_EXIT -eq 0 ]; then
-              echo "All code examples pass validation."
-              break
-            fi
-
-            echo "Found issues, re-revising post..."
-            echo "$VALIDATION_OUTPUT" > /tmp/validation-errors.json
-            node .github/scripts/revise-post.mjs --errors-file /tmp/validation-errors.json "$POST_FILE"
-            rm -f /tmp/validation-errors.json
-          done
-
-          # Final validation check
-          node .github/scripts/validate-post.mjs "$POST_FILE" || echo "Warning: Some validation issues remain after revision."
+        run: node "$BLOG_WRITER_WORKFLOW" validate
 
       - name: Check formatting
         run: npx prettier --check .
@@ -135,7 +94,12 @@ jobs:
       - name: Create Pull Request
         if: success()
         env:
+          AI_MODEL_USED: ${{ steps.compose.outputs.ai-model }}
+          GENERATED_DATE: ${{ steps.setup.outputs.date }}
           GITHUB_TOKEN: ${{ secrets.BLOG_WRITER_PAT }}
+          POST_FILE: ${{ steps.compose.outputs.post-file }}
+          TOPIC_SLUG: ${{ steps.compose.outputs.topic-slug }}
+          TOPIC_TITLE: ${{ steps.compose.outputs.topic-title }}
         run: |
           if git diff --quiet && git ls-files --others --exclude-standard --quiet; then
             echo "No changes to commit."
@@ -157,14 +121,12 @@ jobs:
           git push origin HEAD:"${{ steps.setup.outputs.branch_name }}"
 
           if [ "${{ steps.setup.outputs.branch_exists }}" = "false" ]; then
-            SLUG="${{ steps.compose.outputs.topic-slug }}"
+            PR_BODY_FILE="$(mktemp)"
+            node "$BLOG_WRITER_WORKFLOW" render-pr-body > "$PR_BODY_FILE"
+
             gh pr create \
               --title "content(posts): add new post for ${{ steps.setup.outputs.date }}" \
-              --body "This PR adds an AI-generated blog post draft.
-
-          Topic slug: ${SLUG}
-
-          **Note:** The post has \`draft: true\` and \`aiGeneratedContent: true\`. Review and remove \`draft: true\` before publishing."
+              --body-file "$PR_BODY_FILE"
           else
             echo "PR already exists for this branch."
           fi

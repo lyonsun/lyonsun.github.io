@@ -257,6 +257,15 @@ async function main() {
 
     if (process.env.GITHUB_OUTPUT) {
         appendFileSync(process.env.GITHUB_OUTPUT, `topic-slug=${topic.slug}\n`);
+        appendFileSync(
+            process.env.GITHUB_OUTPUT,
+            `topic-title=${topic.title.replace(/\n/g, ' ')}\n`,
+        );
+        appendFileSync(
+            process.env.GITHUB_OUTPUT,
+            `post-file=src/content/posts/${fileName}\n`,
+        );
+        appendFileSync(process.env.GITHUB_OUTPUT, `ai-model=${AI_MODEL}\n`);
     }
 }
 
