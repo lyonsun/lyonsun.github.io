@@ -2,10 +2,17 @@
 
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { execFileSync, spawnSync } from 'child_process';
+import { dirname } from 'path';
 
 const command = process.argv[2];
-const HELPERS_DIR = '/tmp/blog-writer-helpers';
 const VALIDATION_ERRORS_PATH = '/tmp/validation-errors.json';
+
+const HELPER_FILES = [
+    'revise-post.mjs',
+    'validate-post.mjs',
+    'lib/api.mjs',
+    'revise-post-prompt.md',
+];
 
 function git(args, options = {}) {
     return execFileSync('git', args, {
@@ -25,9 +32,15 @@ function readRequiredEnv(name) {
 }
 
 function findPostFile() {
-    const status = git(['status', '--porcelain', 'src/content/posts/'], {
-        stdio: ['ignore', 'pipe', 'ignore'],
-    });
+    let status = '';
+    try {
+        status = git(['status', '--porcelain', 'src/content/posts/'], {
+            stdio: ['ignore', 'pipe', 'ignore'],
+        });
+    } catch {
+        return '';
+    }
+
     const untracked = status
         .split('\n')
         .map((line) => line.match(/^\?\? (.+)$/)?.[1])
@@ -37,14 +50,19 @@ function findPostFile() {
         return untracked;
     }
 
-    const added = git([
-        'diff',
-        '--diff-filter=A',
-        '--name-only',
-        'origin/main...HEAD',
-        '--',
-        'src/content/posts/*.md',
-    ]);
+    let added = '';
+    try {
+        added = git([
+            'diff',
+            '--diff-filter=A',
+            '--name-only',
+            'origin/main...HEAD',
+            '--',
+            'src/content/posts/*.md',
+        ]);
+    } catch {
+        return '';
+    }
 
     return added.split('\n').find(Boolean) ?? '';
 }
@@ -55,11 +73,37 @@ function ensureScript(scriptName) {
         return path;
     }
 
-    mkdirSync(HELPERS_DIR, { recursive: true });
-    const fallbackPath = `${HELPERS_DIR}/${scriptName}`;
-    const contents = git(['show', `main:${path}`]);
-    writeFileSync(fallbackPath, contents + '\n');
-    return fallbackPath;
+    // The blog branch was forked before these scripts were added to main.
+    // Restore the full set of co-located helpers into .github/scripts/ so that
+    // relative imports (./lib/api.mjs) and prompt files resolve correctly.
+    for (const helperFile of HELPER_FILES) {
+        const helperPath = `.github/scripts/${helperFile}`;
+        if (existsSync(helperPath)) {
+            continue;
+        }
+
+        try {
+            const contents = git([
+                'show',
+                `main:.github/scripts/${helperFile}`,
+            ]);
+            mkdirSync(dirname(helperPath), { recursive: true });
+            writeFileSync(helperPath, contents + '\n');
+            console.log(`Restored ${helperFile} from main.`);
+        } catch (err) {
+            console.warn(
+                `Could not restore ${helperFile} from main: ${err.message}`,
+            );
+        }
+    }
+
+    if (!existsSync(path)) {
+        throw new Error(
+            `Required helper script missing and could not be restored: ${path}`,
+        );
+    }
+
+    return path;
 }
 
 function runNode(args, options = {}) {
