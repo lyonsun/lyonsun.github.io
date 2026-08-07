@@ -256,8 +256,30 @@ async function main() {
     }
 
     if (process.env.GITHUB_OUTPUT) {
-        appendFileSync(process.env.GITHUB_OUTPUT, `topic-slug=${topic.slug}\n`);
+        appendFileSync(
+            process.env.GITHUB_OUTPUT,
+            `topic-slug=${escapeGithubOutput(topic.slug)}\n`,
+        );
+        appendFileSync(
+            process.env.GITHUB_OUTPUT,
+            `topic-title=${escapeGithubOutput(topic.title.replace(/\n/g, ' '))}\n`,
+        );
+        appendFileSync(
+            process.env.GITHUB_OUTPUT,
+            `post-file=${escapeGithubOutput(`src/content/posts/${fileName}`)}\n`,
+        );
+        appendFileSync(
+            process.env.GITHUB_OUTPUT,
+            `ai-model=${escapeGithubOutput(AI_MODEL)}\n`,
+        );
     }
+}
+
+function escapeGithubOutput(value) {
+    return value
+        .replace(/%/g, '%25')
+        .replace(/\r/g, '%0D')
+        .replace(/\n/g, '%0A');
 }
 
 main().catch((err) => {
