@@ -5,7 +5,6 @@
   "permission": {
     "external_directory": {
       "*": "ask",
-      "/tmp/blog-writer-helpers": "allow",
       "/tmp/validation-errors.json": "allow"
     }
   }

@@ -101,7 +101,13 @@ jobs:
           TOPIC_SLUG: ${{ steps.compose.outputs.topic-slug }}
           TOPIC_TITLE: ${{ steps.compose.outputs.topic-title }}
         run: |
-          if git diff --quiet && git ls-files --others --exclude-standard --quiet; then
+          if [ "${{ steps.setup.outputs.branch_exists }}" = "false" ]; then
+            git add src/content/posts/ .github/scripts/topics.json
+          else
+            git add src/content/posts/
+          fi
+
+          if git diff --cached --quiet; then
             echo "No changes to commit."
             exit 0
           fi
@@ -110,10 +116,8 @@ jobs:
           git config user.email "sunly917@gmail.com"
 
           if [ "${{ steps.setup.outputs.branch_exists }}" = "false" ]; then
-            git add src/content/posts/ .github/scripts/topics.json
             git commit -m "content(posts): add new post for ${{ steps.setup.outputs.date }}"
           else
-            git add src/content/posts/
             git commit -m "content(posts): revise post for ${{ steps.setup.outputs.date }}"
           fi
 
