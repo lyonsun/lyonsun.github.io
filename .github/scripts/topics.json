@@ -156,5 +156,61 @@
     "rationale": "As software development cycles become shorter, optimizing ci/cd pipelines is crucial for faster deployment and improved productivity. This post provides actionable tips and real-world examples.",
     "tags": ["ci-cd", "pipeline", "optimization"],
     "usedAt": "2026-07-29"
+  },
+  {
+    "slug": "improving-ci-cd-pipeline-security",
+    "title": "Improving security in your ci/cd pipeline",
+    "angle": "Practical strategies for enhancing security in ci/cd pipelines, including secrets management and vulnerability scanning. Real-world examples and best practices for securing your pipeline.",
+    "rationale": "As more teams adopt ci/cd, securing these pipelines is becoming a major concern. This post fills a gap by providing actionable advice on pipeline security.",
+    "tags": ["ci/cd", "security", "devops"],
+    "usedAt": null
+  },
+  {
+    "slug": "api-design-patterns",
+    "title": "Practical api design patterns for modern web applications",
+    "angle": "Exploring design patterns for building scalable and maintainable APIs, including API gateway patterns and service discovery. Focus on real-world use cases and examples.",
+    "rationale": "Well-designed APIs are crucial for modern web applications. This post provides practical guidance on API design patterns, filling a gap in the existing literature.",
+    "tags": ["api", "design", "patterns"],
+    "usedAt": null
+  },
+  {
+    "slug": "llm-based-code-search",
+    "title": "Using LLMs for code search and discovery",
+    "angle": "Exploring the potential of LLMs for code search and discovery, including indexing codebases and retrieving relevant code snippets. Discussion of challenges and limitations.",
+    "rationale": "As codebases grow in size and complexity, effective code search is becoming increasingly important. This post examines the role of LLMs in addressing this challenge.",
+    "tags": ["llm", "code", "search"],
+    "usedAt": null
+  },
+  {
+    "slug": "optimizing-database-queries",
+    "title": "Optimizing database queries for high-performance applications",
+    "angle": "Practical techniques for optimizing database queries, including indexing, caching, and query rewriting. Real-world examples and case studies.",
+    "rationale": "Database performance is critical for many applications. This post provides actionable advice on optimizing database queries, helping developers improve their application's performance.",
+    "tags": ["database", "performance", "optimization"],
+    "usedAt": null
+  },
+  {
+    "slug": "llm-driven-code-summarization",
+    "title": "Using LLMs for automatic code summarization",
+    "angle": "Investigating the potential of LLMs for automatic code summarization, including generating comments and documentation. Discussion of benefits and limitations.",
+    "rationale": "Code summarization is a time-consuming task that can be automated with LLMs. This post explores the possibilities and challenges of using LLMs for code summarization.",
+    "tags": ["llm", "code", "summarization"],
+    "usedAt": null
+  },
+  {
+    "slug": "frontend-performance-optimization",
+    "title": "Optimizing frontend performance for faster page loads",
+    "angle": "Practical strategies for optimizing frontend performance, including code splitting, lazy loading, and image optimization. Real-world examples and best practices.",
+    "rationale": "Frontend performance is crucial for user experience. This post provides actionable advice on optimizing frontend performance, helping developers improve their application's page load times.",
+    "tags": ["frontend", "performance", "optimization"],
+    "usedAt": null
+  },
+  {
+    "slug": "llm-based-bug-prediction",
+    "title": "Using LLMs for bug prediction and prevention",
+    "angle": "Exploring the potential of LLMs for predicting and preventing bugs, including analyzing code patterns and identifying potential vulnerabilities. Discussion of challenges and limitations.",
+    "rationale": "Bug prediction and prevention are critical for software reliability. This post examines the role of LLMs in addressing this challenge, providing insights into the possibilities and limitations of LLM-based bug prediction.",
+    "tags": ["llm", "bug", "prediction"],
+    "usedAt": null
   }
 ]
