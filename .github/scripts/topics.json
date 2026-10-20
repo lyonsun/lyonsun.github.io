@@ -147,7 +147,7 @@
     "angle": "A comprehensive overview of api security best practices, including authentication, authorization, and input validation. Focus on practical implementation of owasp guidelines.",
     "rationale": "API security is a critical aspect of software development, and many developers struggle to implement secure api endpoints. This post fills the gap by providing actionable advice and real-world examples.",
     "tags": ["security", "api", "best-practices"],
-    "usedAt": null
+    "usedAt": "2026-08-12"
   },
   {
     "slug": "ci-cd-pipeline-optimization",
