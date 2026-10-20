@@ -60,7 +60,7 @@
     "title": "From design to code: AI-powered UI generation",
     "angle": "Analyze the current state of AI tools that convert designs (Figma, screenshots, sketches) into frontend code. Cover what works today, limitations, and practical workflows for web engineers.",
     "tags": ["ai", "frontend", "design"],
-    "usedAt": null
+    "usedAt": "2026-08-07"
   },
   {
     "slug": "evaluating-llm-outputs-in-engineering-workflows",
