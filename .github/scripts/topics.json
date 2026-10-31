@@ -115,7 +115,7 @@
     "angle": "Practical strategies for designing and implementing micro-frontend architectures, including componentization, integration, and deployment. Focus on real-world examples and lessons learned.",
     "rationale": "Micro-frontend architecture is becoming increasingly popular, but there is a lack of concrete guidance on designing and implementing these systems. This post provides timely and practical advice.",
     "tags": ["frontend", "architecture", "micro-frontends"],
-    "usedAt": null
+    "usedAt": "2026-08-03"
   },
   {
     "slug": "optimizing-llm-training-data",
